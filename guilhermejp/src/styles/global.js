@@ -20,14 +20,28 @@ export default createGlobalStyle`
         
     }
 
-    body, h2, button {
+    body, button {
         font-family: 'Poppins', sans-serif;
         font-size: 1.6rem;
         outline: none;
     }
-
     label, input, h1, footer, textarea{
        font-family: 'Roboto', sans-serif;
+    }
+
+    h1 {
+        font-size: 4.0rem;
+        font-weight: 900;
+    }
+
+    h2 {
+        font-size: 3.2rem;
+        font-weight: 300;
+        font-family: 'Roboto', sans-serif;
+    }
+
+    h3 {
+        font-size: 2.4rem;
     }
     
     a {
@@ -48,11 +62,13 @@ export default createGlobalStyle`
   }
   
   ::-webkit-scrollbar-track {
-    background-color: transparent;
+    background-color:#ffffff00;
   }
   
   ::-webkit-scrollbar-thumb {
     border-radius: 5px;
-    background-color:${({theme}) => theme.COLORS.WHITE};
+    background:${({theme}) => theme.COLORS.GRADIENT_SCROLL};
+    filter: opacity(0%); /* Define a opacidade do thumb */
+    
   }
 `;
