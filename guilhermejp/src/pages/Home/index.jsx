@@ -24,15 +24,15 @@ export function Home(){
                         <p>Atualmente estou atuando como freelancer realizando criação de websites e APIs para pequenos e médios empresários.</p>
                         <p>Alguns dos meus certificados na área de tecnologia (<em>clique no icone para mais informações</em>):</p>
                         <Certificates>
-                            <a href=""><img src={c1} alt="" /></a>
-                            <a href=""><img src={c2} alt="" /></a>
-                            <a href=""><img src={c3} alt="" /></a>
+                            <a href="https://app.rocketseat.com.br/certificates/efd3cf67-adb5-4e63-8022-e4221b78ea4f" target="_blank"><img src={c1} alt="" /></a>
+                            <a href="https://app.rocketseat.com.br/certificates/1eeab2d8-809c-4ad7-a89a-c31ffc14b3ff" target="_blank"><img src={c2} alt="" /></a>
+                            <a href="https://app.rocketseat.com.br/certificates/3cf04357-4759-4f69-8673-b450bc3d79ce" target="_blank"><img src={c3} alt="" /></a>
                         </Certificates>
                         <p>Se sinta livre para me contatar nas minhas redes sociais abaixo:</p>
                         <SocialMedias>
-                            <a href=""><FiLinkedin/></a>
-                            <a href=""><FiGithub/></a>
-                            <a href=""><FiInstagram/></a>
+                            <a href="https://www.linkedin.com/in/guimaxtr/" target="_blank"><FiLinkedin/></a>
+                            <a href="https://github.com/Maxtherox/" target="_blank"><FiGithub/></a>
+                            <a href="https://www.instagram.com/oimaxtr/" target="_blank"><FiInstagram/></a>
                         </SocialMedias>  
                 </Content>
                 </Article>     

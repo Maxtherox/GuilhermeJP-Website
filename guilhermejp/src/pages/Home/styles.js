@@ -1,5 +1,7 @@
 import styled from "styled-components"
-import backgroundImg from "../../assets/Group2.png";
+import backgroundImg from "../../assets/purple-background-164999.jpg";
+import * as animations from '../../styles/animations';
+import { DEVICE_BREAKPOINTS } from "../../styles/devicesBreakpoints";
 
 export const Container = styled.div`
     display: flex;
@@ -9,9 +11,7 @@ export const Container = styled.div`
     width: 100%;
     height: 100vh;
     position: absolute;
-    z-index: -2;
-
-    overflow: hidden; /* Para ocultar o overflow do pseudo-elemento */
+    z-index: -1;
     
     /* Adiciona um pseudo-elemento ::before */
     &::before {
@@ -27,6 +27,9 @@ export const Container = styled.div`
         mix-blend-mode: hardlight; /* Define o modo de mesclagem */
         opacity: 0; /* Define a opacidade do overlay */
         z-index: -1;
+        filter: blur(1px);
+        transform: rotate(180deg);
+        transform: rotatey(180deg);
     }
 `
 
@@ -36,7 +39,8 @@ export const Main = styled.main`
     width: 100%;
     height: 100%;
     justify-content: center;
-   
+
+    animation:${animations.slideOut} .25s ease-in-out;
 `
 
 export const Content = styled.div`
@@ -53,6 +57,21 @@ export const Content = styled.div`
     position: relative;
     overflow-y: auto;
     
+    @media (min-width: ${DEVICE_BREAKPOINTS.XX}) {
+        width: 105.0rem;
+        height: 60rem
+    }
+    @media (max-width:${DEVICE_BREAKPOINTS.MD}) {
+        width: 37rem;
+        height: 90rem;
+        
+        h3 {
+            font-size: 18px;
+        }
+    }
+    @media (max-width:${DEVICE_BREAKPOINTS.SM}) {
+       width: 100%;
+    }
 `
 
 export const Article = styled.article`
@@ -64,7 +83,6 @@ export const ContentBackground = styled.div`
     top: 0;
     left: 0;
     width: 100%;
-    height: 80rem;
     background-color: ${({theme}) => theme.COLORS.WHITE};
     border-radius: 12px;
 
