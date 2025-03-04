@@ -7,12 +7,15 @@ export const Container = styled.div`
     width: 86.1rem;
     height: 15.7rem;
     background: ${({theme}) => theme.COLORS.BLACK};
-    margin-top: 7rem;
+    margin-top: 4rem;
     margin-bottom: 7px;
     border-radius: 32px 32px 12px 12px;
     z-index: 1;
     animation:${animations.slideOut} .75s cubic-bezier(0.075, 0.82, 0.165, 1);
 
+    @media (max-width:${DEVICE_BREAKPOINTS.XL}) {
+        margin-top: 1rem;
+    }
     @media (max-width:850px) {
 
             height: 10.7rem;
@@ -113,6 +116,8 @@ export const Menu = styled.div`
     filter: drop-shadow(1px 3px 2px rgba(0, 0, 0, 0.25));
     transition: visibility 0.5s ;
     visibility: hidden;
+
+
     
     @media (max-width:${DEVICE_BREAKPOINTS.MD}) {
         width: 100%;

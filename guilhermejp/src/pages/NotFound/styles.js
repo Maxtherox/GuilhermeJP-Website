@@ -10,8 +10,11 @@ export const Container = styled.div`
 
     width: 100%;
     height: 100svh;
+
     position: absolute;
-    overflow-y: auto;
+    overflow: hidden;
+    margin-bottom: 20px;
+    padding-bottom:20px;
     
     /* Adiciona um pseudo-elemento ::before */
     &::before {
