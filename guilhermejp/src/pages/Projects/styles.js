@@ -24,13 +24,12 @@ export const Container = styled.div`
         opacity: 0.05; /* Define a opacidade do overlay */
         z-index: -2;
         transform: rotate(180deg);
-
-
     }
     position: absolute;
     overflow: hidden;
     margin-bottom: 20px;
     padding-bottom:20px;
+    
     
     /* Adiciona um pseudo-elemento ::before */
     &::before {
@@ -41,7 +40,7 @@ export const Container = styled.div`
         width: 100%;
         height: 100%;
         background-image: url(${backgroundImg});
-        
+
         background-size: cover;
         background-position: center;
         mix-blend-mode: hardlight; /* Define o modo de mesclagem */
@@ -147,6 +146,11 @@ export const Card = styled.div`
         
         @media (max-width: 850px) {
             width: 100px;
+
+        }
+        @media (max-width: 370px) {
+            width: 80px;
+            margin: 5px;
         }
     }
 `

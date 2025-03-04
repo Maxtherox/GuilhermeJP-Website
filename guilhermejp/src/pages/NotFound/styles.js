@@ -1,5 +1,5 @@
 import styled from "styled-components"
-import backgroundImg from "../../assets/purple-background-164999.jpg";
+import backgroundImg from "../../assets/bgtech6.jpg";
 import * as animations from '../../styles/animations';
 import { DEVICE_BREAKPOINTS } from "../../styles/devicesBreakpoints";
 
@@ -25,7 +25,7 @@ export const Container = styled.div`
         background-size: cover;
         background-position: center;
         mix-blend-mode: hardlight; /* Define o modo de mesclagem */
-        opacity: 0; /* Define a opacidade do overlay */
+        opacity: 0.1; /* Define a opacidade do overlay */
         z-index: -1;
         filter: blur(1px);
         transform: rotate(180deg);
