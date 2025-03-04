@@ -1,7 +1,7 @@
 import styled from "styled-components"
-import backgroundImg from "../../assets/Group2.png";
+import backgroundImg from "../../assets/bgtech9.jpg";
 import * as animations from '../../styles/animations';
-
+import { DEVICE_BREAKPOINTS } from "../../styles/devicesBreakpoints";
 
 export const Container = styled.div`
     display: flex;
@@ -9,11 +9,9 @@ export const Container = styled.div`
     align-items: center;
 
     width: 100%;
-    height: 100vh;
+    height: 100svh;
     position: absolute;
-    z-index: -1;
-
-    overflow: hidden; /* Para ocultar o overflow do pseudo-elemento */
+    overflow-y: auto;
     
     /* Adiciona um pseudo-elemento ::before */
     &::before {
@@ -24,11 +22,14 @@ export const Container = styled.div`
         width: 100%;
         height: 100%;
         background-image: url(${backgroundImg});
+        
         background-size: cover;
         background-position: center;
         mix-blend-mode: hardlight; /* Define o modo de mesclagem */
-        opacity: 0; /* Define a opacidade do overlay */
+        opacity:0.1; /* Define a opacidade do overlay */
         z-index: -1;
+       //filter: blur(1px);
+
     }
 `
 
@@ -38,7 +39,7 @@ export const Main = styled.main`
     width: 100%;
     height: 100%;
     justify-content: center;
-
+    
     animation:${animations.slideOut} .25s ease-in-out;
 `
 
@@ -50,15 +51,28 @@ export const Content = styled.div`
     flex-direction: column;    
     gap: 1rem;
     //border: 1px solid #f1f1f1;
-
+    overflow-y: auto;
     background-color: ${({theme}) => theme.COLORS.WHITE};
     border-radius: 12px;
     position: relative;
-    overflow-y: auto;
+ 
     
-
-    
-    
+    @media (min-width: ${DEVICE_BREAKPOINTS.XX}) {
+        width: 105.0rem;
+        height: 60rem
+    }
+    @media (max-width:${DEVICE_BREAKPOINTS.MD}) {
+        width: 37rem;
+        height: 70rem;
+        
+        h3 {
+            font-size: 18px;
+        }
+    }
+    @media (max-width:${DEVICE_BREAKPOINTS.SM}) {
+       width: 100%;
+       height: 100vh;
+    }
 `
 
 export const Article = styled.article`
@@ -70,10 +84,9 @@ export const ContentBackground = styled.div`
     top: 0;
     left: 0;
     width: 100%;
-    height: 80rem;
     background-color: ${({theme}) => theme.COLORS.WHITE};
     border-radius: 12px;
-
+    overflow-y: auto;
     z-index: -1;
     filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.15));
 `
@@ -88,5 +101,28 @@ export const SocialMedias = styled.div`
     gap: 1rem;
     > a {
         color: ${({theme}) => theme.COLORS.BLACK};
+    }
+`
+export const Card = styled.div`
+    margin-top: 1rem;
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding: 3rem;
+
+    background: #ffffff;
+    filter: drop-shadow(-5px 5px 0px #272727);
+    border: 1px solid #f0f0f0;
+    border-radius: 12px;
+    a {
+        font-weight: 600;
+
+    }
+
+    button {
+        width: 15rem;
+        margin-right: 2rem;
     }
 `

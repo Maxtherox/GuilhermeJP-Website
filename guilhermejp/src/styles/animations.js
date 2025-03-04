@@ -13,32 +13,32 @@ export const fadeIn = keyframes`
 
 export const slideIn = keyframes`
   from {
-    transform: translateX(-100px);
-    opacity: 0%;
+    transform: translateX(-25px);
+  //  opacity: 0%;
   }
   to {
     transform: translateX(0);
-    opacity: 100px;
+   // opacity: 100px;
   }
 `;
 
 export const slideOut = keyframes`
   from {
-    transform: translateX(100px);
-    opacity: 0%;
+    transform: translateX(50px);
+   // opacity: 0%;
   }
   to {
     transform: translateX(0);
-    opacity: 100px;
+  //  opacity: 100px;
   }
 `;
 export const scale = keyframes`
   0% {
     
-    transform: scale(0.9);
+    transform: scale(0.5);
   }
  60% {
-    transform: scale(1.1);
+    transform: scale(1.05);
   }
 
   100% {
@@ -47,12 +47,12 @@ export const scale = keyframes`
 `;
 export const bottomToTop = keyframes` 
   0% {
-      opacity: 0;
+      //opacity: 0;
       transform: scale(0);
       transform: translateY(50px);
   }
   100% {
-      opacity: 100;
+      //opacity: 100;
       transform: scale(1);
       transform: translateY(0);
   }

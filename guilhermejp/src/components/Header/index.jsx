@@ -1,5 +1,5 @@
 import { Container, Title, Profile, Menu, Aside } from "./style";
-import  guilhermeJP from "../../assets/guilhermeJP.png"
+import  guilhermeJP from "../../assets/GUILHERMEJP20254.png"
 import { FiMenu,FiGlobe,FiInstagram,FiUser,FiClipboard,FiZap,FiArrowLeftCircle } from "react-icons/fi";
 
 export function Header(){
@@ -16,7 +16,7 @@ export function Header(){
     return(
         <Container>
             <Profile>
-                <img src={guilhermeJP} height="175px" alt="" />
+              <a href="https://www.linkedin.com/in/guimaxtr/" target="_blank"><img src={guilhermeJP} height="175px" alt="" /></a>  
             </Profile>    
            <a onClick={openNav} id="menuMobileHeader"><FiMenu /> </a>        
             <Title>
@@ -27,9 +27,11 @@ export function Header(){
                 <Aside>
                     <a href="/"><FiUser/>Sobre</a>
                     <a href="/projects"><FiClipboard/>Projetos</a>
-                    <a href="#"><FiGlobe/>Sites</a>
+                    <a href="/website"><FiGlobe/>Sites</a>
+                {/*
                     <a href="#"><FiInstagram/>Fotos</a>
-                    <a href="#"><FiZap/>Hobbies</a>
+                    */}
+                    <a href="/hobbies"><FiZap/>Hobbies</a>
                     <a onClick={closeNav} ><FiArrowLeftCircle/>Fechar</a>
                 </Aside> 
             </Menu>    

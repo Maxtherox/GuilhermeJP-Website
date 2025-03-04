@@ -7,7 +7,7 @@ import c3 from "../../assets/c3.png"
 import { FiLinkedin,FiGithub,FiInstagram } from "react-icons/fi";
 import { Footer } from "../../components/Footer";
 
-export function Photos(){
+export function NotFound(){
     return(
         <Container>
             <Header/>
@@ -16,8 +16,8 @@ export function Photos(){
                 <Article>
                 <Content>
                     <ContentBackground />
-                        <h3>Error</h3>
-                        <p>A página solicitada está em contrução! volte mais tarde.</p>
+                        <h3>Erro 404</h3>
+                        <p>A página solicitada não existe!. Por favor, confira se o link solicitado está correto.</p>
                 </Content>
                 </Article>     
             </Main>        

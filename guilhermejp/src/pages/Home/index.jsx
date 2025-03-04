@@ -17,7 +17,7 @@ export function Home(){
                 <Content>
                     <ContentBackground />
                         <h3>Sobre mim</h3>
-                        <p>Bem-vindo ao meu website! Meu nome é Guilherme Pereira, tenho 25 anos e minha intenção com este site é compartilhar um pouco sobre mim e minha carreira como desenvolvedor de software.</p>
+                        <p>Bem-vindo ao meu website! Meu nome é Guilherme Pereira, tenho 26 anos e minha intenção com este site é compartilhar um pouco sobre mim e minha carreira como desenvolvedor de software.</p>
                         <p>Academicamente, sou formado em Análise e Desenvolvimento de Sistemas, possuo o diploma de tecnólogo pela <em>Universidade Estácio de Sá</em>. Além disso, acumulei diversos certificados ao longo do período acadêmico para complementação de horas extras.</p>
                         <p>Anteriormente, trabalhei como suporte de TI em uma renomada multinacional chamada <em>AB-InBev/Ambev</em>, reconhecida como a maior cervejaria do mundo. Como suporte de TI, contribuí com diversas soluções para problemas do dia a dia, prezando pela qualidade nas entregas e também com muito dinamismo.</p>
                         <p>Também trabalhei como editor de vídeo e animador anteriormente como freelancer, o que contribuiu indiretamente para o meu conhecimento atual em design web e outros assuntos.</p>
@@ -29,15 +29,17 @@ export function Home(){
                             <a href="https://app.rocketseat.com.br/certificates/3cf04357-4759-4f69-8673-b450bc3d79ce" target="_blank"><img src={c3} alt="" /></a>
                         </Certificates>
                         <p>Se sinta livre para me contatar nas minhas redes sociais abaixo:</p>
+                        <p>contato@guilhermejp.com</p>
                         <SocialMedias>
-                            <a href="https://www.linkedin.com/in/guimaxtr/" target="_blank"><FiLinkedin/></a>
+                            <a href="https://www.linkedin.com/in/guimaxtr/" target="_blank" ><FiLinkedin/></a>
                             <a href="https://github.com/Maxtherox/" target="_blank"><FiGithub/></a>
                             <a href="https://www.instagram.com/oimaxtr/" target="_blank"><FiInstagram/></a>
                         </SocialMedias>  
+                        
                 </Content>
                 </Article>     
             </Main>        
-
+        
         </Container>
     )
 }
