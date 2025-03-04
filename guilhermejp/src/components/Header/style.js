@@ -79,6 +79,12 @@ export const Profile = styled.div`
          @media (max-width:${DEVICE_BREAKPOINTS.SM}) {
          display: none;
          }
+         
+    @media (max-width:${DEVICE_BREAKPOINTS.MD}) {
+        width: 146px;
+        height: 146px;
+        border: 4px solid ${({theme}) => theme.COLORS.WHITE};
+    }
     }
    
 `
