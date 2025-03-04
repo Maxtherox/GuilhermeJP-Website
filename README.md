@@ -115,11 +115,6 @@ Este projeto está licenciado sob a licença MIT.
 
 **Contato:**
 
-Para qualquer dúvida ou sugestão, entre em contato com Guilherme Pereira.
+Para qualquer dúvida ou sugestão, entre em contato no e-mail: contato@guilhermejp.com ou na rede social [linkedin](https://www.linkedin.com/in/guimaxtr/).
 
-**Observações:**
 
-* Esta documentação foi criada com base nos arquivos fornecidos.
-* Informações adicionais podem ser adicionadas conforme o projeto evolui.
-
-Lembre-se de atualizar esta documentação sempre que fizer alterações significativas no projeto.
