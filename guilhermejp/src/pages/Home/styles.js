@@ -1,5 +1,5 @@
 import styled from "styled-components"
-import backgroundImg from "../../assets/purple-background-164999.jpg";
+import backgroundImg from "../../assets/bgtech6.jpg";
 import * as animations from '../../styles/animations';
 import { DEVICE_BREAKPOINTS } from "../../styles/devicesBreakpoints";
 
@@ -8,10 +8,11 @@ export const Container = styled.div`
     flex-direction: column;
     align-items: center;
 
+    height: 100svh;
     width: 100%;
-    height: 100vh;
+
     position: absolute;
-    z-index: -1;
+    overflow: hidden;
     
     /* Adiciona um pseudo-elemento ::before */
     &::before {
@@ -22,14 +23,14 @@ export const Container = styled.div`
         width: 100%;
         height: 100%;
         background-image: url(${backgroundImg});
+        
         background-size: cover;
         background-position: center;
         mix-blend-mode: hardlight; /* Define o modo de mesclagem */
-        opacity: 0; /* Define a opacidade do overlay */
+        opacity:0.1; /* Define a opacidade do overlay */
         z-index: -1;
-        filter: blur(1px);
-        transform: rotate(180deg);
-        transform: rotatey(180deg);
+       //filter: blur(111px);
+
     }
 `
 
@@ -39,23 +40,23 @@ export const Main = styled.main`
     width: 100%;
     height: 100%;
     justify-content: center;
-
+    
     animation:${animations.slideOut} .25s ease-in-out;
 `
 
 export const Content = styled.div`
     width: 63.0rem;
-    height: 60rem;
+
     padding: 2.4rem 2.7rem;
     display: flex;
     flex-direction: column;    
     gap: 1rem;
     //border: 1px solid #f1f1f1;
-
+    overflow-y: auto;
     background-color: ${({theme}) => theme.COLORS.WHITE};
     border-radius: 12px;
     position: relative;
-    overflow-y: auto;
+ 
     
     @media (min-width: ${DEVICE_BREAKPOINTS.XX}) {
         width: 105.0rem;
@@ -63,19 +64,22 @@ export const Content = styled.div`
     }
     @media (max-width:${DEVICE_BREAKPOINTS.MD}) {
         width: 37rem;
-        height: 90rem;
+        height: 60rem;
         
         h3 {
             font-size: 18px;
         }
     }
     @media (max-width:${DEVICE_BREAKPOINTS.SM}) {
+
        width: 100%;
+
     }
 `
 
 export const Article = styled.article`
     filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.171));
+    
 `
 
 export const ContentBackground = styled.div`
@@ -85,7 +89,7 @@ export const ContentBackground = styled.div`
     width: 100%;
     background-color: ${({theme}) => theme.COLORS.WHITE};
     border-radius: 12px;
-
+    overflow-y: auto;
     z-index: -1;
     filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.15));
 `

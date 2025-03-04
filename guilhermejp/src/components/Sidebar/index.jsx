@@ -8,9 +8,11 @@ export function Sidebar(){
                 <Aside>
                     <a href="/"><FiUser/>Sobre</a>
                     <a href="/projects"><FiClipboard/>Projetos</a>
-                    <a href="https://cssgradient.io/"><FiGlobe/>Sites</a>
-                    <a href="https://cssgradient.io/"><FiInstagram/>Fotos</a>
-                    <a href="https://cssgradient.io/"><FiZap/>Hobbies</a>
+                    <a href="/website"><FiGlobe/>Sites</a>
+                    {/** 
+                   <a href="https://cssgradient.io/"><FiInstagram/>Fotos</a>
+                   */}
+                    <a href="/hobbies"><FiZap/>Hobbies</a>
                 </Aside> 
             </Menu>    
         </Container>
