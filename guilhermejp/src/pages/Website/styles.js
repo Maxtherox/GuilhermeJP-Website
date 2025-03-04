@@ -28,9 +28,9 @@ export const Container = styled.div`
         background-size: cover;
         background-position: center;
         mix-blend-mode: hardlight; /* Define o modo de mesclagem */
-        opacity: 0.09; /* Define a opacidade do overlay */
+        opacity: 0.1; /* Define a opacidade do overlay */
         z-index: -1;
-        transform: rotateY(180deg);
+        transform: rotateY(0deg);
         filter: blur(1px);
     }
 `
@@ -129,6 +129,11 @@ export const Card = styled.div`
 
         @media (max-width: 850px) {
             width: 100px;
+
+        }
+        @media (max-width: 370px) {
+            width: 80px;
+            margin: 5px;
         }
     }
 `

@@ -67,3 +67,17 @@ export const topToBottom = keyframes`
       transform: translateY(0);
   }
 `
+
+export const opacityBG =  keyframes`
+
+  0% {
+      opacity: 0.01;
+      
+
+  }
+  100%{
+      opacity: 0.1;
+
+  }
+
+`
