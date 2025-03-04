@@ -8,12 +8,12 @@ export const Container = styled.div`
     flex-direction: column;
     align-items: center;
 
-height: 100svh;
+    min-height: 100svh;
     width: 100%;
 
     position: absolute;
+    overflow: auto;
 
-    margin-bottom: 20px;
     padding-bottom:20px;
     
     /* Adiciona um pseudo-elemento ::before */
