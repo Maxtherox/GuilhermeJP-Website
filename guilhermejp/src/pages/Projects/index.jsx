@@ -22,7 +22,7 @@ export function Projects(){
                         <h3>Projetos</h3>
                         <p>Aqui vou elencar algums projetos que fiz durante essa minha trajetória no mundo do desenvolvimento, lembrando que você por ver todos clicando <a href="https://github.com/Maxtherox/">aqui.</a></p>
                         <Card>
-                            <h4>[API Restful] - Aplicação para restaurantes online.</h4>
+                            <h4>[API Restful] - Aplicação para restaurantes online. 🍽️</h4>
                             <p>Essa aplicação fiz durante meu curso da <a href="">Rocketseat</a> trata-se de um site onde o usuário pode realizar suas compras e um administrador pode criar editar e excluir qualquer prato, ainda necessita implementar um sistema de cobrança.</p>
                            <div>
                             <Button title="Deploy" link="https://foodexplorer-maxtr.netlify.app/"/>
@@ -30,15 +30,15 @@ export function Projects(){
                            </div>        
                         </Card>
                         <Card>
-                            <h4>[API Restful] - Aplicação para gerenciamento de notas fiscais e empresas online web.</h4>
+                            <h4>[API Restful] - Aplicação para gerenciamento de notas fiscais e empresas online web. 🧾</h4>
                             <p>Este foi um projeto pessoal para testar diferentes abordagens na hora de criar uma aplicação restful, aqui o usuário pode criar editar visualizar e excluir: Clientes, empresas e produtos.</p>
                            <div>
-                            <Button title="Deploy" link="https://djony-nfe.netlify.app/"/>
-                            <Button title="Github" link="https://github.com/Maxtherox/backend-nfe-plataform-system"/>
+                            <Button title="Deploy" link="https://nfesystem.guilhermejp.com"/>
+                            <Button title="Github" link="https://github.com/Maxtherox/nfe-system-2025"/>
                            </div>        
                         </Card>
                         <Card>
-                            <h4>[API Restful] - Aplicação para anotações online.</h4>
+                            <h4>[API Restful] - Aplicação para anotações online. 📝</h4>
                             <p>Essa aplicação fiz durante meu curso da <a href="">Rocketseat</a> trata-se de um site onde o usuário pode criar, editar e excluir qualquer anotação atrelado ao seu ID, pendente a implementação de algumas validações.</p>
                            <div>
                             <Button title="Deploy" link="https://rocketnotes-maxtr.netlify.app/"/>

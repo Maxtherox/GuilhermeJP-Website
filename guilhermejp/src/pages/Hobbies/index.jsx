@@ -17,17 +17,22 @@ export function Hobbies(){
                 <Content>
                     <ContentBackground />
                         <h3>Hobbies</h3>
-                            <p>Tenho uma variedade de <strong>hobbies</strong> que me mantêm ocupado e inspirado. Entre eles, destaco minha paixão por <strong>jogos</strong>, tanto jogando quanto desenvolvendo. Gosto de ficar imerso em RPGs e souls like, como <em>Dark Souls</em> e <em>Elden Ring</em>, explorando mundos e desafios. Além disso, gosto de me aventurar na edição de vídeos nas horas vagas, embora minha experiência nessa área ainda seja limitada. Estou em constante aprimoramento, especialmente no desenvolvimento de jogos, e já planejo iniciar meu próprio projeto no próximo ano, mantendo-o em segredo por enquanto. 🎮</p>
+                        
+                        <p>Uma das minhas maiores paixões é o <strong>Taekwondo</strong>. Atualmente, estou prestes a conquistar a <strong>faixa vermelha</strong>, um momento significativo na minha jornada, pois já poderei atuar como instrutor. Meu grande objetivo é alcançar a <strong>faixa preta</strong>, e o caminho até lá tem sido uma experiência transformadora. O Taekwondo me ensinou disciplina, paciência e resiliência — qualidades que aplico diariamente na programação. 💪🥋</p>
 
-                            <p>Além disso, encontro prazer em outras atividades que estimulam minha mente e criatividade. Sou um ávido leitor de <em>Berserk</em>, um mangá que me cativa profundamente. Mesmo não sendo talentoso musicalmente, <strong>estudo sobre música</strong> em meu tempo livre, explorando suas nuances e histórias fascinantes. Tenho uma forte paixão por história, dedicando parte do meu tempo livre para absorver conhecimentos sobre diferentes épocas e culturas. 📚</p>
+                        <p>Além dos treinos, tive a oportunidade de unir minha paixão pela tecnologia ao esporte, desenvolvendo um <strong>gerenciador e balanceador de lutas</strong> para competições. Criar uma ferramenta que auxilia eventos e organizadores dentro do Taekwondo foi extremamente gratificante e me deu insights valiosos sobre como a programação pode impactar diferentes áreas da vida. Esse projeto me fez perceber como posso contribuir para comunidades que vão além do mundo da tecnologia. 🔥</p>
 
-                            <p>Relembrar é uma parte importante dos meus hobbies, e o <strong>taekwondo</strong> é uma prática que desejo retomar. Apesar de ter deixado de lado quando me tornei adulto, esse esporte foi meu principal hobby na adolescência e início da juventude, e sinto falta da adrenalina e da sensação de realização que ele proporcionava. 🥋</p>
+                        <p>Outro hobby que me trouxe muito aprendizado foi <strong>criar e gerenciar servidores de jogos</strong>. Desde a adolescência, sempre fui fascinado por como os jogos funcionam por trás das cortinas, e isso me levou a explorar sistemas como <strong>Linux (Ubuntu Server)</strong> e <strong>FreeBSD</strong>. Aprender a configurar, otimizar e manter servidores me ensinou muito sobre redes, segurança e até mesmo automação, tornando-se um grande diferencial na minha trajetória como desenvolvedor. 🚀💻</p>
 
-                            <p>Por fim, minha fascinação por jogos vai além de apenas jogar e desenvolver. <strong>Criar servidores de jogos</strong> é um hobby que me desafia a aprender novas linguagens de programação, como <strong>C++</strong>, já que cada jogo possui seu próprio código fonte em uma linguagem específica. Essa constante busca por conhecimento e habilidade me motiva a continuar explorando e expandindo meus horizontes no universo dos jogos. 🖥️</p>
+                        <p>Minha paixão por <strong>jogos</strong> vai além de apenas jogar. Gosto de entender suas mecânicas, explorar o design por trás de cada experiência e até mesmo experimentar um pouco do desenvolvimento. Sou fã de <em>RPGs e soulslikes</em>, como <em>Dark Souls</em> e <em>Elden Ring</em>, e aprecio jogos que desafiam o jogador tanto mecanicamente quanto narrativamente. 🎮</p>
+
+                        <p>Além dos games, sou um grande entusiasta do <strong>automobilismo</strong> e dos simuladores de corrida e voo. Não apenas pela adrenalina de acelerar em uma pista virtual ou pilotar uma aeronave, mas também pelo lado técnico envolvido. Gosto de estudar como os veículos funcionam, ajustar configurações, entender física e aerodinâmica — e isso tudo me fascina tanto quanto escrever código. 🏎️✈️</p>
+
+                        <p>No fim, todos esses hobbies se conectam de alguma forma com a tecnologia e com minha vontade constante de aprender e criar. Seja no tatame, nos servidores ou nas pistas virtuais, estou sempre buscando novos desafios e formas de aprimorar minhas habilidades. 🚀🔥</p>
+
                 </Content>
                 </Article>     
             </Main>        
-        
         </Container>
     )
 }
