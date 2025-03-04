@@ -5,7 +5,7 @@ import {DEVICE_BREAKPOINTS} from "../../styles/devicesBreakpoints"
 export const Container = styled.div`
     display: flex;
     width: 86.1rem;
-    min-height: 10.7rem;
+    height: 15.7rem;
     background: ${({theme}) => theme.COLORS.BLACK};
     margin-top: 7rem;
     margin-bottom: 7px;
@@ -13,6 +13,10 @@ export const Container = styled.div`
     z-index: 1;
     animation:${animations.slideOut} .75s cubic-bezier(0.075, 0.82, 0.165, 1);
 
+    @media (max-width:850px) {
+
+            height: 10.7rem;
+        }
     #menuMobileHeader {
         font-size: 7.0rem;
         margin-top: 2rem;
@@ -23,6 +27,7 @@ export const Container = styled.div`
         }
         @media (max-width:450px) {
             font-size: 53px;
+
         }
     }
 
