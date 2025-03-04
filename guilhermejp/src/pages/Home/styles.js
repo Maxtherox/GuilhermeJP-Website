@@ -47,7 +47,7 @@ export const Main = styled.main`
 
 export const Content = styled.div`
     width: 63.0rem;
-    height: 60rem;
+    max-height: 60rem;
     padding: 2.4rem 2.7rem;
     display: flex;
     flex-direction: column;    
