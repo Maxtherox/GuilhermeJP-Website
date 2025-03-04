@@ -16,7 +16,7 @@ export function Hobbies(){
                 <Article>
                 <Content>
                     <ContentBackground />
-                        <h3>Hobbies</h3>
+                        <h3>Hobbies </h3>
                         
                         <p>Uma das minhas maiores paixões é o <strong>Taekwondo</strong>. Atualmente, estou prestes a conquistar a <strong>faixa vermelha</strong>, um momento significativo na minha jornada, pois já poderei atuar como instrutor. Meu grande objetivo é alcançar a <strong>faixa preta</strong>, e o caminho até lá tem sido uma experiência transformadora. O Taekwondo me ensinou disciplina, paciência e resiliência — qualidades que aplico diariamente na programação. 💪🥋</p>
 
