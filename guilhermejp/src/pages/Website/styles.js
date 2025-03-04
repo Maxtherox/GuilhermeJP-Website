@@ -1,5 +1,5 @@
 import styled from "styled-components"
-import backgroundImg from "../../assets/bgtech9.jpg";
+import backgroundImg from "../../assets/bgtech6.jpg";
 import * as animations from '../../styles/animations';
 import { DEVICE_BREAKPOINTS } from "../../styles/devicesBreakpoints";
 
@@ -30,6 +30,7 @@ export const Container = styled.div`
         mix-blend-mode: hardlight; /* Define o modo de mesclagem */
         opacity: 0.09; /* Define a opacidade do overlay */
         z-index: -1;
+        transform: rotateY(180deg);
         filter: blur(1px);
     }
 `

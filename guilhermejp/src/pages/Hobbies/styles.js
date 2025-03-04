@@ -8,10 +8,13 @@ export const Container = styled.div`
     flex-direction: column;
     align-items: center;
 
+height: 100svh;
     width: 100%;
-    height: 100svh;
+
     position: absolute;
-    overflow-y: auto;
+
+    margin-bottom: 20px;
+    padding-bottom:20px;
     
     /* Adiciona um pseudo-elemento ::before */
     &::before {
@@ -27,10 +30,11 @@ export const Container = styled.div`
         mix-blend-mode: hardlight; /* Define o modo de mesclagem */
         opacity: 0.1; /* Define a opacidade do overlay */
         z-index: -1;
-        filter: blur(1px);
-        transform: rotate(180deg);
+
+  
         transform: rotatey(180deg);
     }
+   
 `
 
 export const Main = styled.main`
@@ -39,7 +43,7 @@ export const Main = styled.main`
     width: 100%;
     height: 100%;
     justify-content: center;
-    
+
     animation:${animations.slideOut} .25s ease-in-out;
 `
 
@@ -63,7 +67,7 @@ export const Content = styled.div`
     }
     @media (max-width:${DEVICE_BREAKPOINTS.MD}) {
         width: 37rem;
-        height: 70rem;
+        height: 60rem;
         
         h3 {
             font-size: 18px;
@@ -71,7 +75,7 @@ export const Content = styled.div`
     }
     @media (max-width:${DEVICE_BREAKPOINTS.SM}) {
        width: 100%;
-
+height: 100%;
     }
 `
 

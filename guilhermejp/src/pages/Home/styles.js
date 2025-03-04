@@ -8,11 +8,11 @@ export const Container = styled.div`
     flex-direction: column;
     align-items: center;
 
-    min-height: 100%;
+height: 100svh;
     width: 100%;
 
     position: absolute;
-    overflow: hidden;
+
     margin-bottom: 20px;
     padding-bottom:20px;
     /* Adiciona um pseudo-elemento ::before */
@@ -47,7 +47,7 @@ export const Main = styled.main`
 
 export const Content = styled.div`
     width: 63.0rem;
-    max-height: 60rem;
+    height: 60rem;
     padding: 2.4rem 2.7rem;
     display: flex;
     flex-direction: column;    
@@ -65,16 +65,17 @@ export const Content = styled.div`
     }
     @media (max-width:${DEVICE_BREAKPOINTS.MD}) {
         width: 37rem;
-        height: 70rem;
+        height: 60rem;
         
         h3 {
             font-size: 18px;
         }
     }
     @media (max-width:${DEVICE_BREAKPOINTS.SM}) {
+        width: 100%;
+height:100%;
 
-width: 100%;
-height: 100%;
+
     }
 `
 
@@ -99,13 +100,16 @@ export const ContentBackground = styled.div`
 
 export const Certificates = styled.div`
     margin-left: -1.8rem;
+
 `
 
 export const SocialMedias = styled.div`
     display: flex;
     flex-direction: row;
-    gap: 1rem;
+    gap: 1.5rem;
     > a {
         color: ${({theme}) => theme.COLORS.BLACK};
+        margin-top: 5px;
+        font-size: 25px;
     }
 `

@@ -1,5 +1,5 @@
 import styled from "styled-components"
-import backgroundImg from "../../assets/bgtech6.jpg";
+import backgroundImg from "../../assets/bgtech9.jpg";
 import * as animations from '../../styles/animations';
 import { DEVICE_BREAKPOINTS } from "../../styles/devicesBreakpoints";
 
@@ -10,7 +10,23 @@ export const Container = styled.div`
 
     min-height: 100%;
     width: 100%;
+    &::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url(${backgroundImg});
+        background-size: cover;
+        background-position: center;
+        mix-blend-mode: hardlight; /* Define o modo de mesclagem */
+        opacity: 0.05; /* Define a opacidade do overlay */
+        z-index: -2;
+        transform: rotate(180deg);
 
+
+    }
     position: absolute;
     overflow: hidden;
     margin-bottom: 20px;
@@ -29,7 +45,7 @@ export const Container = styled.div`
         background-size: cover;
         background-position: center;
         mix-blend-mode: hardlight; /* Define o modo de mesclagem */
-        opacity:0.1; /* Define a opacidade do overlay */
+        opacity:0.08; /* Define a opacidade do overlay */
         z-index: -1;
        //filter: blur(1px);
 
@@ -42,7 +58,7 @@ export const Main = styled.main`
     width: 100%;
     height: 100%;
     justify-content: center;
-    
+
     animation:${animations.slideOut} .25s ease-in-out;
 `
 

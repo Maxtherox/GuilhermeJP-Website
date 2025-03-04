@@ -29,12 +29,14 @@ export function Home(){
                             <a href="https://app.rocketseat.com.br/certificates/3cf04357-4759-4f69-8673-b450bc3d79ce" target="_blank"><img src={c3} alt="" /></a>
                         </Certificates>
                         <p>Se sinta livre para me contatar nas minhas redes sociais abaixo:</p>
-                        <p>contato@guilhermejp.com</p>
-                        <SocialMedias>
+                        <p>contato@guilhermejp.com 
+                            <SocialMedias>
                             <a href="https://www.linkedin.com/in/guimaxtr/" target="_blank" ><FiLinkedin/></a>
                             <a href="https://github.com/Maxtherox/" target="_blank"><FiGithub/></a>
                             <a href="https://www.instagram.com/oimaxtr/" target="_blank"><FiInstagram/></a>
-                        </SocialMedias>  
+                        </SocialMedias> 
+                        </p>
+                         
                         
                 </Content>
                 </Article>     
