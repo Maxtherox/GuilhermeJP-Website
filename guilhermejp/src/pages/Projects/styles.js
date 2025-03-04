@@ -1,5 +1,5 @@
 import styled from "styled-components"
-import backgroundImg from "../../assets/bgtech9.jpg";
+import backgroundImg from "../../assets/bgtech6.jpg";
 import * as animations from '../../styles/animations';
 import { DEVICE_BREAKPOINTS } from "../../styles/devicesBreakpoints";
 
@@ -8,10 +8,13 @@ export const Container = styled.div`
     flex-direction: column;
     align-items: center;
 
+    min-height: 100%;
     width: 100%;
-    height: 100svh;
+
     position: absolute;
-    overflow-y: auto;
+    overflow: hidden;
+    margin-bottom: 20px;
+    padding-bottom:20px;
     
     /* Adiciona um pseudo-elemento ::before */
     &::before {
@@ -55,15 +58,16 @@ export const Content = styled.div`
     background-color: ${({theme}) => theme.COLORS.WHITE};
     border-radius: 12px;
     position: relative;
- 
+
     
+
     @media (min-width: ${DEVICE_BREAKPOINTS.XX}) {
         width: 105.0rem;
         height: 60rem
     }
     @media (max-width:${DEVICE_BREAKPOINTS.MD}) {
         width: 37rem;
-        height: 70rem;
+        height: 60rem;
         
         h3 {
             font-size: 18px;
@@ -71,7 +75,7 @@ export const Content = styled.div`
     }
     @media (max-width:${DEVICE_BREAKPOINTS.SM}) {
        width: 100%;
-       height: 100vh;
+       height: 100%;
     }
 `
 
@@ -124,5 +128,9 @@ export const Card = styled.div`
     button {
         width: 15rem;
         margin-right: 2rem;
+        
+        @media (max-width: 850px) {
+            width: 100px;
+        }
     }
 `
