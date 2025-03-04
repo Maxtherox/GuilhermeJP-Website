@@ -10,7 +10,7 @@ export const Menu = styled.div`
     background: ${({theme}) => theme.COLORS.GRADIENT_SIDEBAR};
     width: 22.4rem;
     max-height: 60rem;
-    margin-bottom: 2rem;
+
     border-radius: 12px;
     //border-top-left-rsssadius: 0;
     //border-top-right-radius: 0;

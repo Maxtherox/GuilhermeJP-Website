@@ -8,12 +8,13 @@ export const Container = styled.div`
     flex-direction: column;
     align-items: center;
 
-    height: 100svh;
+    min-height: 100%;
     width: 100%;
 
     position: absolute;
     overflow: hidden;
-    
+    margin-bottom: 20px;
+    padding-bottom:20px;
     /* Adiciona um pseudo-elemento ::before */
     &::before {
         content: '';
@@ -46,7 +47,7 @@ export const Main = styled.main`
 
 export const Content = styled.div`
     width: 63.0rem;
-
+    height: 60rem;
     padding: 2.4rem 2.7rem;
     display: flex;
     flex-direction: column;    
@@ -56,7 +57,7 @@ export const Content = styled.div`
     background-color: ${({theme}) => theme.COLORS.WHITE};
     border-radius: 12px;
     position: relative;
- 
+
     
     @media (min-width: ${DEVICE_BREAKPOINTS.XX}) {
         width: 105.0rem;
@@ -64,7 +65,7 @@ export const Content = styled.div`
     }
     @media (max-width:${DEVICE_BREAKPOINTS.MD}) {
         width: 37rem;
-        height: 60rem;
+        height: 70rem;
         
         h3 {
             font-size: 18px;
@@ -72,13 +73,14 @@ export const Content = styled.div`
     }
     @media (max-width:${DEVICE_BREAKPOINTS.SM}) {
 
-       width: 100%;
-
+width: 100%;
+height: 100%;
     }
 `
 
 export const Article = styled.article`
     filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.171));
+
     
 `
 
@@ -92,6 +94,7 @@ export const ContentBackground = styled.div`
     overflow-y: auto;
     z-index: -1;
     filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.15));
+    
 `
 
 export const Certificates = styled.div`
