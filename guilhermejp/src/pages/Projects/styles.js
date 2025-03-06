@@ -51,6 +51,31 @@ export const Container = styled.div`
     }
 `
 
+export const Yellow = styled.span`
+color: #ff9100;
+font-weight: bold;
+font-size: 14px;
+margin: -2rem 0  -1rem; 
+`
+export const Blue = styled.span`
+color: #008cff;
+font-weight: bold;
+font-size: 14px;
+margin: -2rem 0  -1rem; 
+`
+export const Red = styled.span`
+color: red;
+font-weight: bold;
+font-size: 14px;
+margin: -2rem 0  -1rem; 
+`
+export const Green = styled.span`
+color: green;
+font-weight: bold;
+font-size: 14px;
+margin: -2rem 0  -1rem; 
+`
+
 export const Main = styled.main`
     display: flex;
     gap: 7px;
