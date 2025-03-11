@@ -13,7 +13,7 @@ export function AppRoutes(){
             <Route  path="/website" element={<Website />}/>
             <Route  path="/hobbies" element={<Hobbies />}/>
 
-            <Route path="*" exact={true} element={<NotFound />} />
+            <Route path="*" element={<NotFound />}  />
         </Routes>
     )
 }
