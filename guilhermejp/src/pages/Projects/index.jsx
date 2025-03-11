@@ -89,7 +89,7 @@ export function Projects() {
                             </p>
                             <div>
                                 <Button title="Deploy" link="https://taekwondo.guilhermejp.com/" />
-                                <Button title="Github" link="https://nfesystem.guilhermejp.com" />
+                                <Button title="Github" link="https://github.com/Maxtherox/Taekwondo-EManager" />
                             </div>
                         </Card>
                         <Card>
