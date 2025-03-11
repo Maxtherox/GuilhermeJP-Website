@@ -13,8 +13,8 @@ import { useEffect } from "react"
 export function Projects() {
 
     useEffect(() => {
-            document.title = "Projetos | Guilherme Pereira - Desenvolvedor Full Stack";
-        },);
+        document.title = "Projetos | Guilherme Pereira - Desenvolvedor Full Stack";
+    },);
 
     return (
         <Container>
@@ -34,6 +34,21 @@ export function Projects() {
                                 <Button title="Deploy" link="https://foodexplorer-maxtr.netlify.app/" />
                                 <Button title="Github" link="https://github.com/Maxtherox/foodexplorer-react-frontend" />
                             </div>
+                        </Card>
+                        <Card>
+                            <h4>[Website] - Camila Braga Marketing 👩‍💻</h4>
+                            <Green>Responsivo 100%</Green>
+                            <p>
+                                Desenvolvi o website da Camila Braga utilizando React, Vite e Styled Components, criando uma aplicação rápida e com interface moderna e responsiva. O projeto abrange desde a estruturação da aplicação com React e Vite, até a estilização com Styled Components, garantindo uma experiência otimizada para o usuário.
+                            </p>
+                            <p>
+                                <strong>Observação:</strong> Este projeto foi publicado com a autorização de Camila Braga.  {/* Diminui o aviso e mantem profissionalismo */}
+                            </p>
+                            <div>
+                                <Button title="Deploy" link="https://camilabragamarketing.com" />
+                                <Button title="Github" link="https://github.com/Maxtherox/camilabragamarketing.com" /> {/* Substitua pelo seu usuário */}
+                            </div>
+
                         </Card>
                         <Card>
                             <h4>[API Restful] - Aplicação para gerenciamento de notas fiscais e empresas online web. 🧾</h4>
@@ -64,7 +79,7 @@ export function Projects() {
                         <Card>
                             <h4>[API Restful] - Gerenciamento de eventos de Taekwondo 🥋</h4>
                             <Blue>Em desenvolvimento (WIP) <Red>Corrigindo problema com JWT Token no deploy... (WIP) </Red> </Blue>
-                            
+
                             <p>
                                 Esta API fornece uma solução completa para gerenciar eventos de Taekwondo,
                                 incluindo cadastro de competidores, geração de chaves de lutas e
