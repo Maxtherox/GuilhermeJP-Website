@@ -5,9 +5,12 @@ import c1 from "../../assets/c1.png"
 import c2 from "../../assets/c2.png"
 import c3 from "../../assets/c3.png"
 import { FiLinkedin,FiGithub,FiInstagram } from "react-icons/fi";
-import { Footer } from "../../components/Footer";
+import { useEffect } from "react"
 
 export function Home(){
+    useEffect(() => {
+            document.title = "Home | Guilherme Pereira - Desenvolvedor Full Stack";
+        },);
     return(
         <Container>
             <Header/>

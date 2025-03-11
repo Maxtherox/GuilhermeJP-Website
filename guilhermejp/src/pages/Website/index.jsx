@@ -1,16 +1,13 @@
 import { Container, Main, Content, Certificates, SocialMedias, ContentBackground, Article, Card, Yellow, Green, Red, Blue} from "./styles"
 import { Header } from "../../components/Header"
 import { Sidebar } from "../../components/Sidebar"
-import c1 from "../../assets/c1.png"
-import c2 from "../../assets/c2.png"
-import c3 from "../../assets/c3.png"
-import { FiLinkedin,FiGithub,FiInstagram } from "react-icons/fi";
-import { Footer } from "../../components/Footer";
 import { Button } from "../../components/Button/Index"
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { useEffect } from "react"
 
 export function Website(){
-
+    useEffect(() => {
+            document.title = "Websites | Guilherme Pereira - Desenvolvedor Full Stack";
+        },);
     return(
         <Container>
             <Header/>

@@ -6,8 +6,13 @@ import c2 from "../../assets/c2.png"
 import c3 from "../../assets/c3.png"
 import { FiLinkedin,FiGithub,FiInstagram } from "react-icons/fi";
 import { Footer } from "../../components/Footer";
-
+import { useEffect } from "react"
 export function Hobbies(){
+
+    useEffect(() => {
+        document.title = "Hobbies | Guilherme Pereira - Desenvolvedor Full Stack";
+    },); 
+    
     return(
         <Container>
             <Header/>

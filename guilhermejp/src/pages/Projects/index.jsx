@@ -8,8 +8,13 @@ import { FiLinkedin, FiGithub, FiInstagram } from "react-icons/fi";
 import { Footer } from "../../components/Footer";
 import { Button } from "../../components/Button/Index"
 import { useParams, useNavigate, Link } from "react-router-dom";
+import { useEffect } from "react"
 
 export function Projects() {
+
+    useEffect(() => {
+            document.title = "Projetos | Guilherme Pereira - Desenvolvedor Full Stack";
+        },);
 
     return (
         <Container>
@@ -51,14 +56,15 @@ export function Projects() {
                                 a exibição de produtos já está implementada, e o sistema de checkout está em desenvolvimento.
                             </p>
                             <div>
-                                <Button title="Deploy" link="https://maralt.guilhermejp.com/" />
+                                <Button title="Deploy em breve" link="#" />
                                 <Button title="Github indisponível" link="#" />
                             </div>
                         </Card>
 
                         <Card>
                             <h4>[API Restful] - Gerenciamento de eventos de Taekwondo 🥋</h4>
-                            <Blue>Em desenvolvimento (WIP) </Blue>
+                            <Blue>Em desenvolvimento (WIP) <Red>Corrigindo problema com JWT Token no deploy... (WIP) </Red> </Blue>
+                            
                             <p>
                                 Esta API fornece uma solução completa para gerenciar eventos de Taekwondo,
                                 incluindo cadastro de competidores, geração de chaves de lutas e
