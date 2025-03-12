@@ -1,0 +1,22 @@
+[33m4fe48f3[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m HEAD@{0}: pull: Fast-forward
+[33m4b500fe[m HEAD@{1}: checkout: moving from projects_feat to main
+[33m9f8d53b[m[33m ([m[1;32mprojects_feat[m[33m)[m HEAD@{2}: commit: Refactor(project): alterações visando melhoreas e conformidades com SEO.
+[33m50f6091[m[33m ([m[1;31morigin/projects_feat[m[33m)[m HEAD@{3}: commit: feat(cards): adicionado novo projeto 'maralt' a pagina de projetos.
+[33m7fe7ab2[m HEAD@{4}: commit: style(cards): adicionado spans coloridos para observações nos cards.
+[33m1423793[m HEAD@{5}: commit: feat(cards): adicionado novo projeto 'taekwondo' a pagina de projetos.
+[33m417938d[m[33m ([m[1;32mDist_branch[m[33m)[m HEAD@{6}: checkout: moving from Dist_branch to projects_feat
+[33m417938d[m[33m ([m[1;32mDist_branch[m[33m)[m HEAD@{7}: pull origin main: Fast-forward
+[33ma34a120[m[33m ([m[1;31morigin/Dist_branch[m[33m)[m HEAD@{8}: commit: update(hobbies): atualização do texto.
+[33mf4aa000[m HEAD@{9}: pull origin Dist_branch: Merge made by the 'ort' strategy.
+[33mf49aaed[m HEAD@{10}: commit: update(hobbies): atualização do texto.
+[33m69837f9[m[33m ([m[1;32m2025[m[33m)[m HEAD@{11}: checkout: moving from 2025 to Dist_branch
+[33m69837f9[m[33m ([m[1;32m2025[m[33m)[m HEAD@{12}: commit: fix(visual): corrigido alguns bugs pequenos de visualização.
+[33m9a5d850[m HEAD@{13}: commit: feat(visual): adicionada animação ao background.
+[33m7265418[m HEAD@{14}: commit: fix(visual): pequenos ajustes gerais.
+[33m2ede9ad[m HEAD@{15}: commit: fix(visual): adicionado responsividade a imagem de perfil.
+[33m3499990[m HEAD@{16}: commit: fix(visual): correção redimensionamento da página website.
+[33ma2baee1[m HEAD@{17}: commit: fix(visual):correção de botões e redimensionamento da pagina projetos
+[33m0afe156[m HEAD@{18}: commit: fix(visual) correção de bug visual onde não era possível ver link e icones das redes sociais em determinados aparelhos.
+[33m6357490[m HEAD@{19}: commit: feat(all): mudança de visual geral das paginas e fix de bugs pequenos
+[33m4b500fe[m HEAD@{20}: checkout: moving from main to 2025
+[33m4b500fe[m HEAD@{21}: clone: from https://github.com/Maxtherox/GuilhermeJP-Website.git

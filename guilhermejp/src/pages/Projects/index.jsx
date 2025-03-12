@@ -102,7 +102,7 @@ export function Projects() {
                             </div>
                         </Card>
                         <br />
-                        <h3>Projetos de Aprendizado Inicial</h3>
+                        <h3>Projetos de Aprendizado Inicial (micro projetos)</h3>
                         <p>
                             Durante a fase inicial da minha jornada de aprendizado, desenvolvi estes projetos para praticar e melhorar meus fundamentos de HTML, CSS e Javascript. Se você busca projetos que demonstrem um conhecimento mais aprofundado e técnicas mais avançadas, recomendo a visualização dos projetos destacados acima. Os projetos apresentados aqui refletem meu ponto de partida no desenvolvimento web.
                         </p>
@@ -118,6 +118,17 @@ export function Projects() {
                                 <Button title="Ver Código" link="https://github.com/Maxtherox/Alarme_web" />
                             </div>
                         </Card>
+                        <Card>
+  <h4>Github Favorites - Primeiros Passos no Desenvolvimento Web 🚀</h4>
+  <Green>Projeto estudo de fundamentos</Green>
+  <p>
+    Mais um dos meus primeiros no desenvolvimento web, Ele demonstra a aplicação de JavaScript para interagir com a API do Github e exibir informações de usuários favoritos. É importante notar que este projeto reflete meu nível de habilidade da época de sua criação.
+  </p>
+  <div>
+    <Button title="Deploy" link="https://shiny-torrone-7ed96a.netlify.app/" />
+    <Button title="Github" link="https://github.com/maxtherox/Github-favorites" />
+  </div>
+</Card>
                     </Content>
                 </Article>
             </Main>
