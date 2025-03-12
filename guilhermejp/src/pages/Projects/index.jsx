@@ -78,14 +78,18 @@ export function Projects() {
 
                         <Card>
                             <h4>[API Restful] - Gerenciamento de eventos de Taekwondo 🥋</h4>
-                            <Blue>Em desenvolvimento (WIP) <Red>Corrigindo problema com JWT Token no deploy... (WIP) </Red> </Blue>
+                            <Blue>Em desenvolvimento (WIP) <Yellow>Pendente rotas de usuário no frontend.(WIP) </Yellow> </Blue>
 
                             <p>
                                 Esta API fornece uma solução completa para gerenciar eventos de Taekwondo,
                                 incluindo cadastro de competidores, geração de chaves de lutas e
                                 gerenciamento de usuários. O backend está 100% funcional, com rotas
                                 para todas as operações. O frontend está em desenvolvimento, com a
-                                área administrativa 85% pronta.
+                                área administrativa 85% pronta.<br />
+                                <br />
+                                <strong>Login:</strong> admin01
+                                <br />
+                                <strong>Senha:</strong> 12345
                             </p>
                             <div>
                                 <Button title="Deploy" link="https://taekwondo.guilhermejp.com/" />
@@ -94,11 +98,20 @@ export function Projects() {
                         </Card>
                         <Card>
                             <h4>[API Restful] - Aplicação para anotações online. 📝</h4>
-                            <Red>Pendente responsividade </Red>
-                            <p>Essa aplicação fiz durante meu curso da <a href="">Rocketseat</a> trata-se de um site onde o usuário pode criar, editar e excluir qualquer anotação atrelado ao seu ID, pendente a implementação de algumas validações.</p>
+                            <Yellow>Pendente responsividade & validações de formulário </Yellow>
+                            <p>Essa aplicação fiz durante meu curso da <a href="">Rocketseat</a> trata-se de um site onde o usuário pode criar, editar e excluir qualquer anotação atrelado ao seu ID, pendente a implementação de validações.</p>
                             <div>
                                 <Button title="Deploy" link="https://rocketnotes-maxtr.netlify.app/" />
                                 <Button title="Github" link="https://github.com/Maxtherox/rocketnotes-nodejs-backend" />
+                            </div>
+                        </Card>
+                        <Card>
+                            <h4>[API Restful] - Aplicação para avaliação de filmes online. 📝</h4>
+                            <Yellow>Pendente responsividade & validações de formulário</Yellow>
+                            <p>Mais uma aplicação que fiz durante um desafio do meu curso da <a href="https://app.rocketseat.com.br/" target="blank">Rocketseat</a> trata-se de um site onde o usuário pode criar, editar e excluir qualquer filme, pendente a implementação de validações.</p>
+                            <div>
+                                <Button title="Deploy em breve" link="#" />
+                                <Button title="Github" link="https://github.com/Maxtherox/RocketMovies-NodeJS-Backend" />
                             </div>
                         </Card>
                         <br />
@@ -119,16 +132,16 @@ export function Projects() {
                             </div>
                         </Card>
                         <Card>
-  <h4>Github Favorites - Primeiros Passos no Desenvolvimento Web 🚀</h4>
-  <Green>Projeto estudo de fundamentos</Green>
-  <p>
-    Mais um dos meus primeiros no desenvolvimento web, Ele demonstra a aplicação de JavaScript para interagir com a API do Github e exibir informações de usuários favoritos. É importante notar que este projeto reflete meu nível de habilidade da época de sua criação.
-  </p>
-  <div>
-    <Button title="Deploy" link="https://shiny-torrone-7ed96a.netlify.app/" />
-    <Button title="Github" link="https://github.com/maxtherox/Github-favorites" />
-  </div>
-</Card>
+                            <h4>Github Favorites - Primeiros Passos no Desenvolvimento Web 🚀</h4>
+                            <Green>Projeto estudo de fundamentos</Green>
+                            <p>
+                                Mais um dos meus primeiros no desenvolvimento web, Ele demonstra a aplicação de JavaScript para interagir com a API do Github e exibir informações de usuários favoritos. É importante notar que este projeto reflete meu nível de habilidade da época de sua criação.
+                            </p>
+                            <div>
+                                <Button title="Deploy" link="https://shiny-torrone-7ed96a.netlify.app/" />
+                                <Button title="Github" link="https://github.com/maxtherox/Github-favorites" />
+                            </div>
+                        </Card>
                     </Content>
                 </Article>
             </Main>
