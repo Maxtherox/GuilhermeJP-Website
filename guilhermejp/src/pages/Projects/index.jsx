@@ -24,7 +24,7 @@ export function Projects() {
                 <Article>
                     <Content>
                         <ContentBackground />
-                        <h3>Projetos</h3>
+                        <h3>Projetos atuais</h3>
                         <p>Aqui vou elencar algums projetos que fiz durante essa minha trajetória no mundo do desenvolvimento, lembrando que você por ver todos clicando <a href="https://github.com/Maxtherox/">aqui.</a></p>
                         <Card>
                             <h4>[API Restful] - Aplicação para restaurantes online. 🍽️</h4>
@@ -99,6 +99,23 @@ export function Projects() {
                             <div>
                                 <Button title="Deploy" link="https://rocketnotes-maxtr.netlify.app/" />
                                 <Button title="Github" link="https://github.com/Maxtherox/rocketnotes-nodejs-backend" />
+                            </div>
+                        </Card>
+                        <br />
+                        <h3>Projetos de Aprendizado Inicial</h3>
+                        <p>
+                            Durante a fase inicial da minha jornada de aprendizado, desenvolvi estes projetos para praticar e melhorar meus fundamentos de HTML, CSS e Javascript. Se você busca projetos que demonstrem um conhecimento mais aprofundado e técnicas mais avançadas, recomendo a visualização dos projetos destacados acima. Os projetos apresentados aqui refletem meu ponto de partida no desenvolvimento web.
+                        </p>
+                        <Card>
+                            <h4>Timer MaxTR - Primeiros Passos no Desenvolvimento Web 🚀</h4>
+                            <Green>Projeto estudo de fundamentos</Green>
+                            <p>
+                                Este projeto foi um dos meus primeiros no desenvolvimento web, criado durante o curso "Explorer" da Rocketseat. Trata-se de um temporizador web, inspirado na técnica Pomodoro, desenvolvido com HTML, CSS e JavaScript.
+                                É importante notar que este projeto reflete minhas habilidades em um estágio inicial de aprendizado. Hoje, como desenvolvedor Fullstack com Node.js e React, minhas capacidades são significativamente mais avançadas.
+                            </p>
+                            <div>
+                                <Button title="Deploy" link="https://maxtherox.github.io/Alarme_web/" />
+                                <Button title="Ver Código" link="https://github.com/Maxtherox/Alarme_web" />
                             </div>
                         </Card>
                     </Content>
