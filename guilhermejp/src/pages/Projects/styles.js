@@ -170,12 +170,14 @@ export const Card = styled.div`
         margin-right: 2rem;
         
         @media (max-width: 850px) {
-            width: 100px;
+            width: 140px;
+            margin: 5px;
 
         }
-        @media (max-width: 370px) {
+        @media (max-width: 37px) {
             width: 80px;
-            margin: 5px;
+
+
         }
     }
 `
