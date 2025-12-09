@@ -36,7 +36,7 @@ export function Home(){
                             <SocialMedias>
                             <a href="https://www.linkedin.com/in/guimaxtr/" target="_blank" ><FiLinkedin/></a>
                             <a href="https://github.com/Maxtherox/" target="_blank"><FiGithub/></a>
-                            <a href="https://www.instagram.com/oimaxtr/" target="_blank"><FiInstagram/></a>
+                            <a href="https://www.instagram.com/dev.guilhermejp/" target="_blank"><FiInstagram/></a>
                         </SocialMedias> 
                         </p>
                          

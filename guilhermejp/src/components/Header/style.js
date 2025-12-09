@@ -27,6 +27,9 @@ export const Container = styled.div`
         color: #fafafa;
         @media (max-width:${DEVICE_BREAKPOINTS.SM}) {
             display: flex;
+            margin-top: 0;
+            justify-content: center;
+            align-items: center;
         }
         @media (max-width:450px) {
             font-size: 53px;
@@ -82,7 +85,7 @@ export const Profile = styled.div`
          @media (max-width:${DEVICE_BREAKPOINTS.SM}) {
          display: none;
          }
-         
+    
     @media (max-width:${DEVICE_BREAKPOINTS.MD}) {
         width: 146px;
         height: 146px;
