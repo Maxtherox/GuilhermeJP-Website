@@ -1,33 +1,43 @@
-import { Container, Main, Content, Certificates, SocialMedias, ContentBackground, Article} from "./styles"
-import { Header } from "../../components/Header"
-import { Sidebar } from "../../components/Sidebar"
-import c1 from "../../assets/c1.png"
-import c2 from "../../assets/c2.png"
-import c3 from "../../assets/c3.png"
-import { FiLinkedin,FiGithub,FiInstagram } from "react-icons/fi";
-import { Footer } from "../../components/Footer";
-import { useEffect } from "react"
+import React from "react";
+import { Helmet } from "react-helmet-async";
+import { Link } from "react-router-dom";
+import { ArrowLeft, Home } from "lucide-react";
 
-export function NotFound(){
+import { Button } from "@/components/ui/button";
+import { GlowCard } from "@/components/ui/glow-card";
+import { CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
-    useEffect(() => {
-        document.title = "Erro 404. Pagina não encontrada";
-    },);
-    
-    return(
-        <Container>
-            <Header/>
-            <Main>
-                <Sidebar/>
-                <Article>
-                <Content>
-                    <ContentBackground />
-                        <h3>Erro 404</h3>
-                        <p>A página solicitada não existe!. Por favor, confira se o link solicitado está correto.</p>
-                </Content>
-                </Article>     
-            </Main>        
-        
-        </Container>
-    )
+export function NotFound() {
+  return (
+    <div className="space-y-6">
+      <Helmet>
+        <title>Erro 404 | Pagina nao encontrada</title>
+      </Helmet>
+
+      <GlowCard className="relative">
+        <div className="absolute inset-0 bg-[radial-gradient(60%_70%_at_30%_0%,hsl(var(--primary)/0.18),transparent_60%)]" />
+        <CardHeader className="relative">
+          <CardTitle className="text-3xl font-black tracking-tight md:text-4xl">
+            Erro 404
+          </CardTitle>
+          <CardDescription className="text-base">
+            A pagina solicitada nao existe. Se voce chegou aqui por um link, ele pode estar errado
+            ou desatualizado.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="relative flex flex-wrap gap-3">
+          <Button asChild className="rounded-xl">
+            <Link to="/">
+              <Home className="mr-2 size-4" />
+              Voltar para Home
+            </Link>
+          </Button>
+          <Button variant="outline" className="rounded-xl" onClick={() => window.history.back()}>
+            <ArrowLeft className="mr-2 size-4" />
+            Voltar
+          </Button>
+        </CardContent>
+      </GlowCard>
+    </div>
+  );
 }
