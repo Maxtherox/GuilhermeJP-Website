@@ -19,12 +19,38 @@
     <link rel="manifest" href="/manifest.json">
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
-    <meta name="theme-color" content="#ffffff">
+    <meta name="theme-color" content="#05070a">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz@9..40&family=Poppins:wght@100;200;300;400;500&family=Roboto:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
     <title>Guilherme J. Pereira - Desenvolvedor Full Stack Web</title>
-    <meta name="description" content="Dev FullStack com experiência em React, Node.js. Crio soluções web para empresas e pequenos empreendedores. Explore meu portfólio e veja meus projetos.">
+    <meta name="description" content="Dev Fullstack com experiencia em React, Node.js. Crio solucoes web para empresas e pequenos empreendedores. Explore meu portfolio e veja meus projetos.">
+    <script>
+      (function () {
+        try {
+          var key = "gp-theme";
+          var theme = localStorage.getItem(key) || "dark";
+          var resolved =
+            theme === "system"
+              ? window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light"
+              : theme;
+
+          document.documentElement.dataset.theme = resolved;
+          if (resolved === "dark") document.documentElement.classList.add("dark");
+
+          var meta = document.querySelector('meta[name="theme-color"]');
+          if (meta)
+            meta.setAttribute(
+              "content",
+              resolved === "dark" ? "#05070a" : "#ffffff"
+            );
+        } catch (e) {
+          // ignore
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

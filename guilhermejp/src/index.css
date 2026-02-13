@@ -1,0 +1,179 @@
+@import "tailwindcss";
+@config "../tailwind.config.cjs";
+
+@layer base {
+  :root {
+    /*
+      Theme tokens derived from:
+      GuilhermeJP-Website/example_theme.ts
+      Primary: #15c98a (hsl(159 81% 44%))
+      Background (dark): #05070a (hsl(216 33% 3%))
+      Paper (dark): #0f1115 (hsl(220 17% 7%))
+      Secondary text (dark): #94a3b8 (hsl(215 20% 65%))
+    */
+    --background: 0 0% 100%;
+    --foreground: 220 17% 7%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 220 17% 7%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 17% 7%;
+
+    --primary: 159 81% 44%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 220 17% 7%;
+
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 20% 40%;
+
+    --accent: 210 40% 96%;
+    --accent-foreground: 220 17% 7%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 159 81% 44%;
+
+    --radius: 1rem;
+  }
+
+  .dark {
+    --background: 216 33% 3%;
+    --foreground: 0 0% 100%;
+
+    --card: 220 17% 7%;
+    --card-foreground: 0 0% 100%;
+
+    --popover: 220 17% 7%;
+    --popover-foreground: 0 0% 100%;
+
+    --primary: 159 81% 44%;
+    --primary-foreground: 216 33% 3%;
+
+    --secondary: 220 17% 12%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 220 17% 12%;
+    --muted-foreground: 215 20% 65%;
+
+    --accent: 220 17% 12%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 17% 14%;
+    --input: 220 17% 14%;
+    --ring: 159 81% 44%;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    @apply font-sans;
+    scroll-padding-top: 7rem; /* fixed header offset */
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+}
+
+/* Scrollbars (subtle, matches the new dark palette) */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: hsl(var(--border)) transparent;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--border));
+  border-radius: 999px;
+  border: 3px solid transparent;
+  background-clip: padding-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground));
+  border: 3px solid transparent;
+  background-clip: padding-box;
+}
+
+/* Starfield helper used by backgrounds/shooting-stars-background.jsx */
+.gp-stars {
+  background-image:
+    radial-gradient(2px 2px at 20px 30px, rgba(255, 255, 255, 0.65), rgba(0, 0, 0, 0)),
+    radial-gradient(2px 2px at 40px 70px, rgba(255, 255, 255, 0.55), rgba(0, 0, 0, 0)),
+    radial-gradient(2px 2px at 50px 160px, rgba(255, 255, 255, 0.45), rgba(0, 0, 0, 0)),
+    radial-gradient(2px 2px at 90px 40px, rgba(255, 255, 255, 0.6), rgba(0, 0, 0, 0)),
+    radial-gradient(2px 2px at 130px 80px, rgba(255, 255, 255, 0.55), rgba(0, 0, 0, 0)),
+    radial-gradient(2px 2px at 160px 120px, rgba(255, 255, 255, 0.4), rgba(0, 0, 0, 0));
+  background-repeat: repeat;
+  background-size: 220px 220px;
+  animation: gpTwinkle 5s ease-in-out infinite;
+  opacity: 0.55;
+}
+
+@keyframes gpTwinkle {
+  0% {
+    opacity: 0.45;
+  }
+  50% {
+    opacity: 0.75;
+  }
+  100% {
+    opacity: 0.45;
+  }
+}
+
+@layer utilities {
+  .gp-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .gp-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .gp-clamp-4 {
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .gp-clamp-5 {
+    display: -webkit-box;
+    -webkit-line-clamp: 5;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .gp-clamp-6 {
+    display: -webkit-box;
+    -webkit-line-clamp: 6;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
