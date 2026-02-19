@@ -28,7 +28,7 @@ export function Sidebar({ onHide }) {
               </div>
               <div className="mt-1 text-sm font-semibold">Portfolio</div>
               <div className="mt-1 text-xs text-muted-foreground">
-                Navegue pelas secoes.
+                Browse the main sections.
               </div>
             </div>
 
@@ -39,7 +39,7 @@ export function Sidebar({ onHide }) {
                 size="icon"
                 className="shrink-0 rounded-full border border-border/60 bg-background/60 backdrop-blur hover:bg-accent"
                 onClick={onHide}
-                aria-label="Ocultar menu lateral"
+                aria-label="Hide sidebar menu"
               >
                 <PanelLeftClose className="size-4" />
               </Button>
@@ -72,13 +72,13 @@ export function Sidebar({ onHide }) {
 
           <div className="relative p-4">
             <div className="text-xs font-semibold tracking-widest text-muted-foreground uppercase">
-              Vamos conversar
+              Let&apos;s talk
             </div>
             <div className="mt-3">
               <a href="mailto:contato@guilhermejp.com" className="inline-block">
                 <ShinyButton className="flex items-center gap-2">
                   <Mail className="size-4" />
-                  Contato
+                  Contact
                 </ShinyButton>
               </a>
             </div>

@@ -26,35 +26,34 @@ export function ThemeToggle() {
           className="rounded-full border border-border/60 bg-background/60 backdrop-blur hover:bg-accent"
         >
           <Icon className="size-4" />
-          <span className="sr-only">Alternar tema</span>
+          <span className="sr-only">Toggle theme</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuLabel>Tema</DropdownMenuLabel>
+        <DropdownMenuLabel>Theme</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuCheckboxItem
           checked={theme === "light"}
           onCheckedChange={() => setTheme("light")}
         >
           <Sun className="mr-2 size-4" />
-          Claro
+          Light
         </DropdownMenuCheckboxItem>
         <DropdownMenuCheckboxItem
           checked={theme === "dark"}
           onCheckedChange={() => setTheme("dark")}
         >
           <Moon className="mr-2 size-4" />
-          Noite
+          Dark
         </DropdownMenuCheckboxItem>
         <DropdownMenuCheckboxItem
           checked={theme === "system"}
           onCheckedChange={() => setTheme("system")}
         >
           <Monitor className="mr-2 size-4" />
-          Sistema
+          System
         </DropdownMenuCheckboxItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
 }
-

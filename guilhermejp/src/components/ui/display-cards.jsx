@@ -6,9 +6,9 @@ import { cn } from "@/lib/utils";
 function DisplayCard({
   className,
   icon = <Sparkles className="size-4 text-primary" />,
-  title = "Destaque",
-  description = "Conteudo em evidencia",
-  date = "Agora",
+  title = "Highlight",
+  description = "Featured content",
+  date = "Now",
   titleClassName = "text-primary",
 }) {
   return (
@@ -36,7 +36,7 @@ export function DisplayCards({ cards }) {
     {
       title: "Performance",
       description: "Vite + React",
-      date: "Build rapido",
+      date: "Fast build",
       className:
         "[grid-area:stack] hover:-translate-y-10 before:absolute before:w-[100%] before:outline-1 before:rounded-xl before:outline-border before:h-[100%] before:content-[''] before:bg-blend-overlay before:bg-background/50 grayscale-[100%] hover:before:opacity-0 before:transition-opacity before:duration-700 hover:grayscale-0 before:left-0 before:top-0",
     },
@@ -48,8 +48,8 @@ export function DisplayCards({ cards }) {
         "[grid-area:stack] translate-x-12 translate-y-10 hover:-translate-y-1 before:absolute before:w-[100%] before:outline-1 before:rounded-xl before:outline-border before:h-[100%] before:content-[''] before:bg-blend-overlay before:bg-background/50 grayscale-[100%] hover:before:opacity-0 before:transition-opacity before:duration-700 hover:grayscale-0 before:left-0 before:top-0",
     },
     {
-      title: "Criativo",
-      description: "Backgrounds vivos",
+      title: "Creative",
+      description: "Dynamic backgrounds",
       date: "Motion + Canvas",
       className: "[grid-area:stack] translate-x-24 translate-y-16 hover:translate-y-10",
     },
@@ -65,4 +65,3 @@ export function DisplayCards({ cards }) {
     </div>
   );
 }
-

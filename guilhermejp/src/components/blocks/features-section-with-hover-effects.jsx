@@ -8,42 +8,42 @@ export function FeaturesSectionWithHoverEffects({ className }) {
   const features = [
     {
       title: "React + Vite",
-      description: "Interfaces rapidas, leves e com feedback imediato.",
+      description: "Fast, reliable interfaces with clear user feedback.",
       icon: <Terminal className="size-5" />,
     },
     {
       title: "Node + APIs",
-      description: "Backends pragmaticos com autenticacao e boas praticas.",
+      description: "Practical backends with secure access and clean structure.",
       icon: <Cpu className="size-5" />,
     },
     {
       title: "UI System",
-      description: "Tailwind + shadcn: consistente, escalavel e bonito.",
+      description: "Tailwind + shadcn for consistency, scale, and polish.",
       icon: <Sparkles className="size-5" />,
     },
     {
       title: "Motion",
-      description: "Animacoes que elevam o produto sem virar ruido.",
+      description: "Motion that improves the experience without distraction.",
       icon: <Wand2 className="size-5" />,
     },
     {
       title: "Deploy",
-      description: "Entrega e iteracao rapida, com foco no que importa.",
+      description: "Quick delivery cycles focused on business impact.",
       icon: <Rocket className="size-5" />,
     },
     {
       title: "Web",
-      description: "Acessibilidade, SEO e performance como padrao.",
+      description: "Accessibility, SEO, and performance as core standards.",
       icon: <Globe className="size-5" />,
     },
     {
-      title: "Codigo",
-      description: "Arquitetura limpa, componentizacao e reuso real.",
+      title: "Code Quality",
+      description: "Clean architecture, reusable components, and maintainability.",
       icon: <Code2 className="size-5" />,
     },
     {
-      title: "Confianca",
-      description: "Validacoes e segurança basica sempre no radar.",
+      title: "Reliability",
+      description: "Validation and baseline security built into every release.",
       icon: <ShieldCheck className="size-5" />,
     },
   ];

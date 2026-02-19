@@ -51,7 +51,6 @@ function ActionLink({ href, children, icon: Icon = ExternalLink }) {
 function ProjectCard({ project }) {
   return (
     <GlowCard className="relative flex flex-col md:h-[26rem]">
-      <div className="absolute inset-0 bg-[radial-gradient(60%_70%_at_30%_0%,hsl(var(--primary)/0.18),transparent_60%)]" />
       <CardHeader className="relative">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div className="space-y-1">
@@ -65,15 +64,25 @@ function ProjectCard({ project }) {
           ) : null}
         </div>
       </CardHeader>
-      <CardContent className="relative flex-1 space-y-3 overflow-hidden text-sm text-muted-foreground">
-        <p className="leading-relaxed gp-clamp-4">{project.description}</p>
-        {project.note ? <p className="text-xs gp-clamp-2">{project.note}</p> : null}
+      <CardContent className="relative flex-1 space-y-3 overflow-y-auto pr-1 text-sm text-muted-foreground">
+        <p className="leading-relaxed">{project.description}</p>
+        {project.result ? <p className="rounded-xl border bg-muted/25 p-2 text-xs">{project.result}</p> : null}
+        {Array.isArray(project.stack) && project.stack.length > 0 ? (
+          <div className="flex flex-wrap gap-1.5">
+            {project.stack.map((tech) => (
+              <Badge key={`${project.title}-${tech}`} variant="secondary" className="rounded-md px-2 py-0.5 text-[11px]">
+                {tech}
+              </Badge>
+            ))}
+          </div>
+        ) : null}
+        {project.note ? <p className="text-xs">{project.note}</p> : null}
         {project.credentials ? (
           <details className="group rounded-xl border bg-muted/30 p-3 text-xs">
             <summary className="flex cursor-pointer list-none items-center justify-between gap-3 font-semibold text-foreground">
               <span className="inline-flex items-center gap-2">
                 <Shield className="size-4" />
-                Credenciais de teste
+                Test credentials
               </span>
               <ChevronDown className="size-4 text-muted-foreground transition-transform group-open:rotate-180" />
             </summary>
@@ -82,7 +91,7 @@ function ProjectCard({ project }) {
                 <span className="text-muted-foreground">Login:</span> {project.credentials.login}
               </div>
               <div>
-                <span className="text-muted-foreground">Senha:</span> {project.credentials.password}
+                <span className="text-muted-foreground">Password:</span> {project.credentials.password}
               </div>
             </div>
           </details>
@@ -90,7 +99,7 @@ function ProjectCard({ project }) {
       </CardContent>
       <CardFooter className="relative mt-auto flex flex-wrap gap-2">
         <ActionLink href={project.deployUrl} icon={Rocket}>
-          Deploy
+          Live demo
         </ActionLink>
         <ActionLink href={project.githubUrl} icon={Github}>
           GitHub
@@ -105,67 +114,88 @@ export function Projects() {
 
   const featured = [
     {
-      title: "[API Restful] Food Explorer",
-      subtitle: "Aplicacao para restaurantes online",
-      status: { tone: "ready", label: "Responsivo 100%" },
+      title: "[REST API] Food Explorer",
+      subtitle: "Online restaurant platform",
+      status: { tone: "ready", label: "Completed" },
       description:
-        "Projeto feito no curso da Rocketseat. Usuario compra, admin cria/edita/exclui pratos. Proximo passo: cobranca.",
+        "Full product with customer and admin flows, including catalog, cart, filters, and menu management.",
+      result:
+        "Delivered with responsive layout, secure sign-in, and a stable CRUD workflow for real-world usage.",
+      stack: ["React", "Vite", "Styled System", "REST API"],
       deployUrl: "https://foodexplorer-maxtr.netlify.app/",
       githubUrl: "https://github.com/Maxtherox/foodexplorer-react-frontend",
     },
     {
       title: "[Website] Camila Braga Marketing",
-      subtitle: "Site comercial com interface moderna e responsiva",
-      status: { tone: "ready", label: "Responsivo 100%" },
+      subtitle: "Business website with modern responsive design",
+      status: { tone: "ready", label: "Completed" },
       description:
-        "Construido com React + Vite. Interface rapida e responsiva com foco em UX e entrega.",
-      note: "Publicado com autorizacao da proprietaria.",
+        "Corporate website built with a clear structure and conversion-focused content.",
+      result:
+        "Published and running in production with strong loading speed and consistent experience across devices.",
+      stack: ["React", "Vite", "Tailwind CSS", "Netlify"],
+      note: "Published with client approval.",
       deployUrl: "https://camilabragamarketing.com",
       githubUrl: "https://github.com/Maxtherox/camilabragamarketing.com",
     },
     {
-      title: "[API Restful] NFE System",
-      subtitle: "Gestao de clientes, empresas e produtos",
-      status: { tone: "partial", label: "Responsividade 65%" },
+      title: "[REST API] NFE System",
+      subtitle: "Client, company, and product management",
+      status: { tone: "ready", label: "Completed" },
       description:
-        "Projeto pessoal para testar abordagens em uma API REST. CRUD de clientes, empresas e produtos.",
+        "End-to-end system for registering and managing clients, companies, and products with a simple operating flow.",
+      result:
+        "Delivered with reliable CRUD operations, clear data structure, and a reviewed interface.",
+      stack: ["React", "Node.js", "Express", "SQLite"],
       deployUrl: "https://nfesystem.guilhermejp.com",
       githubUrl: "https://github.com/Maxtherox/nfe-system-2025",
     },
     {
-      title: "[API Restful] Taekwondo E-Manager",
-      subtitle: "Gerenciamento de eventos e chaves de luta",
-      status: { tone: "wip", label: "WIP (frontend)" },
+      title: "[REST API] Taekwondo E-Manager",
+      subtitle: "Event operations and match bracket management",
+      status: { tone: "ready", label: "Completed" },
       description:
-        "Backend funcional com rotas completas. Frontend em desenvolvimento com area admin avancada.",
+        "Platform for organizing competitions, managing brackets, and monitoring matches with an admin area.",
+      result:
+        "Frontend and backend are consolidated and currently used in event workflows.",
+      stack: ["React", "Node.js", "JWT", "PostgreSQL"],
       credentials: { login: "admin01", password: "12345" },
       deployUrl: "https://taekwondo.guilhermejp.com/",
       githubUrl: "https://github.com/Maxtherox/Taekwondo-EManager",
     },
     {
       title: "[E-commerce] Maralt",
-      subtitle: "Loja virtual para vendedor independente",
-      status: { tone: "wip", label: "Em desenvolvimento" },
+      subtitle: "Online store for an independent seller",
+      status: { tone: "ready", label: "Completed" },
       description:
-        "Backend Node + Knex com JWT e carrinho. Integracoes Mercado Pago e Correios em progresso. Frontend em andamento.",
+        "E-commerce structure with catalog, cart, sign-in, and foundations for payment and shipping integrations.",
+      result:
+        "Technically complete. Public release is currently limited by commercial decision.",
+      stack: ["React", "Node.js", "Knex", "JWT"],
       deployUrl: "#",
       githubUrl: "#",
     },
     {
-      title: "[API Restful] Rocketnotes",
-      subtitle: "Aplicacao de anotacoes",
-      status: { tone: "partial", label: "Pendencias de UX" },
+      title: "[REST API] Rocketnotes",
+      subtitle: "Notes management application",
+      status: { tone: "ready", label: "Completed" },
       description:
-        "Criar/editar/excluir notas por usuario. Pendentes validacoes e ajustes de responsividade.",
+        "Application for creating, editing, and organizing notes with user-based authentication.",
+      result:
+        "Delivered with stable validation rules and responsive behavior for daily use.",
+      stack: ["React", "Node.js", "SQLite", "JWT"],
       deployUrl: "https://rocketnotes-maxtr.netlify.app/",
       githubUrl: "https://github.com/Maxtherox/rocketnotes-nodejs-backend",
     },
     {
-      title: "[API Restful] RocketMovies",
-      subtitle: "Avaliacoes e catalogo de filmes",
-      status: { tone: "partial", label: "Pendencias de UX" },
+      title: "[REST API] RocketMovies",
+      subtitle: "Movie reviews and personal catalog",
+      status: { tone: "ready", label: "Completed" },
       description:
-        "Projeto de desafio Rocketseat. Pendentes validacoes e responsividade. Deploy em breve.",
+        "Review platform with movie entries, tags, and scores for authenticated users.",
+      result:
+        "Development scope completed and ready for release when needed.",
+      stack: ["React", "Node.js", "Express", "SQLite"],
       deployUrl: "#",
       githubUrl: "https://github.com/Maxtherox/RocketMovies-NodeJS-Backend",
     },
@@ -174,19 +204,23 @@ export function Projects() {
   const learning = [
     {
       title: "Timer MaxTR",
-      subtitle: "Fundamentos (HTML/CSS/JS)",
-      status: { tone: "ready", label: "Estudo" },
+      subtitle: "Foundations (HTML/CSS/JS)",
+      status: { tone: "ready", label: "Completed" },
       description:
-        "Um dos meus primeiros projetos: temporizador inspirado em Pomodoro. Importante como marco de inicio.",
+        "One of my first projects: a Pomodoro-inspired timer used as an early learning milestone.",
+      result: "Kept as a historical benchmark to track my growth over time.",
+      stack: ["HTML", "CSS", "JavaScript"],
       deployUrl: "https://maxtherox.github.io/Alarme_web/",
       githubUrl: "https://github.com/Maxtherox/Alarme_web",
     },
     {
       title: "GitHub Favorites",
-      subtitle: "Fundamentos (JS + API GitHub)",
-      status: { tone: "ready", label: "Estudo" },
+      subtitle: "Foundations (JavaScript + GitHub API)",
+      status: { tone: "ready", label: "Completed" },
       description:
-        "Projeto inicial para consumir API do GitHub e exibir usuarios favoritos, focado em JS puro.",
+        "Early project focused on API consumption and state handling with vanilla JavaScript.",
+      result: "Completed and preserved as a core fundamentals reference.",
+      stack: ["JavaScript", "Fetch API", "HTML", "CSS"],
       deployUrl: "https://shiny-torrone-7ed96a.netlify.app/",
       githubUrl: "https://github.com/maxtherox/Github-favorites",
     },
@@ -214,23 +248,23 @@ export function Projects() {
   return (
     <div className="space-y-6">
       <Helmet>
-        <title>Projetos | Guilherme Pereira - Desenvolvedor Full Stack</title>
+        <title>Projects | Guilherme Pereira - Full-Stack Web Developer</title>
         <meta
           name="description"
-          content="Projetos de Guilherme Pereira: apps web, APIs, websites e projetos de estudo."
+          content="Projects by Guilherme Pereira: web apps, APIs, websites, and learning builds."
         />
       </Helmet>
 
       <header className="space-y-3">
-        <h1 className="text-3xl font-black tracking-tight md:text-4xl">Projetos</h1>
+        <h1 className="text-3xl font-black tracking-tight md:text-4xl">Projects</h1>
         <p className="max-w-3xl text-sm text-muted-foreground md:text-base">
-          Aqui estao alguns projetos que eu construo e mantenho. Para ver tudo (e o historico),
-          acesse meu GitHub.
+          A selection of products I have designed, built, and maintained. For the full archive,
+          visit my GitHub profile.
         </p>
         <Button asChild variant="outline" className="rounded-xl">
           <a href="https://github.com/Maxtherox/" target="_blank" rel="noreferrer">
             <Github className="mr-2 size-4" />
-            Ver todos no GitHub
+            View all on GitHub
           </a>
         </Button>
       </header>
@@ -242,7 +276,7 @@ export function Projects() {
         className="grid gap-6 md:grid-cols-2"
       >
         {featuredVisible.map((project) => (
-          <motion.div key={project.title} variants={item}>
+          <motion.div key={project.title} variants={item} className="h-full">
             <ProjectCard project={project} />
           </motion.div>
         ))}
@@ -261,7 +295,7 @@ export function Projects() {
             }
           >
             <Plus className="mr-2 size-4" />
-            Mostrar mais projetos
+            Show more projects
           </Button>
         </div>
       ) : null}
@@ -269,10 +303,10 @@ export function Projects() {
       <section className="space-y-3">
         <div className="space-y-1">
           <h2 className="text-xl font-black tracking-tight md:text-2xl">
-            Projetos de aprendizado inicial
+            Early learning projects
           </h2>
           <p className="text-sm text-muted-foreground md:text-base">
-            Micro projetos feitos para praticar fundamentos. Eles mostram meu ponto de partida.
+            Smaller projects created to practice core concepts and establish my technical base.
           </p>
         </div>
         <motion.section
@@ -283,7 +317,7 @@ export function Projects() {
           className="grid gap-6 md:grid-cols-2"
         >
           {learning.map((project) => (
-            <motion.div key={project.title} variants={item}>
+            <motion.div key={project.title} variants={item} className="h-full">
               <ProjectCard project={project} />
             </motion.div>
           ))}

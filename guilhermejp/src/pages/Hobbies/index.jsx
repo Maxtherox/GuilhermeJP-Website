@@ -12,7 +12,6 @@ import { cn } from "@/lib/utils";
 function HobbyCard({ hobby }) {
   return (
     <GlowCard className="relative flex flex-col md:h-[26rem]">
-      <div className="absolute inset-0 bg-[radial-gradient(70%_80%_at_30%_0%,hsl(var(--primary)/0.14),transparent_60%)]" />
       <CardHeader className="relative">
         <div className="flex items-start justify-between gap-3">
           <div className="space-y-1">
@@ -32,10 +31,16 @@ function HobbyCard({ hobby }) {
           ) : null}
         </div>
       </CardHeader>
-      <CardContent className="relative flex-1 space-y-3 overflow-hidden text-sm text-muted-foreground">
-        <p className="leading-relaxed gp-clamp-6">
-          {Array.isArray(hobby.paragraphs) ? hobby.paragraphs.join(" ") : hobby.paragraphs}
-        </p>
+      <CardContent className="relative flex-1 space-y-3 overflow-y-auto pr-1 text-sm text-muted-foreground">
+        {Array.isArray(hobby.paragraphs) ? (
+          hobby.paragraphs.map((paragraph, index) => (
+            <p key={index} className="leading-relaxed">
+              {paragraph}
+            </p>
+          ))
+        ) : (
+          <p className="leading-relaxed">{hobby.paragraphs}</p>
+        )}
       </CardContent>
     </GlowCard>
   );
@@ -47,61 +52,61 @@ export function Hobbies() {
   const hobbies = [
     {
       title: "Taekwondo",
-      subtitle: "Disciplina, consistencia e mente fria",
+      subtitle: "Discipline, consistency, and composure",
       icon: Swords,
-      badge: { label: "Treino", className: "bg-emerald-500/15 text-emerald-300 border-emerald-500/25" },
+      badge: { label: "Training", className: "bg-emerald-500/15 text-emerald-300 border-emerald-500/25" },
       paragraphs: [
-        "Uma das minhas maiores paixoes e o Taekwondo. A rotina me ensinou disciplina, paciencia e resiliencia.",
-        "Essas mesmas qualidades vao direto para a programacao: iterar, corrigir, repetir e melhorar sem drama.",
+        "Taekwondo is one of my strongest passions. It taught me discipline, patience, and resilience.",
+        "Those same qualities guide my work in software: iterate, improve, and stay focused under pressure.",
       ],
     },
     {
-      title: "Eventos e ferramentas",
-      subtitle: "Quando o hobby vira produto",
+      title: "Events and tools",
+      subtitle: "When a hobby becomes a real product",
       icon: Wrench,
-      badge: { label: "Projeto", className: "bg-sky-500/15 text-sky-300 border-sky-500/25" },
+      badge: { label: "Project", className: "bg-sky-500/15 text-sky-300 border-sky-500/25" },
       paragraphs: [
-        "Eu desenvolvi um gerenciador e balanceador de lutas para competicoes. Construir isso me mostrou como software resolve dores fora da bolha tech.",
-        "O resultado foi aprender muito sobre regras, fluxo, excecoes e como entregar algo que realmente ajuda a organizacao.",
+        "I built a match management and balancing tool for competitions, turning a practical need into a working solution.",
+        "That experience deepened my understanding of rules, edge cases, and product decisions that truly support operations.",
       ],
     },
     {
-      title: "Servidores e infra",
-      subtitle: "Linux, redes e manutencao",
+      title: "Servers and infrastructure",
+      subtitle: "Linux, networking, and maintenance",
       icon: Server,
       badge: { label: "Ops", className: "bg-amber-500/15 text-amber-300 border-amber-500/25" },
       paragraphs: [
-        "Desde a adolescencia eu crio e gerencio servidores de jogos. Isso me puxou para Linux (Ubuntu Server) e FreeBSD.",
-        "Aprender a configurar, otimizar e manter servidores virou base solida para entender redes, seguranca e automacao.",
+        "Since my teenage years, I have managed game servers, which introduced me to Linux and system administration.",
+        "Configuring and maintaining these environments gave me a solid foundation in networking, security, and automation.",
       ],
     },
     {
-      title: "Jogos",
-      subtitle: "Design, mecanica e curiosidade tecnica",
+      title: "Gaming",
+      subtitle: "Design, mechanics, and curiosity",
       icon: Gamepad2,
       badge: { label: "RPG / Soulslike", className: "bg-primary/15 text-primary border-primary/25" },
       paragraphs: [
-        "Gosto de entender mecanicas e o design por tras de cada experiencia.",
-        "Sou fa de RPGs e soulslikes e curto jogos que desafiam tanto mecanicamente quanto narrativamente.",
+        "I enjoy understanding the design decisions behind each game experience.",
+        "RPGs and soulslikes are favorites because they combine challenge, structure, and meaningful progression.",
       ],
     },
     {
-      title: "Automobilismo e simuladores",
-      subtitle: "Ajuste fino e fisica aplicada",
+      title: "Motorsport and simulators",
+      subtitle: "Precision, setup, and applied physics",
       icon: Car,
       badge: { label: "Sim racing", className: "bg-rose-500/15 text-rose-300 border-rose-500/25" },
       paragraphs: [
-        "Curto simuladores de corrida e voo nao so pelo hobby, mas pelo lado tecnico: setup, fisica e aerodinamica.",
-        "Esse tipo de estudo alimenta a mesma energia de otimizar sistemas e interfaces.",
+        "I enjoy racing and flight simulators not only for fun, but also for the analytical side of setup and tuning.",
+        "This mindset aligns with how I optimize digital products: test, measure, and refine for better outcomes.",
       ],
     },
     {
-      title: "Objetivo",
-      subtitle: "Aprender, criar e evoluir",
+      title: "Purpose",
+      subtitle: "Learn, build, and keep improving",
       icon: Trophy,
       paragraphs: [
-        "No fim, tudo se conecta: eu gosto de desafios e de construir coisas.",
-        "Seja no tatame, nos servidores ou no codigo, o que me move e aprender e entregar melhor a cada iteracao.",
+        "In the end, everything connects through problem-solving and creation.",
+        "Whether in sports, infrastructure, or software, my focus is steady progress and better delivery over time.",
       ],
     },
   ];
@@ -128,14 +133,14 @@ export function Hobbies() {
   return (
     <div className="space-y-6">
       <Helmet>
-        <title>Hobbies | Guilherme Pereira - Desenvolvedor Full Stack</title>
-        <meta name="description" content="Hobbies e interesses de Guilherme Pereira." />
+        <title>Hobbies | Guilherme Pereira - Full-Stack Web Developer</title>
+        <meta name="description" content="Hobbies and interests that shape how Guilherme Pereira builds software." />
       </Helmet>
 
       <header className="space-y-3">
         <h1 className="text-3xl font-black tracking-tight md:text-4xl">Hobbies</h1>
         <p className="max-w-3xl text-sm text-muted-foreground md:text-base">
-          Coisas que eu gosto e que, direta ou indiretamente, influenciam como eu construo software.
+          Personal interests that influence my mindset, discipline, and execution as a developer.
         </p>
       </header>
 
@@ -146,7 +151,7 @@ export function Hobbies() {
         className="grid gap-6 md:grid-cols-2"
       >
         {visible.map((hobby) => (
-          <motion.div key={hobby.title} variants={item}>
+          <motion.div key={hobby.title} variants={item} className="h-full">
             <HobbyCard hobby={hobby} />
           </motion.div>
         ))}
@@ -161,7 +166,7 @@ export function Hobbies() {
             onClick={() => setLimit((current) => Math.min(current + STEP, hobbies.length))}
           >
             <Plus className="mr-2 size-4" />
-            Mostrar mais hobbies
+            Show more hobbies
           </Button>
         </div>
       ) : null}

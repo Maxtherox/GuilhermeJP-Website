@@ -141,6 +141,58 @@
   }
 }
 
+/* Subtle particles used by card backgrounds (non-intrusive) */
+.gp-card-aurora {
+  background-image:
+    radial-gradient(46% 38% at 16% 14%, hsl(var(--primary) / 0.20) 0%, transparent 72%),
+    radial-gradient(38% 34% at 86% 18%, hsl(var(--foreground) / 0.08) 0%, transparent 74%),
+    radial-gradient(52% 44% at 52% 88%, hsl(var(--primary) / 0.14) 0%, transparent 78%);
+  background-size: 130% 130%;
+  animation: gpCardAurora 18s ease-in-out infinite alternate;
+}
+
+.gp-card-particles {
+  background-image:
+    radial-gradient(circle at 12% 22%, hsl(var(--primary) / 0.28) 0 1px, transparent 1.4px),
+    radial-gradient(circle at 72% 35%, hsl(var(--foreground) / 0.18) 0 1px, transparent 1.5px),
+    radial-gradient(circle at 38% 74%, hsl(var(--primary) / 0.18) 0 0.9px, transparent 1.3px),
+    radial-gradient(circle at 86% 78%, hsl(var(--foreground) / 0.12) 0 0.9px, transparent 1.2px);
+  background-size: 140px 140px, 200px 200px, 240px 240px, 300px 300px;
+  background-repeat: repeat;
+  animation: gpCardParticles 34s linear infinite;
+  mask-image: radial-gradient(120% 95% at 50% 0%, black 0%, transparent 100%);
+}
+
+/* Fine texture to avoid flat surfaces */
+.gp-card-grain {
+  background-image:
+    radial-gradient(circle at 20% 40%, hsl(var(--foreground) / 0.10) 0 0.8px, transparent 1.1px),
+    radial-gradient(circle at 70% 60%, hsl(var(--foreground) / 0.08) 0 0.7px, transparent 1px);
+  background-size: 3px 3px, 4px 4px;
+  mix-blend-mode: soft-light;
+}
+
+@keyframes gpCardAurora {
+  0% {
+    background-position: 0% 0%, 100% 0%, 50% 100%;
+  }
+  50% {
+    background-position: 16% 10%, 86% 8%, 46% 88%;
+  }
+  100% {
+    background-position: 6% 18%, 94% 10%, 56% 82%;
+  }
+}
+
+@keyframes gpCardParticles {
+  0% {
+    background-position: 0 0, 0 0, 0 0, 0 0;
+  }
+  100% {
+    background-position: 120px -140px, -170px 130px, 140px 150px, -220px -120px;
+  }
+}
+
 @layer utilities {
   .gp-clamp-2 {
     display: -webkit-box;

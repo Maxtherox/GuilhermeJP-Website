@@ -30,7 +30,7 @@ export function ShinyButton({ children, className, ...props }) {
       {...animationProps}
       {...props}
       className={cn(
-        "relative rounded-xl px-6 py-2 font-semibold backdrop-blur-xl transition-shadow duration-300 ease-in-out",
+        "relative inline-flex items-center justify-center whitespace-nowrap rounded-xl px-6 py-2 font-semibold backdrop-blur-xl transition-shadow duration-300 ease-in-out",
         "bg-[radial-gradient(circle_at_50%_0%,hsl(var(--primary)/0.14)_0%,transparent_60%)]",
         "border border-border/70 hover:shadow-[0_0_30px_hsl(var(--primary)/0.12)]",
         "text-foreground",
@@ -38,7 +38,7 @@ export function ShinyButton({ children, className, ...props }) {
       )}
     >
       <span
-        className="relative block size-full text-sm uppercase tracking-wide text-foreground/90"
+        className="relative inline-flex items-center gap-2 whitespace-nowrap text-sm uppercase tracking-wide text-foreground/90"
         style={{
           maskImage:
             "linear-gradient(-75deg,hsl(var(--primary)) calc(var(--x) + 20%),transparent calc(var(--x) + 30%),hsl(var(--primary)) calc(var(--x) + 100%))",
@@ -58,4 +58,3 @@ export function ShinyButton({ children, className, ...props }) {
     </motion.button>
   );
 }
-

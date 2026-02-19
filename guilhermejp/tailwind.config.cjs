@@ -79,8 +79,8 @@ module.exports = {
           "50%": { transform: "translateY(-6px)" },
         },
         shimmer: {
-          from: { backgroundPosition: "0% 50%" },
-          to: { backgroundPosition: "100% 50%" },
+          from: { backgroundPosition: "-200% 50%" },
+          to: { backgroundPosition: "200% 50%" },
         },
       },
       animation: {
@@ -90,7 +90,7 @@ module.exports = {
         "enter-left": "enter-left 300ms cubic-bezier(0.2, 0.8, 0.2, 1) both",
         "enter-up": "enter-up 300ms cubic-bezier(0.2, 0.8, 0.2, 1) both",
         float: "subtle-float 4s ease-in-out infinite",
-        shimmer: "shimmer 2.2s ease infinite",
+        shimmer: "shimmer 2.6s linear infinite",
       },
     },
   },

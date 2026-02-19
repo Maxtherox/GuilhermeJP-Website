@@ -47,7 +47,7 @@ export function Header({ sidebarVisible = false, onToggleSidebar }) {
                     Guilherme J. Pereira
                   </div>
                   <div className="truncate text-xs text-muted-foreground">
-                    Fullstack Web Dev.
+                    Full-Stack Web Developer
                   </div>
                 </div>
               </NavLink>
@@ -89,8 +89,8 @@ export function Header({ sidebarVisible = false, onToggleSidebar }) {
                   )}
                   <span className="sr-only">
                     {sidebarVisible
-                      ? "Ocultar menu lateral"
-                      : "Mostrar menu lateral"}
+                      ? "Hide sidebar menu"
+                      : "Show sidebar menu"}
                   </span>
                 </Button>
               ) : null}
@@ -106,15 +106,15 @@ export function Header({ sidebarVisible = false, onToggleSidebar }) {
                       className="rounded-full border border-border/60 bg-background/60 backdrop-blur hover:bg-accent"
                     >
                       <Menu className="size-4" />
-                      <span className="sr-only">Abrir menu</span>
+                      <span className="sr-only">Open menu</span>
                     </Button>
                   </SheetTrigger>
                   <SheetContent side="right" className="border-border/70">
                     <div className="flex h-full flex-col gap-4">
                       <div className="space-y-1">
-                        <div className="text-sm font-semibold">Navegacao</div>
+                        <div className="text-sm font-semibold">Navigation</div>
                         <div className="text-xs text-muted-foreground">
-                          Explore as secoes do portfolio.
+                          Explore the portfolio sections.
                         </div>
                       </div>
 
@@ -142,7 +142,7 @@ export function Header({ sidebarVisible = false, onToggleSidebar }) {
 
                       <div className="mt-auto rounded-2xl border bg-muted/30 p-4">
                         <div className="text-xs font-semibold tracking-widest text-muted-foreground uppercase">
-                          Contato
+                          Contact
                         </div>
                         <a
                           href="mailto:contato@guilhermejp.com"

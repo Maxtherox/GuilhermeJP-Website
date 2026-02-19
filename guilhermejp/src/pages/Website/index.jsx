@@ -11,8 +11,7 @@ import { cn } from "@/lib/utils";
 
 function SiteCard({ site }) {
   return (
-    <GlowCard className="relative">
-      <div className="absolute inset-0 bg-[radial-gradient(65%_70%_at_30%_0%,hsl(var(--primary)/0.16),transparent_60%)]" />
+    <GlowCard className="relative flex flex-col md:h-[24rem]">
       <CardHeader className="relative">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div className="space-y-1">
@@ -31,14 +30,14 @@ function SiteCard({ site }) {
           ) : null}
         </div>
       </CardHeader>
-      <CardContent className="relative space-y-3 text-sm text-muted-foreground">
+      <CardContent className="relative flex-1 space-y-3 overflow-y-auto pr-1 text-sm text-muted-foreground">
         <p className="leading-relaxed">{site.description}</p>
       </CardContent>
-      <CardFooter className="relative flex flex-wrap gap-2">
+      <CardFooter className="relative mt-auto flex flex-wrap gap-2">
         <Button asChild variant="outline" className="rounded-xl">
           <a href={site.url} target="_blank" rel="noreferrer">
             <Globe className="mr-2 size-4" />
-            Visitar
+            Visit
           </a>
         </Button>
         {site.githubUrl ? (
@@ -58,10 +57,10 @@ export function Website() {
   const sites = [
     {
       title: "modpacks.com.br",
-      subtitle: "SPA para portfolio e conversao",
-      badge: { label: "Em evolucao", className: "bg-sky-500/15 text-sky-300 border-sky-500/25" },
+      subtitle: "Landing page focused on showcase and conversion",
+      badge: { label: "In progress", className: "bg-sky-500/15 text-sky-300 border-sky-500/25" },
       description:
-        "Site criado no inicio da minha jornada para destacar um modpack de Skyrim e direcionar para o Patreon. Em breve, migro para uma plataforma com API REST exclusiva para assinantes.",
+        "This website was created early in my journey to promote a Skyrim modpack and direct traffic to Patreon. It is now being prepared for migration to a dedicated subscriber platform.",
       url: "https://modpacks.com.br/",
       githubUrl: "https://github.com/Maxtherox/maxtrMods-landingpage-SPA",
     },
@@ -85,19 +84,19 @@ export function Website() {
   return (
     <div className="space-y-6">
       <Helmet>
-        <title>Websites | Guilherme Pereira - Desenvolvedor Full Stack</title>
-        <meta name="description" content="Lista de websites publicados por Guilherme Pereira." />
+        <title>Websites | Guilherme Pereira - Full-Stack Web Developer</title>
+        <meta name="description" content="Published websites created by Guilherme Pereira." />
       </Helmet>
 
       <header className="space-y-3">
         <h1 className="text-3xl font-black tracking-tight md:text-4xl">Websites</h1>
         <p className="max-w-3xl text-sm text-muted-foreground md:text-base">
-          Alguns sites publicados. Vou atualizando conforme novos projetos entram no ar.
+          A curated list of published websites. New releases are added as projects go live.
         </p>
         <Button asChild className="rounded-xl">
           <a href="mailto:contato@guilhermejp.com">
             <Rocket className="mr-2 size-4" />
-            Quero um site
+            Request a website
           </a>
         </Button>
       </header>
@@ -109,7 +108,7 @@ export function Website() {
         className="grid gap-6 md:grid-cols-2"
       >
         {sites.map((site) => (
-          <motion.div key={site.title} variants={item}>
+          <motion.div key={site.title} variants={item} className="h-full">
             <SiteCard site={site} />
           </motion.div>
         ))}
