@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Guilherme Pereira — ECLIPSE (Aceternity v2)</title>
+</head>
+<body>
+<style>
+/* ═══════════════════════════════════════════════════════════
+   V2 · 01 — "ECLIPSE"   ·  Aceternity UI, refinada
+   ───────────────────────────────────────────────────────────
+   DIREÇÃO ARTÍSTICA
+   Um eclipse total. Um disco negro cobrindo uma coroa em brasa.
+   Tudo na página é CORTADO — tipografia em fatias que se
+   reencontram, seções separadas por cortes diagonais, retrato
+   dividido em lâminas. Obsidiana, osso e brasa.
+   ───────────────────────────────────────────────────────────
+   3D REAL: shader GLSL raymarch-free com coroa em fbm polar,
+   pilha de cartões em perspectiva CSS 3D arrastável.
+   ═══════════════════════════════════════════════════════════ */
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --void:#050506;
+  --obsidian:#0b0b0e;
+  --slate:#15151a;
+  --bone:#ece7dd;
+  --bone-2:#a8a49b;
+  --ash:#6b6862;
+  --ember:#ff5b2e;
+  --ember-2:#ff9147;
+  --plasma:#7c5cff;
+  --ice:#5ce1e6;
+  --line:rgba(236,231,221,.11);
+  --line-2:rgba(236,231,221,.22);
+  --disp:"Archivo","Inter Tight","Helvetica Neue",Helvetica,sans-serif;
+  --body:"Inter","SF Pro Text",-apple-system,BlinkMacSystemFont,sans-serif;
+  --serif:"Instrument Serif","Iowan Old Style",Georgia,ui-serif,serif;
+  --mono:"JetBrains Mono",ui-monospace,"SFMono-Regular",Consolas,monospace;
+}
+html{scroll-behavior:smooth}
+body{background:var(--void);color:var(--bone);font-family:var(--body);line-height:1.6;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+h1,h2,h3,h4{line-height:.92;letter-spacing:-.045em;font-weight:800;font-family:var(--disp)}
+::selection{background:var(--ember);color:var(--void)}
+::-webkit-scrollbar{width:8px}
+::-webkit-scrollbar-track{background:var(--void)}
+::-webkit-scrollbar-thumb{background:linear-gradient(180deg,var(--ember),var(--plasma))}
+.wrap{max-width:1240px;margin:0 auto;padding:0 26px;position:relative;z-index:3}
+.mono{font-family:var(--mono)}
+
+/* ═══════════ PRELOADER ═══════════ */
+#pre{position:fixed;inset:0;z-index:200;background:var(--void);display:grid;place-items:center;
+  transition:opacity .8s cubic-bezier(.7,0,.2,1)}
+#pre.gone{opacity:0;pointer-events:none}
+#pre .bars{position:absolute;inset:0;display:flex;flex-direction:column}
+#pre .bars i{flex:1;background:var(--obsidian);transform-origin:left;
+  transition:transform 1s cubic-bezier(.76,0,.24,1)}
+#pre.gone .bars i{transform:scaleX(0)}
+#pre .n{position:relative;z-index:2;font-family:var(--disp);font-size:clamp(64px,16vw,180px);
+  letter-spacing:-.06em;line-height:1;color:var(--bone);font-variant-numeric:tabular-nums}
+#pre .n sup{font-size:.22em;vertical-align:super;color:var(--ember);letter-spacing:0}
+#pre .lb{position:absolute;bottom:8vh;left:0;right:0;text-align:center;z-index:2;
+  font:500 10.5px/1 var(--mono);letter-spacing:.34em;text-transform:uppercase;color:var(--ash)}
+
+/* ═══════════ CURSOR-LENTE ═══════════ */
+#lens{position:fixed;top:0;left:0;width:190px;height:190px;margin:-95px 0 0 -95px;border-radius:50%;
+  z-index:150;pointer-events:none;opacity:0;transition:opacity .5s,transform .12s ease-out;
+  backdrop-filter:invert(1) hue-rotate(160deg) contrast(1.1);
+  -webkit-backdrop-filter:invert(1) hue-rotate(160deg) contrast(1.1);
+  box-shadow:0 0 0 1px rgba(236,231,221,.28),0 0 60px rgba(255,91,46,.2) inset}
+body.lens-on #lens{opacity:1}
+@media(pointer:coarse){#lens{display:none!important}}
+#dot{position:fixed;top:0;left:0;width:6px;height:6px;margin:-3px 0 0 -3px;border-radius:50%;
+  background:var(--ember);z-index:151;pointer-events:none;mix-blend-mode:screen}
+@media(pointer:coarse){#dot{display:none}}
+
+/* ═══════════ GRÃO ═══════════ */
+#grain{position:fixed;inset:-150px;z-index:190;pointer-events:none;opacity:.038;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation:gr .5s steps(2) infinite}
+@keyframes gr{0%{transform:translate(0,0)}25%{transform:translate(-30px,16px)}
+  50%{transform:translate(22px,-24px)}75%{transform:translate(-14px,-16px)}100%{transform:translate(0,0)}}
+
+/* ═══════════ NAV ═══════════ */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;mix-blend-mode:difference}
+.nav-in{max-width:1240px;margin:0 auto;padding:24px 26px;display:flex;align-items:center;gap:24px}
+.nav-in .mark{font-family:var(--disp);font-size:15px;letter-spacing:-.03em;font-weight:800;text-transform:uppercase}
+.nav-in .mark i{color:var(--ember);font-style:normal}
+.nav-l{margin-left:auto;display:flex;gap:1px}
+.nav-l a{font:500 10.5px/1 var(--mono);letter-spacing:.2em;text-transform:uppercase;
+  padding:9px 13px;position:relative;overflow:hidden;display:block}
+.nav-l a span{display:block;transition:transform .5s cubic-bezier(.76,0,.24,1)}
+.nav-l a::after{content:attr(data-t);position:absolute;left:13px;top:9px;color:var(--ember);
+  transform:translateY(110%);transition:transform .5s cubic-bezier(.76,0,.24,1)}
+.nav-l a:hover span{transform:translateY(-110%)}
+.nav-l a:hover::after{transform:translateY(0)}
+@media(max-width:820px){.nav-l a:not(.keep){display:none}}
+
+/* ═══════════ HERO / ECLIPSE ═══════════ */
+header{position:relative;height:100svh;min-height:640px;overflow:hidden;display:grid;place-items:center}
+#sky{position:absolute;inset:0;width:100%;height:100%;z-index:0}
+#skyFB{position:absolute;inset:0;z-index:0;display:none;background:
+  radial-gradient(circle at 50% 46%,transparent 17%,rgba(255,91,46,.55) 18%,rgba(124,92,255,.25) 30%,transparent 58%),
+  radial-gradient(circle at 50% 46%,#000 0 17.4%,transparent 17.6%),var(--void)}
+header::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:linear-gradient(180deg,rgba(5,5,6,.75) 0%,transparent 22% 62%,var(--void) 100%)}
+
+.hero-type{position:relative;z-index:4;text-align:center;width:100%;padding:0 20px;pointer-events:none}
+.kine{font-family:var(--disp);font-weight:800;text-transform:uppercase;
+  font-size:clamp(52px,15.5vw,214px);line-height:.82;letter-spacing:-.062em}
+.kine .ln{display:block;position:relative;overflow:hidden}
+.kine .ln>span{display:block;transform:translateY(105%);
+  transition:transform 1.25s cubic-bezier(.16,1,.28,1)}
+.ready .kine .ln>span{transform:none}
+.kine .ln:nth-child(2)>span{transition-delay:.09s}
+.hollow{color:transparent;-webkit-text-stroke:1.4px rgba(236,231,221,.5)}
+.hero-sub{margin-top:34px;display:flex;justify-content:center;gap:0;flex-wrap:wrap;
+  font:500 10.5px/1 var(--mono);letter-spacing:.26em;text-transform:uppercase;color:var(--bone-2);
+  opacity:0;transition:opacity 1s .7s}
+.ready .hero-sub{opacity:1}
+.hero-sub span{padding:0 16px;border-right:1px solid var(--line)}
+.hero-sub span:last-child{border:0}
+.hero-sub b{color:var(--ember);font-weight:500}
+
+.scrollcue{position:absolute;bottom:26px;left:50%;transform:translateX(-50%);z-index:5;
+  font:500 9.5px/1 var(--mono);letter-spacing:.3em;text-transform:uppercase;color:var(--ash);
+  display:flex;flex-direction:column;align-items:center;gap:12px}
+.scrollcue i{width:1px;height:54px;background:linear-gradient(180deg,var(--ember),transparent);
+  animation:cue 2.2s ease-in-out infinite}
+@keyframes cue{0%,100%{transform:scaleY(.25);opacity:.3}50%{transform:scaleY(1);opacity:1}}
+
+/* ═══════════ FAIXA DIAGONAL / SLICE BAND ═══════════ */
+/* a faixa é girada e escalada de propósito; o recorte externo
+   impede que essa sangria alargue o documento */
+.band-clip{overflow:hidden;position:relative;z-index:6}
+.band{position:relative;overflow:hidden;background:var(--ember);color:var(--void);
+  padding:20px 0;transform:rotate(-1.6deg) scale(1.04);margin:-30px 0 60px;z-index:6}
+.band.alt{background:var(--bone);transform:rotate(1.1deg) scale(1.04);margin-top:-58px}
+.band .rail{display:flex;gap:34px;width:max-content;animation:roll 26s linear infinite}
+.band.alt .rail{animation-direction:reverse;animation-duration:34s}
+.band:hover .rail{animation-play-state:paused}
+@keyframes roll{to{transform:translateX(-50%)}}
+.band .rail span{font-family:var(--disp);font-size:19px;font-weight:800;text-transform:uppercase;
+  letter-spacing:-.02em;white-space:nowrap;display:flex;align-items:center;gap:34px}
+/* losango desenhado em CSS — sem depender de glifo tipográfico */
+.band .rail span::after{content:"";width:7px;height:7px;background:currentColor;
+  transform:rotate(45deg);opacity:.55;flex:none;display:block}
+
+/* ═══════════ SEÇÕES + CORTES ═══════════ */
+section{position:relative;padding:110px 0}
+.cut-top{clip-path:polygon(0 3.2vw,100% 0,100% 100%,0 100%)}
+.cut-bot{clip-path:polygon(0 0,100% 0,100% calc(100% - 3.2vw),0 100%)}
+.cut-both{clip-path:polygon(0 3.2vw,100% 0,100% calc(100% - 3.2vw),0 100%)}
+.bg-slate{background:var(--obsidian)}
+.bg-bone{background:var(--bone);color:var(--void)}
+.bg-bone h1,.bg-bone h2,.bg-bone h3,.bg-bone h4{color:var(--void)}
+
+.shead{display:grid;grid-template-columns:auto 1fr;gap:26px;align-items:baseline;margin-bottom:56px}
+@media(max-width:700px){.shead{grid-template-columns:1fr;gap:10px}}
+.snum{font:500 10.5px/1 var(--mono);letter-spacing:.26em;color:var(--ember);white-space:nowrap}
+h2.sec{font-size:clamp(34px,7vw,92px);text-transform:uppercase}
+h2.sec em{font-family:var(--serif);font-style:italic;font-weight:400;text-transform:none;
+  letter-spacing:-.02em;color:var(--ember)}
+.lede{max-width:560px;font-size:16.5px;color:var(--bone-2);margin-top:18px}
+.bg-bone .lede{color:#4a463f}
+
+/* revelação por fatias — construída em JS.
+   A primeira camada fica no fluxo e define a altura; as demais são
+   empilhadas em absoluto, então o efeito funciona com QUALQUER número
+   de linhas (era aqui que os títulos grandes quebravam). */
+/* overflow:hidden é essencial: antes de entrar em tela as lâminas
+   ficam deslocadas ±104% e empurravam a largura do documento */
+.slice{display:block;position:relative;overflow-wrap:break-word;
+  overflow:hidden;padding-bottom:.12em;margin-bottom:-.12em}
+.slice .lyr{display:block;position:relative}
+.slice .lyr+.lyr{position:absolute;inset:0}
+.slice .lyr>i{display:block;font-style:normal;transform:translateX(var(--from,-104%));
+  transition:transform 1.05s cubic-bezier(.16,1,.28,1)}
+.slice.in .lyr>i{transform:none}
+h1,h2,h3,h4{overflow-wrap:break-word}
+
+.rv{opacity:0;transform:translateY(30px);transition:opacity .95s cubic-bezier(.16,1,.3,1),transform .95s cubic-bezier(.16,1,.3,1)}
+.rv.in{opacity:1;transform:none}
+
+/* ═══════════ RETRATO EM LÂMINAS ═══════════ */
+.about{display:grid;grid-template-columns:.85fr 1.15fr;gap:60px;align-items:center}
+@media(max-width:900px){.about{grid-template-columns:1fr;gap:40px}}
+.blade{position:relative;aspect-ratio:4/5;overflow:hidden;background:var(--slate)}
+.blade .st{position:absolute;left:0;right:0;overflow:hidden}
+.blade .st img{position:absolute;left:0;width:100%;height:auto;filter:grayscale(1) contrast(1.22) brightness(.92)}
+.blade .st{transform:translateX(var(--dir,-100%));opacity:0;
+  transition:transform 1.15s cubic-bezier(.16,1,.28,1),opacity .5s}
+.blade.in .st{transform:none;opacity:1}
+.blade::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:3;
+  background:linear-gradient(160deg,rgba(255,91,46,.30),transparent 42%,rgba(124,92,255,.26));
+  mix-blend-mode:color;transition:opacity .8s}
+.blade:hover::after{opacity:0}
+.blade:hover .st img{filter:none;transition:filter .8s}
+.blade .tagx{position:absolute;left:14px;bottom:12px;z-index:4;font:500 9.5px/1.6 var(--mono);
+  letter-spacing:.2em;text-transform:uppercase;color:var(--bone);text-shadow:0 2px 14px #000}
+.blade.noimg{display:grid;place-items:center}
+.blade.noimg .st{display:none}
+.blade.noimg::before{content:"GP";font-family:var(--disp);font-size:96px;color:var(--ash)}
+
+.prose p{font-size:16.6px;color:var(--bone-2);margin-bottom:17px;max-width:620px}
+.bg-bone .prose p{color:#4a463f}
+.prose strong{color:var(--bone);font-weight:600}
+.bg-bone .prose strong{color:var(--void)}
+.quote{font-family:var(--serif);font-size:clamp(21px,2.7vw,31px);line-height:1.26;
+  border-left:2px solid var(--ember);padding-left:24px;margin:34px 0 0;color:var(--bone);max-width:600px}
+.bg-bone .quote{color:var(--void)}
+
+/* ═══════════ NÚMEROS ═══════════ */
+.figs{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line)}
+@media(max-width:820px){.figs{grid-template-columns:repeat(2,1fr)}}
+.fig{background:var(--void);padding:34px 22px;position:relative;overflow:hidden}
+.bg-bone .fig{background:var(--bone)}
+.fig b{display:block;font-family:var(--disp);font-size:clamp(44px,6.4vw,80px);line-height:.86;
+  letter-spacing:-.06em;font-variant-numeric:tabular-nums}
+.fig span{display:block;margin-top:12px;font:500 10px/1.5 var(--mono);letter-spacing:.18em;
+  text-transform:uppercase;color:var(--ash)}
+.fig::before{content:"";position:absolute;left:0;bottom:0;height:2px;width:0;background:var(--ember);
+  transition:width 1.4s cubic-bezier(.16,1,.3,1)}
+.fig.in::before{width:100%}
+
+/* ═══════════ PILHA 3D DE PROJETOS ═══════════ */
+/* o leque abre para os lados: sem recorte ele empurrava a largura
+   do documento (907px num viewport de 484) */
+.deck-wrap{position:relative;height:560px;perspective:1600px;perspective-origin:50% 42%;
+  touch-action:pan-y;user-select:none;overflow:hidden;
+  margin-inline:calc(var(--bleed,0px) * -1);padding-inline:var(--bleed,0px)}
+@media(max-width:640px){.deck-wrap{height:520px}}
+.deck{position:absolute;inset:0;transform-style:preserve-3d}
+.dcard{position:absolute;left:50%;top:50%;width:min(420px,84vw);height:min(470px,66vh);
+  margin:0;transform-origin:50% 120%;background:var(--obsidian);border:1px solid var(--line-2);
+  overflow:hidden;cursor:grab;
+  transition:transform .78s cubic-bezier(.19,1,.28,1),opacity .6s,box-shadow .6s,filter .6s;
+  will-change:transform}
+.dcard:active{cursor:grabbing}
+.dcard .im{height:52%;position:relative;overflow:hidden;background:var(--slate)}
+.dcard .im img{width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.15) brightness(.8);
+  transition:filter .8s,transform 1.1s cubic-bezier(.16,1,.3,1)}
+.dcard.front .im img{filter:grayscale(.25) contrast(1.05) brightness(.95)}
+.dcard.front:hover .im img{filter:none;transform:scale(1.05)}
+.dcard .im .fb{position:absolute;inset:0;background:
+  linear-gradient(150deg,rgba(255,91,46,.3),rgba(124,92,255,.2)),
+  repeating-linear-gradient(48deg,transparent 0 12px,rgba(236,231,221,.04) 12px 24px)}
+.dcard .im::after{content:"";position:absolute;inset:0;
+  background:linear-gradient(180deg,transparent 40%,var(--obsidian))}
+.dcard .st{position:absolute;top:14px;left:14px;z-index:3;font:500 9.5px/1 var(--mono);
+  letter-spacing:.16em;text-transform:uppercase;padding:6px 11px;border:1px solid currentColor}
+.s-on{color:#8ef2b8}.s-wip{color:var(--ember-2)}
+.dcard .idx{position:absolute;top:14px;right:16px;z-index:3;font-family:var(--disp);font-size:15px;
+  color:var(--ash);letter-spacing:-.02em}
+.dcard .bd{padding:22px 24px}
+.dcard h4{font-size:25px;text-transform:uppercase;margin-bottom:10px;letter-spacing:-.035em}
+.dcard p{font-size:14.2px;color:var(--bone-2);margin-bottom:16px;min-height:64px}
+.dcard .kit{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px}
+.dcard .kit i{font-style:normal;font:500 9.5px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;
+  padding:5px 9px;border:1px solid var(--line);color:var(--ash)}
+.dcard .lk{display:flex;gap:9px}
+.dcard .lk a{font:600 10.5px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;
+  padding:10px 15px;border:1px solid var(--line-2);transition:.3s}
+.dcard .lk a:hover{background:var(--ember);border-color:var(--ember);color:var(--void)}
+.dcard .lk a.off{opacity:.3;pointer-events:none}
+
+.deck-ui{display:flex;align-items:center;justify-content:center;gap:22px;margin-top:34px}
+.deck-ui button{width:52px;height:52px;border-radius:50%;border:1px solid var(--line-2);
+  background:transparent;color:var(--bone);cursor:pointer;transition:.3s;display:grid;place-items:center}
+.deck-ui button svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.6}
+.deck-ui button:hover{background:var(--ember);border-color:var(--ember);color:var(--void);transform:scale(1.08)}
+.deck-ui .ct{font:500 10.5px/1 var(--mono);letter-spacing:.22em;color:var(--ash);min-width:78px;text-align:center}
+.deck-ui .ct b{color:var(--bone);font-weight:500}
+.deck-hint{text-align:center;margin-top:16px;font:500 9.5px/1 var(--mono);letter-spacing:.22em;
+  text-transform:uppercase;color:var(--ash)}
+
+/* ═══════════ SHOWREEL FATIADO ═══════════ */
+.reel{position:relative;height:min(76vh,660px);overflow:hidden;background:var(--slate);
+  clip-path:polygon(0 3.2vw,100% 0,100% calc(100% - 3.2vw),0 100%)}
+.reel video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  filter:grayscale(1) contrast(1.3) brightness(.5)}
+.reel.playing video{filter:grayscale(.15) contrast(1.1) brightness(.72)}
+.reel::after{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;
+  background:linear-gradient(135deg,rgba(255,91,46,.34),transparent 46%,rgba(124,92,255,.34));
+  mix-blend-mode:color;transition:opacity .9s}
+.reel.playing::after{opacity:.45}
+/* ripas verticais que abrem como uma persiana */
+.reel-slats{position:absolute;inset:0;z-index:3;display:flex;pointer-events:none}
+.reel-slats i{flex:1;background:var(--void);transform-origin:top;
+  transition:transform 1.15s cubic-bezier(.76,0,.24,1)}
+.reel.open .reel-slats i{transform:scaleY(0)}
+.reel-over{position:absolute;left:0;right:0;bottom:0;z-index:4;padding:clamp(24px,5vw,58px);
+  max-width:640px}
+.reel-over h3{font-size:clamp(28px,5.4vw,60px);text-transform:uppercase;margin:14px 0 14px}
+.reel-over h3 em{font-family:var(--serif);font-style:italic;font-weight:400;text-transform:none;color:var(--ember)}
+.reel-over p{font-size:15.4px;color:var(--bone-2);max-width:430px;margin-bottom:24px}
+.reel-btn{display:inline-flex;align-items:center;gap:12px;background:transparent;cursor:pointer;
+  border:1px solid var(--line-2);color:var(--bone);padding:13px 22px;
+  font:600 10.5px/1 var(--mono);letter-spacing:.2em;text-transform:uppercase;transition:.35s}
+.reel-btn:hover{background:var(--bone);color:var(--void);border-color:var(--bone)}
+.reel-btn .ic{width:13px;height:13px;fill:currentColor;flex:none}
+.reel-tc{position:absolute;top:clamp(20px,4vw,40px);right:clamp(20px,4vw,40px);z-index:4;
+  font-size:10.5px;letter-spacing:.2em;color:var(--bone-2);
+  border:1px solid var(--line);padding:6px 11px;background:rgba(5,5,6,.5);backdrop-filter:blur(6px)}
+
+/* ═══════════ TIMELINE ═══════════ */
+.tl{display:grid;gap:1px;background:var(--line);border-block:1px solid var(--line)}
+.tlr{background:var(--void);display:grid;
+  grid-template-columns:150px minmax(0,1fr) minmax(0,290px);gap:30px;
+  padding:34px 6px;align-items:start;transition:background .5s;position:relative}
+.tlr>*{min-width:0}
+.bg-bone .tlr{background:var(--bone)}
+.tlr:hover{background:var(--obsidian)}
+.bg-bone .tlr:hover{background:#e3ded3}
+@media(max-width:900px){.tlr{grid-template-columns:1fr;gap:10px;padding:26px 6px}}
+.tlr time{font:500 10.5px/1.4 var(--mono);letter-spacing:.16em;color:var(--ember)}
+.tlr h4{font-size:24px;text-transform:uppercase;letter-spacing:-.035em;margin-bottom:6px}
+.tlr .org{font:500 10.5px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--ash)}
+.tlr p{font-size:14.8px;color:var(--bone-2)}
+.bg-bone .tlr p{color:#4a463f}
+.tlr .ec{position:absolute;right:6px;top:26px;width:34px;height:34px;border-radius:50%;
+  background:var(--void);box-shadow:0 0 0 1px var(--line),0 0 22px -4px var(--ember);
+  transition:box-shadow .6s,transform .6s}
+.bg-bone .tlr .ec{background:var(--bone)}
+.tlr:hover .ec{box-shadow:0 0 0 1px var(--ember),0 0 40px 2px rgba(255,91,46,.55);transform:scale(1.1)}
+@media(max-width:900px){.tlr .ec{display:none}}
+
+/* ═══════════ HOBBIES ═══════════ */
+.hgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line)}
+@media(max-width:960px){.hgrid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.hgrid{grid-template-columns:1fr}}
+.hb{background:var(--void);padding:32px 26px;min-height:250px;position:relative;overflow:hidden;
+  display:flex;flex-direction:column;justify-content:flex-end}
+.hb .cor{position:absolute;inset:0;opacity:0;transition:opacity .7s;pointer-events:none;
+  background:radial-gradient(280px circle at var(--cx,50%) var(--cy,50%),rgba(255,91,46,.2),transparent 66%)}
+.hb:hover .cor{opacity:1}
+.hb .no{position:absolute;top:-14px;right:-4px;font-family:var(--disp);font-size:112px;
+  color:rgba(236,231,221,.035);letter-spacing:-.06em;transition:transform .8s cubic-bezier(.16,1,.3,1)}
+.hb:hover .no{transform:translate(-8px,10px)}
+.hb .em{width:32px;height:32px;margin-bottom:18px;color:var(--ember);display:block}
+.hb .em svg{width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:1.5}
+.hb h4{font-size:17px;text-transform:uppercase;margin-bottom:9px;letter-spacing:-.02em}
+.hb p{font-size:13.8px;color:var(--bone-2)}
+
+/* ═══════════ CONTATO ═══════════ */
+.outro{position:relative;padding:130px 0 90px;text-align:center;overflow:hidden}
+.outro .corona{position:absolute;left:50%;top:46%;transform:translate(-50%,-50%);
+  width:min(720px,120vw);aspect-ratio:1;border-radius:50%;pointer-events:none;
+  background:radial-gradient(circle,transparent 32%,rgba(255,91,46,.2) 36%,rgba(124,92,255,.12) 52%,transparent 72%);
+  filter:blur(30px);animation:breath 9s ease-in-out infinite}
+@keyframes breath{50%{transform:translate(-50%,-50%) scale(1.14);opacity:.72}}
+.outro h2{font-size:clamp(38px,10vw,140px);text-transform:uppercase;position:relative}
+.mailbig{display:inline-block;margin-top:34px;font-family:var(--mono);font-size:clamp(13px,2.4vw,19px);
+  letter-spacing:.16em;padding:18px 30px;border:1px solid var(--line-2);position:relative;overflow:hidden;
+  text-transform:uppercase}
+.mailbig span{position:relative;z-index:2;transition:color .45s}
+.mailbig::before{content:"";position:absolute;inset:0;background:var(--ember);
+  transform:translateY(101%);transition:transform .55s cubic-bezier(.76,0,.24,1)}
+.mailbig:hover span{color:var(--void)}
+.mailbig:hover::before{transform:none}
+.socs{display:flex;gap:1px;justify-content:center;margin-top:44px;background:var(--line);
+  max-width:620px;margin-inline:auto;border:1px solid var(--line)}
+.socs a{flex:1;background:var(--void);padding:22px 10px;font:600 10px/1 var(--mono);letter-spacing:.2em;
+  text-transform:uppercase;color:var(--bone-2);position:relative;overflow:hidden;transition:color .4s}
+.socs a span{position:relative;z-index:2}
+.socs a::before{content:"";position:absolute;inset:0;background:var(--plasma);
+  transform:translateY(100%);transition:transform .5s cubic-bezier(.76,0,.24,1)}
+.socs a:hover{color:var(--bone)}
+.socs a:hover::before{transform:none}
+
+footer{border-top:1px solid var(--line);padding:26px 0}
+.foot{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;
+  font:500 9.5px/1 var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--ash)}
+.foot b{color:var(--ember);font-weight:500}
+</style>
+
+<div id="pre">
+  <div class="bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  <div class="n"><span id="preN">0</span><sup>%</sup></div>
+  <div class="lb">Alinhando o eclipse</div>
+</div>
+
+<!-- ═══════ CONJUNTO DE ÍCONES (traço, herda a cor) ═══════ -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <g id="i-belt"><path d="M3 9h18M3 15h18M7 9v6M17 9v6M12 6v12" stroke-linecap="round"/></g>
+  <g id="i-server"><rect x="3" y="4" width="18" height="6" rx="1.5"/><rect x="3" y="14" width="18" height="6" rx="1.5"/><path d="M7 7h.01M7 17h.01" stroke-linecap="round"/></g>
+  <g id="i-gamepad"><path d="M6.5 8h11a4.5 4.5 0 0 1 4.4 5.4l-.7 3.5A2.6 2.6 0 0 1 16.7 18l-1.5-2h-6.4L7.3 18a2.6 2.6 0 0 1-4.5-1.1l-.7-3.5A4.5 4.5 0 0 1 6.5 8Z"/><path d="M8 11v3M6.5 12.5h3M15.5 11.5h.01M17.5 13.5h.01" stroke-linecap="round"/></g>
+  <g id="i-gauge"><path d="M4 18a9 9 0 1 1 16 0"/><path d="M12 14l4-4" stroke-linecap="round"/><circle cx="12" cy="14" r="1.4"/></g>
+  <g id="i-arrow-l"><path d="M19 12H5m0 0 6-6m-6 6 6 6" stroke-linecap="round" stroke-linejoin="round"/></g>
+  <g id="i-arrow-r"><path d="M5 12h14m0 0-6-6m6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></g>
+</defs></svg>
+
+<div id="grain"></div>
+<div id="lens"></div>
+<div id="dot"></div>
+
+<nav>
+  <div class="nav-in">
+    <a class="mark" href="#top">GUILHERME<i>·</i>PEREIRA</a>
+    <div class="nav-l">
+      <a href="#sobre"      data-t="Sobre"><span>Sobre</span></a>
+      <a href="#trajetoria" data-t="Trajetória"><span>Trajetória</span></a>
+      <a href="#projetos"   data-t="Projetos"><span>Projetos</span></a>
+      <a href="#hobbies"    data-t="Hobbies"><span>Hobbies</span></a>
+      <a href="#contato" class="keep" data-t="Contato"><span>Contato</span></a>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══════════ HERO ═══════════ -->
+<header id="top">
+  <canvas id="sky"></canvas>
+  <div id="skyFB"></div>
+  <div class="hero-type">
+    <h1 class="kine">
+      <span class="ln"><span>Guilherme</span></span>
+      <span class="ln"><span class="hollow">Pereira</span></span>
+    </h1>
+    <div class="hero-sub">
+      <span>Full Stack Developer</span>
+      <span>Rio de Janeiro <b>BR</b></span>
+      <span>React · Node · Linux</span>
+      <span><b>◉ Disponível</b></span>
+    </div>
+  </div>
+  <div class="scrollcue"><span>Role</span><i></i></div>
+</header>
+
+<div class="band-clip"><div class="band"><div class="rail" id="rail1"></div></div></div>
+
+<!-- ═══════════ SOBRE ═══════════ -->
+<section id="sobre" class="cut-both bg-slate" style="margin-top:-40px;padding-top:150px">
+  <div class="wrap">
+    <div class="shead">
+      <span class="snum">01 / Perfil</span>
+      <div>
+        <h2 class="sec slice" data-slice="Do escuro"><em>para a luz</em></h2>
+        <p class="lede">Motion designer que virou desenvolvedor, passou pelo suporte de TI de uma multinacional e hoje entrega produto web inteiro — do banco de dados ao último frame de animação.</p>
+      </div>
+    </div>
+
+    <div class="about">
+      <figure class="blade" id="blade" data-src="gp.jpg">
+        <span class="tagx">Guilherme Pereira<br>Rio de Janeiro · 2026</span>
+      </figure>
+
+      <div class="prose">
+        <p>Comecei longe do código. Foram anos como <strong>editor de vídeo e animador</strong> freelancer — tempo suficiente para que timing, hierarquia e composição deixassem de ser conceito e virassem instinto.</p>
+        <p>Depois vieram dois anos como <strong>analista de suporte de TI na AB-InBev/Ambev</strong>, a maior cervejaria do mundo. Ali aprendi a diferença entre um sistema que funciona na apresentação e um que aguenta segunda-feira de manhã.</p>
+        <p>Me formei <strong>tecnólogo em Análise e Desenvolvimento de Sistemas</strong> pela Universidade Estácio de Sá, com as trilhas da Rocketseat em paralelo. Hoje construo websites e APIs REST para pequenos e médios empresários — cada projeto passa inteiro pelas minhas mãos.</p>
+        <blockquote class="quote">Design, código e infraestrutura não são três departamentos. São três ângulos do mesmo problema — e eu olho pelos três.</blockquote>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ NÚMEROS ═══════════ -->
+<section style="padding:0">
+  <div class="wrap">
+    <div class="figs">
+      <div class="fig rv"><b data-count="7">0</b><span>projetos publicados</span></div>
+      <div class="fig rv"><b data-count="4">0</b><span>anos em tecnologia</span></div>
+      <div class="fig rv"><b data-count="3">0</b><span>certificações Rocketseat</span></div>
+      <div class="fig rv"><b>24<small style="font-size:.42em">h</small></b><span>tempo de resposta</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ SHOWREEL — vídeo fatiado ═══════════ -->
+<section class="reel-sec" style="padding:0;margin-top:110px">
+  <div class="reel" id="reel">
+    <video id="reelVid" muted loop playsinline preload="metadata"
+           poster="https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=1400&q=80">
+      <source src="https://assets.mixkit.co/videos/preview/mixkit-white-lines-of-light-in-motion-31745-large.mp4" type="video/mp4">
+    </video>
+    <div class="reel-slats" id="reelSlats"></div>
+    <div class="reel-over">
+      <span class="snum" style="color:var(--ember)">Antes do código</span>
+      <h3>Anos editando<br><em>vídeo e movimento</em></h3>
+      <p>Motion graphics, timing e composição. O repertório que hoje separa uma interface funcional de uma interface que gruda.</p>
+      <button class="reel-btn" id="reelBtn" aria-pressed="false">
+        <svg class="ic" viewBox="0 0 24 24"><path d="M8 5.2v13.6L19 12z"/></svg>
+        <span class="tx">Reproduzir</span>
+      </button>
+    </div>
+    <span class="reel-tc mono" id="reelTC">00:00 / --:--</span>
+  </div>
+</section>
+
+<!-- ═══════════ TRAJETÓRIA ═══════════ -->
+<section id="trajetoria">
+  <div class="wrap">
+    <div class="shead">
+      <span class="snum">02 / Trajetória</span>
+      <div><h2 class="sec slice" data-slice="Quatro anos"><em>três carreiras</em></h2></div>
+    </div>
+
+    <div class="tl">
+      <div class="tlr rv"><span class="ec"></span>
+        <time>2024 — PRESENTE</time>
+        <div><h4>Desenvolvedor Full Stack</h4><span class="org">Freelancer · Autônomo</span></div>
+        <p>Websites e APIs REST para pequenos e médios empresários. Ciclo completo: levantamento, modelagem do banco, API em Node.js com Knex, autenticação JWT, interface em React + Vite e deploy em VPS Linux com Nginx.</p>
+      </div>
+      <div class="tlr rv"><span class="ec"></span>
+        <time>2023 — 2024</time>
+        <div><h4>Tecnólogo em ADS</h4><span class="org">Universidade Estácio de Sá</span></div>
+        <p>Graduação concluída com trilhas intensivas da Rocketseat em paralelo — fundamentos, front-end e Node.js. Cada desafio proposto virou projeto real de portfólio.</p>
+      </div>
+      <div class="tlr rv"><span class="ec"></span>
+        <time>2021 — 2023</time>
+        <div><h4>Analista de Suporte de TI</h4><span class="org">AB-InBev / Ambev</span></div>
+        <p>Suporte técnico dentro da maior cervejaria do mundo. Diagnóstico e resolução de incidentes em escala, automação de rotinas repetitivas e obsessão por tempo de resposta.</p>
+      </div>
+      <div class="tlr rv"><span class="ec"></span>
+        <time>ANTES DE 2021</time>
+        <div><h4>Editor de Vídeo & Animador</h4><span class="org">Freelance criativo</span></div>
+        <p>Produção audiovisual e motion graphics. Ritmo, curva de easing e leitura visual viraram músculo — é por isso que minhas interfaces têm movimento com intenção, não animação por enfeite.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="band-clip"><div class="band alt"><div class="rail" id="rail2"></div></div></div>
+
+<!-- ═══════════ PROJETOS · PILHA 3D ═══════════ -->
+<section id="projetos" class="cut-both bg-slate" style="margin-top:-46px;padding-top:150px">
+  <div class="wrap">
+    <div class="shead">
+      <span class="snum">03 / Portfólio</span>
+      <div>
+        <h2 class="sec slice" data-slice="Trabalho"><em>no ar</em></h2>
+        <p class="lede">Arraste os cartões ou use as setas do teclado. Tudo com código aberto.</p>
+      </div>
+    </div>
+
+    <div class="deck-wrap" id="deckWrap"><div class="deck" id="deck"></div></div>
+    <div class="deck-ui">
+      <button id="dPrev" aria-label="Anterior"><svg viewBox="0 0 24 24"><use href="#i-arrow-l"/></svg></button>
+      <span class="ct"><b id="dNow">01</b> / <span id="dAll">06</span></span>
+      <button id="dNext" aria-label="Próximo"><svg viewBox="0 0 24 24"><use href="#i-arrow-r"/></svg></button>
+    </div>
+    <p class="deck-hint">Arraste · setas ← → · clique no cartão de trás</p>
+  </div>
+</section>
+
+<!-- ═══════════ HOBBIES ═══════════ -->
+<section id="hobbies">
+  <div class="wrap">
+    <div class="shead">
+      <span class="snum">04 / Offline</span>
+      <div><h2 class="sec slice" data-slice="Fora"><em>do editor</em></h2></div>
+    </div>
+    <div class="hgrid" id="hobs"></div>
+  </div>
+</section>
+
+<!-- ═══════════ CONTATO ═══════════ -->
+<section class="outro cut-top bg-slate" id="contato">
+  <span class="corona"></span>
+  <div class="wrap">
+    <span class="snum" style="display:block;margin-bottom:26px">05 / Contato</span>
+    <h2 class="slice" data-slice="Vamos construir"></h2>
+    <a class="mailbig" href="mailto:contato@guilhermejp.com"><span>contato@guilhermejp.com</span></a>
+    <div class="socs">
+      <a href="https://github.com/Maxtherox/" target="_blank"><span>GitHub</span></a>
+      <a href="https://www.linkedin.com/in/guimaxtr/" target="_blank"><span>LinkedIn</span></a>
+      <a href="https://www.instagram.com/dev.guilhermejp/" target="_blank"><span>Instagram</span></a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot">
+    <span>Esboço V2·01 — <b>ECLIPSE</b></span>
+    <span>Aceternity UI refinada · WebGL</span>
+    <span>© 2026 Guilherme Pereira</span>
+  </div>
+</footer>
+
+<script>
+(() => {
+"use strict";
+const q=(s,c=document)=>c.querySelector(s), qa=(s,c=document)=>[...c.querySelectorAll(s)];
+const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+const clamp=(v,a=0,b=1)=>Math.min(b,Math.max(a,v));
+
+/* ═══════════════════════════════════════════
+   1 · SHADER DO ECLIPSE (WebGL)
+   Disco ocluso + coroa em fbm polar + flare.
+   ═══════════════════════════════════════════ */
+(function eclipse(){
+  const cv=q("#sky");
+  const gl=cv.getContext("webgl",{alpha:false,antialias:false,powerPreference:"low-power"})
+        || cv.getContext("experimental-webgl");
+  if(!gl||reduce){ cv.style.display="none"; q("#skyFB").style.display="block"; return; }
+
+  const VS="attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}";
+  const FS=[
+"precision highp float;",
+"uniform vec2 u_res; uniform float u_t; uniform vec2 u_m; uniform float u_scroll;",
+"float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}",
+"float noise(vec2 p){vec2 i=floor(p),f=fract(p);vec2 u=f*f*(3.-2.*f);",
+"  return mix(mix(hash(i),hash(i+vec2(1,0)),u.x),mix(hash(i+vec2(0,1)),hash(i+vec2(1,1)),u.x),u.y);}",
+"float fbm(vec2 p){float v=0.,a=.5;for(int i=0;i<6;i++){v+=a*noise(p);p*=2.02;a*=.5;}return v;}",
+"void main(){",
+"  vec2 uv=(gl_FragCoord.xy-.5*u_res)/min(u_res.x,u_res.y);",
+"  vec2 ctr=vec2((u_m.x-.5)*.10,(u_m.y-.5)*.07+.03-u_scroll*.30);",
+"  vec2 p=uv-ctr;",
+"  float r=length(p); float a=atan(p.y,p.x);",
+"  float R=0.175;",
+"  float t=u_t*.055;",
+// coroa: fbm em coordenadas polares, alongado radialmente
+"  float streak=fbm(vec2(a*3.2+t*1.6, r*3.6-t*2.4));",
+"  streak+= .55*fbm(vec2(a*7.5-t*1.1, r*7.0-t*3.1));",
+"  float halo=smoothstep(R*0.90,R*3.3,r);",
+"  float fall=exp(-(r-R)*3.15);",
+"  float corona=clamp(fall*halo*(.34+streak*.86),0.,1.6);",
+// anel de contato (chromosfera)
+"  float ring=exp(-pow((r-R*1.012)/0.0075,2.0));",
+// diamante: um ponto brilhante girando na borda
+"  float da=a-t*2.1; float diamond=exp(-pow((r-R*1.02)/0.011,2.0))*pow(max(0.,cos(da)),56.0);",
+"  vec3 hot =vec3(1.00,0.42,0.16);",
+"  vec3 warm=vec3(1.00,0.68,0.32);",
+"  vec3 cold=vec3(0.44,0.34,1.00);",
+"  vec3 col=mix(cold,hot,clamp(fall*1.25,0.,1.))*corona;",
+"  col+=warm*ring*0.95;",
+"  col+=vec3(1.0,0.95,0.88)*diamond*2.4;",
+// estrelas
+"  vec2 sg=floor(uv*260.); float star=step(.9975,hash(sg))*(0.35+0.65*sin(u_t*2.2+hash(sg)*60.));",
+"  col+=vec3(star)*smoothstep(R*1.7,R*5.0,r)*.55;",
+// poeira nebular
+"  col+=cold*0.055*fbm(uv*2.1+t*.4)*smoothstep(R*1.3,R*4.,r);",
+// oclusão do disco
+"  float disk=smoothstep(R,R*0.985,r);",
+"  col*= (1.0-disk);",
+"  col*=smoothstep(1.45,0.18,length(uv));",
+"  col=pow(col,vec3(0.92));",
+"  gl_FragColor=vec4(col,1.0);",
+"}"].join("\n");
+
+  function sh(t,s){const o=gl.createShader(t);gl.shaderSource(o,s);gl.compileShader(o);
+    if(!gl.getShaderParameter(o,gl.COMPILE_STATUS))throw new Error(gl.getShaderInfoLog(o));return o;}
+  let prog;
+  try{
+    prog=gl.createProgram();
+    gl.attachShader(prog,sh(gl.VERTEX_SHADER,VS));
+    gl.attachShader(prog,sh(gl.FRAGMENT_SHADER,FS));
+    gl.linkProgram(prog);
+    if(!gl.getProgramParameter(prog,gl.LINK_STATUS))throw new Error(gl.getProgramInfoLog(prog));
+  }catch(e){ cv.style.display="none"; q("#skyFB").style.display="block"; return; }
+
+  gl.useProgram(prog);
+  const b=gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER,b);
+  gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);
+  const lp=gl.getAttribLocation(prog,"p");
+  gl.enableVertexAttribArray(lp); gl.vertexAttribPointer(lp,2,gl.FLOAT,false,0,0);
+  const U=n=>gl.getUniformLocation(prog,n);
+  const uRes=U("u_res"),uT=U("u_t"),uM=U("u_m"),uS=U("u_scroll");
+  const dpr=Math.min(devicePixelRatio||1,1.5);
+  let mx=.5,my=.5,tx=.5,ty=.5,alive=true;
+  addEventListener("pointermove",e=>{tx=e.clientX/innerWidth;ty=1-e.clientY/innerHeight;},{passive:true});
+  new IntersectionObserver(es=>es.forEach(e=>alive=e.isIntersecting),{threshold:0}).observe(q("header"));
+  const t0=performance.now();
+  (function frame(now){
+    requestAnimationFrame(frame);
+    if(!alive) return;
+    const w=cv.clientWidth*dpr|0,h=cv.clientHeight*dpr|0;
+    if(cv.width!==w||cv.height!==h){cv.width=w;cv.height=h;gl.viewport(0,0,w,h);}
+    mx+=(tx-mx)*.045; my+=(ty-my)*.045;
+    gl.uniform2f(uRes,cv.width,cv.height);
+    gl.uniform1f(uT,(now-t0)/1000);
+    gl.uniform2f(uM,mx,my);
+    gl.uniform1f(uS,clamp(scrollY/innerHeight));
+    gl.drawArrays(gl.TRIANGLES,0,3);
+  })(t0);
+})();
+
+/* ═══════════════════════════════════════════
+   1b · AJUSTE TIPOGRÁFICO
+   As fontes display podem não existir na máquina
+   do visitante; o substituto é mais largo e
+   estoura o contêiner. Aqui medimos o texto real
+   e reduzimos o corpo até caber — sempre.
+   ═══════════════════════════════════════════ */
+const fitText=(()=>{
+  const probe=document.createElement("span");
+  probe.setAttribute("aria-hidden","true");
+  probe.style.cssText="position:absolute;left:-99999px;top:0;visibility:hidden;white-space:pre;";
+  document.body.appendChild(probe);
+  function widthAt100(el,text){
+    const cs=getComputedStyle(el);
+    const fs=parseFloat(cs.fontSize)||100;
+    const lsEm=(parseFloat(cs.letterSpacing)||0)/fs;   // px → em
+    probe.style.fontFamily=cs.fontFamily;
+    probe.style.fontWeight=cs.fontWeight;
+    probe.style.fontStyle=cs.fontStyle;
+    probe.style.textTransform=cs.textTransform;
+    probe.style.fontSize="100px";
+    probe.style.letterSpacing=(lsEm*100)+"px";
+    probe.textContent=text;
+    return probe.getBoundingClientRect().width;
+  }
+  return function fit(el,opts){
+    opts=opts||{};
+    const min=opts.min||24;
+    const lines=(opts.lines||[el.textContent]).filter(Boolean);
+    function apply(){
+      el.style.fontSize="";
+      const max=parseFloat(getComputedStyle(el).fontSize);
+      const box=(el.parentElement||el).clientWidth;
+      if(!box) return;
+      let widest=0;
+      for(const t of lines) widest=Math.max(widest,widthAt100(el,t));
+      if(!widest) return;
+      const ideal=box/widest*100*0.985;
+      el.style.fontSize=Math.max(min,Math.min(max,ideal))+"px";
+    }
+    apply();
+    addEventListener("resize",apply,{passive:true});
+    if(document.fonts&&document.fonts.ready) document.fonts.ready.then(apply);
+  };
+})();
+fitText(q("h1.kine"),{lines:["GUILHERME","PEREIRA"],min:34});
+
+/* ═══════════════════════════════════════════
+   2 · PRELOADER
+   ═══════════════════════════════════════════ */
+(function pre(){
+  const el=q("#pre"), n=q("#preN");
+  let v=0;
+  const id=setInterval(()=>{
+    v=Math.min(100,v+Math.random()*13+4);
+    n.textContent=Math.floor(v);
+    if(v>=100){
+      clearInterval(id);
+      setTimeout(()=>{
+        qa("#pre .bars i").forEach((b,i)=>b.style.transitionDelay=(i*.045)+"s");
+        el.classList.add("gone");
+        document.body.classList.add("ready","lens-on");
+        setTimeout(()=>el.remove(),1600);
+      },260);
+    }
+  },90);
+})();
+
+/* ═══════════════════════════════════════════
+   3 · CURSOR-LENTE
+   ═══════════════════════════════════════════ */
+(function lens(){
+  const L=q("#lens"), D=q("#dot");
+  let x=innerWidth/2,y=innerHeight/2,lx=x,ly=y;
+  addEventListener("pointermove",e=>{
+    x=e.clientX;y=e.clientY;
+    D.style.transform="translate("+x+"px,"+y+"px)";
+  },{passive:true});
+  (function loop(){
+    lx+=(x-lx)*.10; ly+=(y-ly)*.10;
+    L.style.transform="translate("+lx+"px,"+ly+"px)";
+    requestAnimationFrame(loop);
+  })();
+  // a lente some sobre texto corrido, para não atrapalhar a leitura
+  document.addEventListener("pointerover",e=>{
+    const soft=e.target.closest("p,.prose,.lede,.quote,input,textarea");
+    document.body.classList.toggle("lens-on",!soft);
+  });
+})();
+
+/* ═══════════════════════════════════════════
+   4 · TIPOGRAFIA EM FATIAS
+   Cada título vira N cópias recortadas em faixas
+   horizontais que entram por lados alternados.
+   ═══════════════════════════════════════════ */
+(function slices(){
+  qa(".slice").forEach(el=>{
+    const pre=el.dataset.slice||"";
+    const html=(pre?pre+" ":"")+el.innerHTML;
+    const N=5;
+    let out="";
+    for(let i=0;i<N;i++){
+      const top=(i/N*100).toFixed(3), bot=((N-1-i)/N*100).toFixed(3);
+      out+='<span class="lyr" style="clip-path:inset('+top+'% 0 '+bot+'% 0)">'+
+           '<i style="--from:'+(i%2?'104%':'-104%')+';transition-delay:'+(i*.07)+'s">'+html+'</i></span>';
+    }
+    el.innerHTML=out;
+  });
+})();
+
+/* ═══════════════════════════════════════════
+   5 · RETRATO EM LÂMINAS
+   ═══════════════════════════════════════════ */
+(function blade(){
+  const fig=q("#blade"); if(!fig) return;
+  const src=fig.dataset.src, N=7;
+  const img=new Image();
+  img.onload=()=>{
+    let html="";
+    for(let i=0;i<N;i++){
+      const t=(i/N*100).toFixed(4), h=(100/N).toFixed(4);
+      html+='<span class="st" style="top:'+t+'%;height:'+h+'%;--dir:'+(i%2?'102%':'-102%')+
+            ';transition-delay:'+(i*.075)+'s"><img src="'+src+'" alt="Guilherme Pereira" '+
+            'style="top:'+(-i*100)+'%"></span>';
+    }
+    fig.insertAdjacentHTML("afterbegin",html);
+  };
+  img.onerror=()=>fig.classList.add("noimg");
+  img.src=src;
+})();
+
+/* ═══════════════════════════════════════════
+   6 · FAIXAS ROLANTES
+   ═══════════════════════════════════════════ */
+(function bands(){
+  const A=["React","Node.js","Vite","Knex","JWT","PostgreSQL","Linux","Nginx","REST API","TypeScript"];
+  const B=["Disponível para projetos","Rio de Janeiro","contato@guilhermejp.com","Full Stack",
+           "Ex AB-InBev","Tecnólogo em ADS","Faixa vermelha de Taekwondo"];
+  const mk=a=>a.map(s=>"<span>"+s+"</span>").join("");
+  q("#rail1").innerHTML=mk(A)+mk(A);
+  q("#rail2").innerHTML=mk(B)+mk(B);
+})();
+
+/* ═══════════════════════════════════════════
+   7 · PILHA 3D DE PROJETOS
+   ═══════════════════════════════════════════ */
+const PROJECTS=[
+  {t:"Food Explorer",st:["s-on","Online"],
+   d:"Plataforma para restaurantes: catálogo de pratos, carrinho e painel administrativo com CRUD completo e acesso por perfil.",
+   k:["React","Node.js","SQLite","JWT"],
+   img:"https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=900&q=80",
+   u:"https://foodexplorer-maxtr.netlify.app/",g:"https://github.com/Maxtherox/foodexplorer-react-frontend"},
+  {t:"Camila Braga",st:["s-on","Cliente real"],
+   d:"Site institucional entregue para cliente e publicado com autorização. Interface moderna, responsiva e de carregamento rápido.",
+   k:["React","Vite","Styled Comp."],
+   img:"https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=900&q=80",
+   u:"https://camilabragamarketing.com",g:"https://github.com/Maxtherox/camilabragamarketing.com"},
+  {t:"NFe System",st:["s-on","Online"],
+   d:"Gestão de notas fiscais, clientes, empresas e produtos, com todas as relações modeladas no banco relacional.",
+   k:["Node.js","Knex","REST","React"],
+   img:"https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=900&q=80",
+   u:"https://nfesystem.guilhermejp.com",g:"https://github.com/Maxtherox/nfe-system-2025"},
+  {t:"Taekwondo Manager",st:["s-on","Backend 100%"],
+   d:"Gestão de campeonatos com geração e balanceamento automático de chaves de luta. Nasceu do meu próprio esporte.",
+   k:["Node.js","JWT","Algoritmos"],
+   img:"https://images.unsplash.com/photo-1555597673-b21d5c935865?w=900&q=80",
+   u:"https://taekwondo.guilhermejp.com/",g:"https://github.com/Maxtherox/Taekwondo-EManager"},
+  {t:"Maralt",st:["s-wip","Em desenvolvimento"],
+   d:"E-commerce para vendedor independente. API com JWT e carrinho funcionais; integrações de pagamento e frete em progresso.",
+   k:["Node.js","Knex","Checkout"],
+   img:"https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=900&q=80",u:null,g:null},
+  {t:"RocketNotes",st:["s-wip","Refinando"],
+   d:"Anotações com tags e busca vinculadas ao usuário autenticado, sobre API REST própria.",
+   k:["React","Node.js","SQLite"],
+   img:"https://images.unsplash.com/photo-1531346878377-a5be20888e57?w=900&q=80",
+   u:"https://rocketnotes-maxtr.netlify.app/",g:"https://github.com/Maxtherox/rocketnotes-nodejs-backend"}
+];
+(function deck(){
+  const deck=q("#deck"), wrap=q("#deckWrap");
+  const N=PROJECTS.length;
+  q("#dAll").textContent=String(N).padStart(2,"0");
+  deck.innerHTML=PROJECTS.map((p,i)=>
+    '<article class="dcard" data-i="'+i+'">'+
+      '<span class="st '+p.st[0]+'">'+p.st[1]+'</span>'+
+      '<span class="idx">'+String(i+1).padStart(2,"0")+'</span>'+
+      '<div class="im"><span class="fb"></span>'+
+        '<img src="'+p.img+'" alt="" loading="lazy" onerror="this.remove()"></div>'+
+      '<div class="bd"><h4>'+p.t+'</h4><p>'+p.d+'</p>'+
+        '<div class="kit">'+p.k.map(k=>"<i>"+k+"</i>").join("")+'</div>'+
+        '<div class="lk">'+
+          '<a class="'+(p.u?"":"off")+'" href="'+(p.u||"#")+'" target="_blank">Deploy ↗</a>'+
+          '<a class="'+(p.g?"":"off")+'" href="'+(p.g||"#")+'" target="_blank">Código</a>'+
+        '</div></div>'+
+    '</article>').join("");
+
+  const cards=qa(".dcard",deck);
+  let cur=0, drag=null;
+
+  function layout(off){
+    off=off||0;
+    // o leque encolhe em telas estreitas — senão os cartões laterais
+    // saem da tela e o dedo não alcança o de trás
+    const narrow=innerWidth<760;
+    const SPREAD=narrow?30:70, DEPTH=narrow?120:168;
+    cards.forEach((c,i)=>{
+      let d=i-cur;
+      if(d<-N/2) d+=N; if(d>N/2) d-=N;
+      const k=d+off;
+      const depth=Math.abs(k);
+      const tz=-depth*DEPTH;
+      const ty=depth*-24;
+      const rx=clamp(depth*4,0,14);
+      const rz=k*3.4;
+      const tx=k*SPREAD;
+      c.style.transform="translate(-50%,-50%) translate3d("+tx+"px,"+ty+"px,"+tz+"px) "+
+                        "rotateX("+rx+"deg) rotateZ("+rz+"deg)";
+      c.style.opacity=String(clamp(1-depth*.26,0,1));
+      c.style.zIndex=String(100-Math.round(depth*10));
+      c.style.filter="brightness("+clamp(1-depth*.22,.35,1)+")";
+      c.style.pointerEvents=depth<2.6?"auto":"none";
+      c.classList.toggle("front",Math.round(k)===0);
+      c.style.boxShadow=Math.round(k)===0
+        ? "0 60px 110px -40px rgba(0,0,0,.95),0 0 60px -20px rgba(255,91,46,.35)"
+        : "0 30px 70px -40px rgba(0,0,0,.9)";
+    });
+    q("#dNow").textContent=String(cur+1).padStart(2,"0");
+  }
+  function go(d){ cur=(cur+d+N)%N; layout(); }
+  q("#dNext").onclick=()=>go(1);
+  q("#dPrev").onclick=()=>go(-1);
+  cards.forEach(c=>c.addEventListener("click",e=>{
+    const i=+c.dataset.i;
+    if(i!==cur){ e.preventDefault(); cur=i; layout(); }
+  }));
+  addEventListener("keydown",e=>{
+    if(e.key==="ArrowRight")go(1);
+    if(e.key==="ArrowLeft")go(-1);
+  });
+  addEventListener("resize",()=>layout(),{passive:true});
+  // arraste
+  wrap.addEventListener("pointerdown",e=>{ drag={x:e.clientX,moved:0}; });
+  addEventListener("pointermove",e=>{
+    if(!drag) return;
+    drag.moved=e.clientX-drag.x;
+    layout(-drag.moved/240);
+  });
+  addEventListener("pointerup",()=>{
+    if(!drag) return;
+    if(Math.abs(drag.moved)>70) go(drag.moved<0?1:-1); else layout();
+    drag=null;
+  });
+  layout();
+})();
+
+/* ═══════════════════════════════════════════
+   7b · SHOWREEL — persiana + vídeo
+   O vídeo só carrega quando a seção entra em
+   tela, e nunca reproduz sozinho com som.
+   ═══════════════════════════════════════════ */
+(function reel(){
+  const box=q("#reel"); if(!box) return;
+  const vid=q("#reelVid"), btn=q("#reelBtn"), tc=q("#reelTC"), slats=q("#reelSlats");
+  const N=14;
+  let html="";
+  for(let i=0;i<N;i++) html+='<i style="transition-delay:'+(i*.055)+'s"></i>';
+  slats.innerHTML=html;
+
+  const fmt=s=>isNaN(s)?"--:--":String(Math.floor(s/60)).padStart(2,"0")+":"+String(Math.floor(s%60)).padStart(2,"0");
+  vid.addEventListener("loadedmetadata",()=>tc.textContent="00:00 / "+fmt(vid.duration));
+  vid.addEventListener("timeupdate",()=>tc.textContent=fmt(vid.currentTime)+" / "+fmt(vid.duration));
+  vid.addEventListener("error",()=>{ tc.textContent="POSTER"; box.classList.add("open"); });
+
+  function setPlay(on){
+    box.classList.toggle("playing",on);
+    btn.setAttribute("aria-pressed",String(on));
+    q(".ic",btn).innerHTML = on
+      ? '<path d="M7 5h3.4v14H7zM13.6 5H17v14h-3.4z"/>'
+      : '<path d="M8 5.2v13.6L19 12z"/>';
+    q(".tx",btn).textContent=on?"Pausar":"Reproduzir";
+    if(on){ const p=vid.play(); if(p&&p.catch) p.catch(()=>{}); } else vid.pause();
+  }
+  btn.addEventListener("click",()=>setPlay(vid.paused));
+
+  new IntersectionObserver((es,o)=>es.forEach(e=>{
+    if(!e.isIntersecting) return;
+    box.classList.add("open");
+    if(!reduce) setTimeout(()=>setPlay(true),700);
+    o.disconnect();
+  }),{threshold:.32}).observe(box);
+
+  // pausa quando sai da tela — não gasta bateria à toa
+  new IntersectionObserver(es=>es.forEach(e=>{ if(!e.isIntersecting && !vid.paused) setPlay(false); }),
+    {threshold:0}).observe(box);
+})();
+
+/* ═══════════════════════════════════════════
+   8 · HOBBIES
+   ═══════════════════════════════════════════ */
+(function hobbies(){
+  const H=[
+    ["belt","Taekwondo","Prestes a conquistar a faixa vermelha — o degrau antes de poder instruir. Disciplina e resiliência que atravessam direto para o código."],
+    ["server","Servidores &amp; Linux","Desde a adolescência subo e mantenho servidores de jogos em Ubuntu Server e FreeBSD. Redes e automação aprendidas quebrando coisa de verdade."],
+    ["gamepad","Soulslikes","Dark Souls, Elden Ring, RPGs. Me interessa a engenharia por trás — sistema, feedback e curva de dificuldade são design de produto disfarçado."],
+    ["gauge","Simuladores","Corrida e voo. Setup, física e aerodinâmica me prendem tanto quanto a adrenalina de acelerar."]
+  ];
+  q("#hobs").innerHTML=H.map((h,i)=>
+    '<div class="hb rv"><span class="cor"></span><span class="no">0'+(i+1)+'</span>'+
+    '<span class="em"><svg viewBox="0 0 24 24"><use href="#i-'+h[0]+'"/></svg></span>'+
+    '<h4>'+h[1]+'</h4><p>'+h[2]+'</p></div>').join("");
+  qa(".hb").forEach(el=>el.addEventListener("pointermove",e=>{
+    const r=el.getBoundingClientRect();
+    el.style.setProperty("--cx",(e.clientX-r.left)+"px");
+    el.style.setProperty("--cy",(e.clientY-r.top)+"px");
+  }));
+})();
+
+/* ═══════════════════════════════════════════
+   9 · REVELAÇÕES E CONTADORES
+   ═══════════════════════════════════════════ */
+const io=new IntersectionObserver(es=>es.forEach(e=>{
+  if(!e.isIntersecting) return;
+  e.target.classList.add("in");
+  io.unobserve(e.target);
+}),{threshold:.14,rootMargin:"0px 0px -60px"});
+qa(".rv,.slice,.blade").forEach((el,i)=>{
+  if(el.classList.contains("rv")) el.style.transitionDelay=((i%5)*.07)+"s";
+  io.observe(el);
+});
+
+qa("[data-count]").forEach(el=>{
+  const target=+el.dataset.count;
+  new IntersectionObserver((es,o)=>es.forEach(e=>{
+    if(!e.isIntersecting) return; o.disconnect();
+    const t0=performance.now();
+    (function step(t){
+      const p=Math.min(1,(t-t0)/1300);
+      el.textContent=Math.round(target*(1-Math.pow(1-p,3)));
+      if(p<1) requestAnimationFrame(step);
+    })(t0);
+  }),{threshold:.55}).observe(el);
+});
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f5f2ea">
+<title>Guilherme Pereira — PRESS (Motion Primitives v2)</title>
+</head>
+<body>
+<style>
+/* ═══════════════════════════════════════════════════════════
+   V2 · 04 — "PRESS"   ·  Motion Primitives, refinada
+   ───────────────────────────────────────────────────────────
+   DIREÇÃO ARTÍSTICA
+   Uma revista impressa que ganhou vida. Papel quente, tinta
+   marinha, um único vermelho de registro. Grade de base
+   visível, marcas de corte, fólio, marginália. Nada grita —
+   tudo respira.
+   ───────────────────────────────────────────────────────────
+   3D REAL: dobra de página em CSS 3D reagindo ao scroll +
+   virada de folha ao abrir um projeto. Fundo em WebGL com
+   fibra de papel e sangria de tinta.
+   MOBILE PRIMEIRO — reconstruído do zero para a tela pequena.
+   ═══════════════════════════════════════════════════════════ */
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --paper:#f5f2ea;
+  --paper-2:#ebe7dc;
+  --paper-3:#e0dbcd;
+  --ink:#15161c;
+  --ink-2:#3a3c46;
+  --ink-3:#6d6f7a;
+  --mute:#93949d;
+  --navy:#1d2f5a;
+  --red:#d1341f;
+  --rule:#d6d1c2;
+  --rule-2:#c2bcaa;
+  --serif:"Instrument Serif","Iowan Old Style","Palatino Linotype",Georgia,ui-serif,serif;
+  --sans:"Inter","SF Pro Text",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"SFMono-Regular",Consolas,monospace;
+  --gut:18px;                 /* margem lateral — mobile primeiro */
+  --bar:64px;                 /* altura da barra inferior */
+}
+@media(min-width:700px){:root{--gut:34px}}
+@media(min-width:1100px){:root{--gut:48px}}
+
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{background:var(--paper);color:var(--ink-2);font-family:var(--sans);
+  font-size:16px;line-height:1.62;-webkit-font-smoothing:antialiased;overflow-x:hidden;
+  padding-bottom:calc(var(--bar) + env(safe-area-inset-bottom));
+  text-rendering:optimizeLegibility}
+@media(min-width:860px){body{padding-bottom:0}}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+button{font-family:inherit;font-size:inherit;color:inherit;background:none;border:0;cursor:pointer}
+h1,h2,h3,h4{color:var(--ink);line-height:1.04;letter-spacing:-.022em;font-weight:400;font-family:var(--serif)}
+::selection{background:var(--red);color:var(--paper)}
+.wrap{max-width:1180px;margin:0 auto;padding-inline:var(--gut);position:relative;z-index:3}
+.mono{font-family:var(--mono)}
+.rule{height:1px;background:var(--rule)}
+.rule.thick{height:2px;background:var(--ink)}
+
+/* ─── FUNDO WEBGL: fibra de papel + sangria de tinta ─── */
+#paperCv{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;
+  mix-blend-mode:multiply;opacity:.5}
+#paperFB{position:fixed;inset:0;z-index:0;pointer-events:none;display:none;opacity:.5;
+  mix-blend-mode:multiply;
+  background:radial-gradient(60% 50% at 18% 12%,rgba(29,47,90,.10),transparent 60%),
+             radial-gradient(50% 45% at 84% 68%,rgba(209,52,31,.09),transparent 60%)}
+
+/* grade de base tipográfica — o "grid impresso" */
+#baseline{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:0;transition:opacity .5s;
+  background-image:repeating-linear-gradient(180deg,rgba(29,47,90,.14) 0 1px,transparent 1px 28px)}
+body.grid-on #baseline{opacity:1}
+
+/* marcas de registro nos cantos */
+.regmark{position:fixed;width:22px;height:22px;z-index:2;pointer-events:none;opacity:.4}
+.regmark::before,.regmark::after{content:"";position:absolute;background:var(--ink-3)}
+.regmark::before{left:50%;top:0;bottom:0;width:1px}
+.regmark::after{top:50%;left:0;right:0;height:1px}
+.rm1{top:12px;left:12px}.rm2{top:12px;right:12px}
+@media(max-width:700px){.regmark{display:none}}
+
+/* ═══════════ MASTHEAD ═══════════ */
+.masthead{border-bottom:2px solid var(--ink);padding-top:22px}
+.mh-top{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;
+  font:500 9.5px/1 var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--ink-3);
+  padding-bottom:12px}
+.mh-top .sep{flex:1;height:1px;background:var(--rule);min-width:16px}
+.mh-top .red{color:var(--red)}
+.mh-title{font-family:var(--serif);font-size:clamp(40px,13.5vw,132px);line-height:.86;
+  letter-spacing:-.035em;padding:6px 0 16px;display:block}
+.mh-title i{font-style:italic;color:var(--red)}
+.mh-bot{display:flex;gap:10px;flex-wrap:wrap;align-items:baseline;padding:10px 0 14px;
+  border-top:1px solid var(--rule);
+  font:500 9.5px/1.6 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3)}
+.mh-bot .sep{flex:1;height:1px;background:var(--rule);min-width:12px;align-self:center}
+
+/* ═══════════ CAPA ═══════════ */
+.cover{padding:26px 0 46px}
+.cover-grid{display:grid;gap:26px}
+@media(min-width:860px){.cover-grid{grid-template-columns:1.05fr .95fr;gap:44px;align-items:end}}
+
+.lede-big{font-family:var(--serif);font-size:clamp(23px,5.6vw,42px);line-height:1.16;color:var(--ink);
+  letter-spacing:-.02em}
+.lede-big em{font-style:italic;color:var(--red)}
+.deck{margin-top:18px;font-size:15.6px;color:var(--ink-3);max-width:44ch}
+.byline{margin-top:22px;display:flex;gap:10px;flex-wrap:wrap;
+  font:500 9.5px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3)}
+.byline b{color:var(--ink);font-weight:500}
+
+.figure{position:relative}
+.figure .frame{border:1px solid var(--rule-2);padding:9px;background:var(--paper)}
+.figure img{width:100%;aspect-ratio:1/1.12;object-fit:cover;object-position:center 16%;
+  filter:grayscale(.55) contrast(1.07) sepia(.09)}
+.figure.noimg .frame{aspect-ratio:1/1.12;display:grid;place-items:center;background:var(--paper-2)}
+.figure.noimg img{display:none}
+.figure.noimg .frame::after{content:"GP";font-family:var(--serif);font-size:64px;color:var(--mute)}
+.figure figcaption{display:flex;justify-content:space-between;gap:10px;margin-top:9px;
+  font:500 9px/1.5 var(--mono);letter-spacing:.15em;text-transform:uppercase;color:var(--mute)}
+.figure .stamp{position:absolute;top:-11px;right:-6px;background:var(--red);color:var(--paper);
+  font:600 9px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;padding:7px 11px;
+  transform:rotate(3deg)}
+
+.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:24px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px;
+  padding:0 20px;border:1px solid var(--ink);font-size:14px;font-weight:500;
+  transition:background .3s,color .3s,border-color .3s;will-change:transform}
+.btn.fill{background:var(--ink);color:var(--paper)}
+.btn.fill:hover{background:var(--red);border-color:var(--red)}
+.btn:hover{background:var(--ink);color:var(--paper)}
+.btn.plain{border-color:transparent;padding-inline:8px;color:var(--ink-3)}
+.btn.plain:hover{background:transparent;color:var(--red)}
+
+/* ═══════════ DOBRA DE PÁGINA (3D) ═══════════ */
+.fold{position:relative;height:120px;perspective:900px;perspective-origin:50% 0;overflow:hidden;
+  margin:8px 0}
+.fold .half{position:absolute;left:0;right:0;height:50%;background:var(--paper-2);
+  border-inline:0;transform-origin:50% 100%;will-change:transform}
+.fold .half.a{top:0;transform-origin:50% 100%;
+  background:linear-gradient(180deg,var(--paper),var(--paper-3))}
+.fold .half.b{bottom:0;transform-origin:50% 0;
+  background:linear-gradient(180deg,var(--paper-3),var(--paper))}
+.fold .crease{position:absolute;left:0;right:0;top:50%;height:1px;background:var(--rule-2);z-index:3}
+.fold .lbl{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:4;
+  background:var(--paper);padding:5px 14px;border:1px solid var(--rule-2);
+  font:500 9px/1 var(--mono);letter-spacing:.24em;text-transform:uppercase;color:var(--ink-3);white-space:nowrap}
+
+/* ═══════════ SEÇÕES ═══════════ */
+section{padding:52px 0;position:relative}
+@media(min-width:860px){section{padding:78px 0}}
+.shead{margin-bottom:26px}
+.folio{display:flex;align-items:baseline;gap:12px;
+  font:500 9.5px/1 var(--mono);letter-spacing:.22em;text-transform:uppercase;color:var(--red);
+  margin-bottom:14px}
+.folio .ln{flex:1;height:1px;background:var(--rule)}
+h2.sec{font-size:clamp(28px,7.4vw,58px);line-height:1.02}
+h2.sec em{font-style:italic;color:var(--red)}
+.subhead{margin-top:12px;font-size:15.4px;color:var(--ink-3);max-width:52ch}
+
+/* revelação com mola (JS) */
+.rise{opacity:0;transform:translateY(20px)}
+
+/* ═══════════ MATÉRIA / COLUNAS ═══════════ */
+.article{font-size:16.4px;color:var(--ink-2)}
+.article p{margin-bottom:16px}
+.article p.first::first-letter{font-family:var(--serif);font-size:3.5em;float:left;line-height:.78;
+  padding:7px 11px 0 0;color:var(--red)}
+.article strong{color:var(--ink);font-weight:600}
+@media(min-width:900px){
+  .article{columns:2;column-gap:42px;column-rule:1px solid var(--rule)}
+  .article p{break-inside:avoid}
+}
+.pull{font-family:var(--serif);font-size:clamp(20px,4.6vw,30px);line-height:1.22;color:var(--ink);
+  border-top:2px solid var(--ink);border-bottom:1px solid var(--rule);
+  padding:18px 0;margin:26px 0}
+@media(min-width:900px){.pull{margin:34px 0 0;break-inside:avoid;column-span:all}}
+
+/* marginália */
+.margin-note{border-left:2px solid var(--red);padding-left:14px;margin:22px 0;
+  font:500 12.2px/1.62 var(--mono);color:var(--ink-3);letter-spacing:.005em}
+.margin-note b{display:block;color:var(--red);font-weight:600;font-size:9.5px;
+  letter-spacing:.2em;text-transform:uppercase;margin-bottom:6px}
+
+/* ═══════════ TABELA IMPRESSA (skills) ═══════════ */
+.ptable{border-top:2px solid var(--ink);margin-top:26px}
+.prow{display:grid;grid-template-columns:1fr auto;gap:6px 14px;align-items:center;
+  padding:13px 0;border-bottom:1px solid var(--rule)}
+@media(min-width:640px){.prow{grid-template-columns:190px 1fr auto}}
+.prow .nm{font-size:14.6px;color:var(--ink);font-weight:500}
+.prow .meter{grid-column:1/-1;height:3px;background:var(--paper-3);position:relative;overflow:hidden}
+@media(min-width:640px){.prow .meter{grid-column:auto}}
+.prow .meter i{position:absolute;inset:0 auto 0 0;width:0;background:var(--navy)}
+.prow .vl{font:500 11px/1 var(--mono);color:var(--mute);letter-spacing:.08em;text-align:right;
+  font-variant-numeric:tabular-nums}
+
+/* ═══════════ CONTACT SHEET (projetos) ═══════════ */
+.sheet{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--rule);
+  border:1px solid var(--rule);margin-top:26px}
+@media(min-width:760px){.sheet{grid-template-columns:repeat(3,1fr)}}
+.frame-i{background:var(--paper);padding:9px;text-align:left;position:relative;
+  transition:background .35s;min-height:44px}
+.frame-i:hover,.frame-i:focus-visible{background:var(--paper-2)}
+.frame-i .th{position:relative;aspect-ratio:4/3;overflow:hidden;background:var(--paper-3)}
+.frame-i .th img{width:100%;height:100%;object-fit:cover;filter:grayscale(.7) contrast(1.1);
+  transition:filter .6s,transform .8s cubic-bezier(.16,1,.3,1)}
+.frame-i:hover .th img{filter:grayscale(0) contrast(1);transform:scale(1.04)}
+.frame-i .th .fb{position:absolute;inset:0;background:
+  linear-gradient(140deg,var(--paper-3),#d4cfc0),
+  repeating-linear-gradient(45deg,transparent 0 9px,rgba(0,0,0,.025) 9px 18px)}
+.frame-i .th .n{position:absolute;left:6px;top:6px;background:var(--paper);color:var(--ink);
+  font:600 9px/1 var(--mono);letter-spacing:.1em;padding:4px 7px}
+.frame-i .th .dot{position:absolute;right:6px;top:6px;width:8px;height:8px;border-radius:50%}
+.frame-i .cap{display:flex;justify-content:space-between;gap:8px;align-items:baseline;margin-top:8px}
+.frame-i .cap b{font-family:var(--serif);font-size:16.5px;color:var(--ink);font-weight:400;line-height:1.15}
+.frame-i .cap span{font:500 8.5px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--mute);white-space:nowrap}
+.frame-i .kk{margin-top:5px;font:500 9px/1.5 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--mute)}
+
+/* ═══════════ FOLHA ABERTA (virada de página 3D) ═══════════ */
+#scrim{position:fixed;inset:0;z-index:80;background:rgba(21,22,28,.42);backdrop-filter:blur(4px);
+  opacity:0;pointer-events:none;transition:opacity .4s}
+#scrim.on{opacity:1;pointer-events:auto}
+#leaf{position:fixed;z-index:81;background:var(--paper);border:1px solid var(--rule-2);
+  overflow:hidden;pointer-events:none;opacity:0;box-shadow:0 40px 90px -30px rgba(21,22,28,.5);
+  transform-style:preserve-3d;backface-visibility:hidden;display:flex;flex-direction:column}
+#leaf.on{pointer-events:auto}
+#leaf .lhead{display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--rule);
+  flex:none;background:var(--paper)}
+#leaf .lhead .fo{font:500 9px/1 var(--mono);letter-spacing:.2em;text-transform:uppercase;color:var(--red)}
+#leaf .lhead .x{margin-left:auto;width:38px;height:38px;border:1px solid var(--rule-2);
+  display:grid;place-items:center;transition:.3s}
+#leaf .lhead .x svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.6}
+#leaf .lhead .x:hover{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+#leaf .lbody{overflow-y:auto;-webkit-overflow-scrolling:touch}
+#leaf .limg{height:190px;overflow:hidden;background:var(--paper-3);flex:none}
+#leaf .limg img{width:100%;height:100%;object-fit:cover}
+#leaf .lin{padding:20px 18px 26px}
+@media(min-width:700px){#leaf .lin{padding:26px 28px 32px}#leaf .limg{height:230px}}
+#leaf h3{font-size:clamp(24px,6vw,34px);margin-bottom:8px}
+#leaf .lst{display:inline-block;font:600 9px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;
+  padding:6px 10px;border:1px solid currentColor;margin-bottom:16px}
+#leaf p{font-size:15.4px;color:var(--ink-2);margin-bottom:16px}
+#leaf .lkit{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px}
+#leaf .lkit span{font:500 9.5px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;
+  padding:6px 9px;border:1px solid var(--rule-2);color:var(--ink-3)}
+#leaf .llk{display:flex;gap:9px;flex-wrap:wrap}
+
+/* ═══════════ ÍNDICE / EXPERIÊNCIA ═══════════ */
+.index{border-top:2px solid var(--ink);margin-top:26px}
+.ix{border-bottom:1px solid var(--rule)}
+.ix-h{width:100%;display:grid;grid-template-columns:1fr 30px;gap:6px 14px;align-items:center;
+  padding:16px 0;text-align:left;min-height:56px}
+@media(min-width:700px){.ix-h{grid-template-columns:120px 1fr 30px}}
+.ix-h time{font:500 10px/1 var(--mono);letter-spacing:.14em;color:var(--mute);
+  grid-column:1/-1;order:-1;margin-bottom:2px}
+@media(min-width:700px){.ix-h time{grid-column:auto;order:0;margin:0}}
+.ix-h .tt b{display:block;font-family:var(--serif);font-size:19.5px;color:var(--ink);font-weight:400;line-height:1.2}
+.ix-h .tt span{display:block;font:500 9.5px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;
+  color:var(--mute);margin-top:5px}
+.ix-h .pm{width:26px;height:26px;border:1px solid var(--rule-2);position:relative;justify-self:end}
+.ix-h .pm::before,.ix-h .pm::after{content:"";position:absolute;background:var(--ink);transition:transform .4s cubic-bezier(.16,1,.3,1)}
+.ix-h .pm::before{left:6px;right:6px;top:12px;height:1px}
+.ix-h .pm::after{top:6px;bottom:6px;left:12px;width:1px}
+.ix.open .pm::after{transform:rotate(90deg) scaleX(0)}
+.ix.open .pm{background:var(--red);border-color:var(--red)}
+.ix.open .pm::before{background:var(--paper)}
+.ix-b{overflow:hidden;height:0}
+.ix-b .in{padding:0 0 20px}
+@media(min-width:700px){.ix-b .in{padding-left:134px}}
+.ix-b p{font-size:15.2px;color:var(--ink-2);margin-bottom:12px;max-width:60ch}
+.ix-b .kit{display:flex;gap:6px;flex-wrap:wrap}
+.ix-b .kit span{font:500 9.5px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;
+  padding:5px 9px;border:1px solid var(--rule-2);color:var(--ink-3)}
+
+/* ═══════════ TIRA DE FILME (vídeo) ═══════════ */
+.filmstrip{border:1px solid var(--rule-2);background:var(--paper);padding:9px;margin-top:26px;position:relative}
+.filmstrip .sprock{display:flex;gap:7px;padding:5px 0;overflow:hidden}
+.filmstrip .sprock i{flex:none;width:13px;height:9px;background:var(--paper-3);border:1px solid var(--rule)}
+.fs-stage{position:relative;aspect-ratio:16/9;overflow:hidden;background:var(--ink)}
+.fs-stage video{width:100%;height:100%;object-fit:cover;filter:grayscale(.8) contrast(1.15) brightness(.92)}
+.filmstrip.live .fs-stage video{filter:grayscale(.15) contrast(1.03) brightness(1)}
+.fs-stage .play{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:3;
+  width:64px;height:64px;border-radius:50%;background:var(--paper);color:var(--ink);
+  display:grid;place-items:center;font-size:16px;transition:.3s;border:1px solid var(--rule-2)}
+.fs-stage .play:hover{background:var(--red);color:var(--paper);border-color:var(--red)}
+.filmstrip.live .play{opacity:0;pointer-events:none}
+.fs-meta{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;padding-top:9px;
+  font:500 9px/1.5 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
+.fs-meta b{color:var(--ink-3);font-weight:500}
+
+/* ═══════════ HOBBIES ═══════════ */
+.hlist{border-top:2px solid var(--ink);margin-top:26px}
+.hrow{display:grid;grid-template-columns:34px 1fr;gap:6px 14px;padding:18px 0;
+  border-bottom:1px solid var(--rule);align-items:baseline;position:relative}
+@media(min-width:820px){.hrow{grid-template-columns:34px 200px 1fr;gap:22px}}
+.hrow .em{width:22px;height:22px;color:var(--red);display:block}
+.hrow .em svg{width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:1.5}
+.hrow h4{font-size:19px}
+.hrow p{font-size:14.8px;color:var(--ink-3);grid-column:2/-1}
+@media(min-width:820px){.hrow p{grid-column:auto}}
+.hrow::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:1px;background:var(--red);
+  transform:scaleX(0);transform-origin:left;transition:transform .6s cubic-bezier(.16,1,.3,1)}
+.hrow:hover::after{transform:scaleX(1)}
+
+/* ═══════════ COLOFÃO ═══════════ */
+.colophon{border-top:2px solid var(--ink);padding:44px 0 30px;text-align:center}
+.colophon h2{font-size:clamp(30px,8.6vw,72px);margin-bottom:18px}
+.colophon h2 em{font-style:italic;color:var(--red)}
+.colophon p{color:var(--ink-3);max-width:40ch;margin:0 auto 26px;font-size:15.6px}
+.cmail{display:inline-flex;align-items:center;min-height:52px;padding:0 24px;border:1px solid var(--ink);
+  font-family:var(--mono);font-size:clamp(12px,3.2vw,15px);letter-spacing:.1em;
+  transition:background .35s,color .35s}
+.cmail:hover{background:var(--ink);color:var(--paper)}
+.clinks{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+.clinks a{min-height:44px;display:inline-flex;align-items:center;padding:0 16px;
+  border:1px solid var(--rule-2);font:500 9.5px/1 var(--mono);letter-spacing:.16em;
+  text-transform:uppercase;color:var(--ink-3);transition:.3s}
+.clinks a:hover{border-color:var(--ink);color:var(--ink)}
+
+footer{border-top:1px solid var(--rule);padding:20px 0}
+.foot{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;
+  font:500 9px/1.6 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--mute)}
+.foot b{color:var(--red);font-weight:500}
+
+/* ═══════════ BARRA INFERIOR (mobile) / DOCK (desktop) ═══════════ */
+.nav-bar{position:fixed;left:0;right:0;bottom:0;z-index:60;
+  background:color-mix(in srgb,var(--paper) 88%,transparent);
+  backdrop-filter:blur(18px) saturate(150%);border-top:1px solid var(--rule-2);
+  padding-bottom:env(safe-area-inset-bottom);display:flex}
+.nav-bar a{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:4px;height:var(--bar);font:500 8.5px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;
+  color:var(--mute);transition:color .25s;position:relative}
+.nav-bar a .g{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.5;flex:none}
+.nav-bar a.on{color:var(--red)}
+.nav-bar a.on::before{content:"";position:absolute;top:0;left:22%;right:22%;height:2px;background:var(--red)}
+@media(min-width:860px){
+  .nav-bar{left:50%;right:auto;bottom:20px;transform:translateX(-50%);border:1px solid var(--rule-2);
+    border-radius:999px;padding:6px 8px;box-shadow:0 16px 40px -18px rgba(21,22,28,.35);display:flex}
+  .nav-bar a{height:44px;flex-direction:row;gap:8px;padding:0 15px;border-radius:999px;font-size:9.5px}
+  .nav-bar a.on{background:var(--ink);color:var(--paper)}
+  .nav-bar a.on::before{display:none}
+  .nav-bar a .g{width:15px;height:15px}
+}
+
+/* botão de grade tipográfica */
+.gridtog{position:fixed;right:12px;bottom:calc(var(--bar) + 14px + env(safe-area-inset-bottom));z-index:61;
+  width:42px;height:42px;border:1px solid var(--rule-2);background:var(--paper);
+  display:grid;place-items:center;color:var(--ink-3);
+  box-shadow:0 8px 22px -12px rgba(21,22,28,.4)}
+.gridtog svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.4}
+@media(min-width:860px){.gridtog{bottom:84px;right:20px}}
+.gridtog[aria-pressed="true"]{background:var(--navy);color:var(--paper);border-color:var(--navy)}
+</style>
+
+<!-- ═══════ CONJUNTO DE ÍCONES (traço, herda a cor) ═══════ -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <g id="i-belt"><path d="M3 9h18M3 15h18M7 9v6M17 9v6M12 6v12" stroke-linecap="round"/></g>
+  <g id="i-server"><rect x="3" y="4" width="18" height="6" rx="1.5"/><rect x="3" y="14" width="18" height="6" rx="1.5"/><path d="M7 7h.01M7 17h.01" stroke-linecap="round"/></g>
+  <g id="i-gamepad"><path d="M6.5 8h11a4.5 4.5 0 0 1 4.4 5.4l-.7 3.5A2.6 2.6 0 0 1 16.7 18l-1.5-2h-6.4L7.3 18a2.6 2.6 0 0 1-4.5-1.1l-.7-3.5A4.5 4.5 0 0 1 6.5 8Z"/><path d="M8 11v3M6.5 12.5h3M15.5 11.5h.01M17.5 13.5h.01" stroke-linecap="round"/></g>
+  <g id="i-gauge"><path d="M4 18a9 9 0 1 1 16 0"/><path d="M12 14l4-4" stroke-linecap="round"/><circle cx="12" cy="14" r="1.4"/></g>
+  <g id="i-cover"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5" stroke-linecap="round"/></g>
+  <g id="i-pen"><path d="M4 20h4L20 8a2.8 2.8 0 0 0-4-4L4 16v4Z" stroke-linejoin="round"/><path d="M14.5 5.5 18.5 9.5" stroke-linecap="round"/></g>
+  <g id="i-frames"><rect x="3" y="4" width="7.5" height="7.5" rx="1"/><rect x="13.5" y="4" width="7.5" height="7.5" rx="1"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="1"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="1"/></g>
+  <g id="i-index"><path d="M4 6h16M4 12h16M4 18h10" stroke-linecap="round"/></g>
+  <g id="i-mail"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 7 8.5 6 8.5-6" stroke-linejoin="round"/></g>
+  <g id="i-close"><path d="M6 6l12 12M18 6 6 18" stroke-linecap="round"/></g>
+  <g id="i-grid4"><path d="M4 4v16M10 4v16M14 4v16M20 4v16M4 4h16M4 10h16M4 14h16M4 20h16" stroke-width="1"/></g>
+</defs></svg>
+
+<canvas id="paperCv"></canvas><div id="paperFB"></div>
+<div id="baseline"></div>
+<span class="regmark rm1"></span><span class="regmark rm2"></span>
+
+<div class="wrap">
+
+  <!-- ═══════════ MASTHEAD ═══════════ -->
+  <div class="masthead" id="top">
+    <div class="mh-top">
+      <span>Edição 01</span><span class="sep"></span>
+      <span class="red">Currículo &amp; marca pessoal</span><span class="sep"></span>
+      <span>2026</span>
+    </div>
+    <span class="mh-title">Guilherme <i>Pereira</i></span>
+    <div class="mh-bot">
+      <span>Desenvolvedor Full Stack</span><span class="sep"></span>
+      <span>Rio de Janeiro · BR</span><span class="sep"></span>
+      <span class="red">◉ Disponível</span>
+    </div>
+  </div>
+
+  <!-- ═══════════ CAPA ═══════════ -->
+  <section class="cover">
+    <div class="cover-grid">
+      <div>
+        <p class="lede-big rise">Construo <em>produtos web inteiros</em> — do modelo de dados ao último detalhe de animação.</p>
+        <p class="deck rise">React e Node.js para pequenos e médios negócios. Sem terceirizar as partes difíceis, sem entregar pela metade.</p>
+        <div class="byline rise">
+          <span>Por <b>Guilherme Pereira</b></span>
+          <span>·</span><span>Fotografia <b>Arquivo pessoal</b></span>
+        </div>
+        <div class="actions rise">
+          <a class="btn fill" href="#projetos" data-mag>Ver o portfólio</a>
+          <a class="btn" href="#contato" data-mag>Fazer contato</a>
+          <a class="btn plain" href="#" data-mag>Currículo em PDF
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.7"
+                 stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v12m0 0-5-5m5 5 5-5M5 20h14"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <figure class="figure rise" id="fig">
+        <span class="stamp">Retrato</span>
+        <div class="frame">
+          <img src="gp.jpg" alt="Retrato de Guilherme Pereira"
+               onerror="document.getElementById('fig').classList.add('noimg')">
+        </div>
+        <figcaption><span>Guilherme Pereira</span><span>Fig. 01</span></figcaption>
+      </figure>
+    </div>
+  </section>
+</div>
+
+<!-- ═══════════ DOBRA ═══════════ -->
+<div class="fold" data-fold><div class="half a"></div><div class="half b"></div>
+  <span class="crease"></span><span class="lbl">Perfil</span></div>
+
+<div class="wrap">
+  <!-- ═══════════ MATÉRIA ═══════════ -->
+  <section id="perfil">
+    <div class="shead">
+      <div class="folio"><span>01</span><span class="ln"></span><span>Perfil</span></div>
+      <h2 class="sec rise">Três carreiras que viraram <em>uma só</em></h2>
+    </div>
+
+    <div class="article">
+      <p class="first rise">Comecei longe do código. Foram anos como editor de vídeo e animador freelancer — tempo suficiente para que <strong>timing, hierarquia e composição</strong> deixassem de ser conceito e virassem instinto.</p>
+      <p class="rise">Depois vieram dois anos como <strong>analista de suporte de TI na AB-InBev/Ambev</strong>, a maior cervejaria do mundo. Foi ali que entendi a diferença entre um sistema que funciona na apresentação e um que aguenta segunda-feira de manhã.</p>
+      <p class="rise">Me formei <strong>tecnólogo em Análise e Desenvolvimento de Sistemas</strong> pela Universidade Estácio de Sá, complementando com as trilhas intensivas da Rocketseat — Explorer, front-end e Node.js, todas certificadas.</p>
+      <p class="rise">Hoje atuo como freelancer construindo <strong>websites e APIs REST</strong> para pequenos e médios empresários. Cada projeto passa inteiro pelas minhas mãos: levantamento, modelagem do banco, API, interface e publicação em servidor.</p>
+      <blockquote class="pull rise">Design, código e infraestrutura não são três departamentos. São três ângulos do mesmo problema — e eu olho pelos três.</blockquote>
+    </div>
+
+    <div class="margin-note rise">
+      <b>Nota da edição</b>
+      A passagem pelo audiovisual não é curiosidade de currículo: é a razão de cada transição desta página ter mola, atrito e peso — e não apenas um <em>fade</em>.
+    </div>
+
+    <div class="ptable" id="ptable">
+      <div class="prow" data-lvl="92"><span class="nm">React + Vite</span><span class="meter"><i></i></span><span class="vl">92</span></div>
+      <div class="prow" data-lvl="90"><span class="nm">Node.js + Express</span><span class="meter"><i></i></span><span class="vl">90</span></div>
+      <div class="prow" data-lvl="88"><span class="nm">Styled Components</span><span class="meter"><i></i></span><span class="vl">88</span></div>
+      <div class="prow" data-lvl="86"><span class="nm">Knex · SQL</span><span class="meter"><i></i></span><span class="vl">86</span></div>
+      <div class="prow" data-lvl="84"><span class="nm">JWT · REST</span><span class="meter"><i></i></span><span class="vl">84</span></div>
+      <div class="prow" data-lvl="82"><span class="nm">Linux · VPS · Nginx</span><span class="meter"><i></i></span><span class="vl">82</span></div>
+    </div>
+  </section>
+</div>
+
+<div class="fold" data-fold><div class="half a"></div><div class="half b"></div>
+  <span class="crease"></span><span class="lbl">Portfólio</span></div>
+
+<div class="wrap">
+  <!-- ═══════════ CONTACT SHEET ═══════════ -->
+  <section id="projetos">
+    <div class="shead">
+      <div class="folio"><span>02</span><span class="ln"></span><span>Portfólio</span></div>
+      <h2 class="sec rise">Folha de <em>contato</em></h2>
+      <p class="subhead rise">Toque em qualquer quadro — a folha vira e abre no lugar, sem recarregar a página.</p>
+    </div>
+    <div class="sheet" id="sheet"></div>
+  </section>
+</div>
+
+<div class="fold" data-fold><div class="half a"></div><div class="half b"></div>
+  <span class="crease"></span><span class="lbl">Trajetória</span></div>
+
+<div class="wrap">
+  <!-- ═══════════ ÍNDICE ═══════════ -->
+  <section id="trajetoria">
+    <div class="shead">
+      <div class="folio"><span>03</span><span class="ln"></span><span>Trajetória</span></div>
+      <h2 class="sec rise">Índice <em>cronológico</em></h2>
+    </div>
+
+    <div class="index" id="index">
+      <div class="ix open">
+        <button class="ix-h" aria-expanded="true">
+          <time>2024 — Presente</time>
+          <span class="tt"><b>Desenvolvedor Full Stack</b><span>Freelancer · Autônomo</span></span>
+          <span class="pm"></span>
+        </button>
+        <div class="ix-b"><div class="in">
+          <p>Websites e APIs REST para pequenos e médios empresários. Assumo o ciclo inteiro: conversa inicial com o cliente, modelagem do banco, API em Node.js com Knex, autenticação JWT, interface em React + Vite e deploy em VPS Linux com Nginx.</p>
+          <div class="kit"><span>React</span><span>Vite</span><span>Node.js</span><span>Knex</span><span>JWT</span><span>Nginx</span></div>
+        </div></div>
+      </div>
+      <div class="ix">
+        <button class="ix-h" aria-expanded="false">
+          <time>2023 — 2024</time>
+          <span class="tt"><b>Tecnólogo em ADS</b><span>Universidade Estácio de Sá</span></span>
+          <span class="pm"></span>
+        </button>
+        <div class="ix-b"><div class="in">
+          <p>Graduação em Análise e Desenvolvimento de Sistemas concluída, com as trilhas da Rocketseat em paralelo. Cada desafio proposto pelo curso virou projeto real de portfólio.</p>
+          <div class="kit"><span>Algoritmos</span><span>Banco de dados</span><span>3 certificações</span></div>
+        </div></div>
+      </div>
+      <div class="ix">
+        <button class="ix-h" aria-expanded="false">
+          <time>2021 — 2023</time>
+          <span class="tt"><b>Analista de Suporte de TI</b><span>AB-InBev / Ambev</span></span>
+          <span class="pm"></span>
+        </button>
+        <div class="ix-b"><div class="in">
+          <p>Suporte técnico dentro de uma multinacional de escala global. Diagnóstico e resolução de incidentes, automação de rotinas repetitivas e atendimento com foco obsessivo em tempo de resposta e qualidade de entrega.</p>
+          <div class="kit"><span>Troubleshooting</span><span>Automação</span><span>Redes</span><span>Linux</span></div>
+        </div></div>
+      </div>
+      <div class="ix">
+        <button class="ix-h" aria-expanded="false">
+          <time>Antes de 2021</time>
+          <span class="tt"><b>Editor de Vídeo &amp; Animador</b><span>Freelance criativo</span></span>
+          <span class="pm"></span>
+        </button>
+        <div class="ix-b"><div class="in">
+          <p>Produção audiovisual e motion graphics para clientes diversos. Ritmo, curva de easing e leitura visual deixaram de ser conceito e viraram músculo — é a razão pela qual minhas interfaces têm movimento com intenção.</p>
+          <div class="kit"><span>Motion</span><span>Edição</span><span>Direção de arte</span></div>
+        </div></div>
+      </div>
+    </div>
+
+    <!-- tira de filme -->
+    <div class="filmstrip" id="film">
+      <div class="sprock" id="sp1"></div>
+      <div class="fs-stage">
+        <video id="fv" muted loop playsinline preload="metadata"
+               poster="https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=1200&q=80">
+          <source src="https://assets.mixkit.co/videos/preview/mixkit-hands-of-a-man-editing-a-video-on-a-computer-42641-large.mp4" type="video/mp4">
+        </video>
+        <button class="play" id="fplay" aria-label="Reproduzir">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M8 5.2v13.6L19 12z"/></svg>
+        </button>
+      </div>
+      <div class="sprock" id="sp2"></div>
+      <div class="fs-meta">
+        <span>Arquivo <b>motion_reel.mp4</b></span>
+        <span>Origem <b>Carreira anterior</b></span>
+        <span id="ftc">00:00</span>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="fold" data-fold><div class="half a"></div><div class="half b"></div>
+  <span class="crease"></span><span class="lbl">Miscelânea</span></div>
+
+<div class="wrap">
+  <!-- ═══════════ HOBBIES ═══════════ -->
+  <section id="hobbies">
+    <div class="shead">
+      <div class="folio"><span>04</span><span class="ln"></span><span>Miscelânea</span></div>
+      <h2 class="sec rise">Fora do <em>expediente</em></h2>
+    </div>
+    <div class="hlist" id="hobs"></div>
+  </section>
+
+  <!-- ═══════════ COLOFÃO ═══════════ -->
+  <section class="colophon" id="contato">
+    <div class="folio" style="justify-content:center"><span>05</span><span class="ln"></span><span>Colofão</span></div>
+    <h2 class="rise">Vamos conversar sobre <em>o seu projeto</em></h2>
+    <p class="rise">Respondo em até 24 horas. Sites, APIs, sistemas internos ou uma segunda opinião técnica.</p>
+    <a class="cmail rise" href="mailto:contato@guilhermejp.com" data-mag>contato@guilhermejp.com</a>
+    <div class="clinks rise">
+      <a href="https://github.com/Maxtherox/" target="_blank" data-mag>GitHub</a>
+      <a href="https://www.linkedin.com/in/guimaxtr/" target="_blank" data-mag>LinkedIn</a>
+      <a href="https://www.instagram.com/dev.guilhermejp/" target="_blank" data-mag>Instagram</a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="foot">
+      <span>V2·04 — <b>PRESS</b></span>
+      <span>Motion Primitives · molas reais</span>
+      <span>© 2026</span>
+    </div>
+  </footer>
+</div>
+
+<button class="gridtog" id="gridTog" aria-pressed="false" title="Mostrar grade tipográfica">
+  <svg viewBox="0 0 24 24"><use href="#i-grid4"/></svg>
+</button>
+
+<nav class="nav-bar" id="navbar">
+  <a href="#top" data-sec="top"><svg class="g" viewBox="0 0 24 24"><use href="#i-cover"/></svg>Capa</a>
+  <a href="#perfil" data-sec="perfil"><svg class="g" viewBox="0 0 24 24"><use href="#i-pen"/></svg>Perfil</a>
+  <a href="#projetos" data-sec="projetos"><svg class="g" viewBox="0 0 24 24"><use href="#i-frames"/></svg>Obras</a>
+  <a href="#trajetoria" data-sec="trajetoria"><svg class="g" viewBox="0 0 24 24"><use href="#i-index"/></svg>Índice</a>
+  <a href="#contato" data-sec="contato"><svg class="g" viewBox="0 0 24 24"><use href="#i-mail"/></svg>Contato</a>
+</nav>
+
+<div id="scrim"></div>
+<div id="leaf">
+  <div class="lhead"><span class="fo" id="lFo">Fig. 01</span>
+    <button class="x" id="lClose" aria-label="Fechar"><svg viewBox="0 0 24 24"><use href="#i-close"/></svg></button></div>
+  <div class="lbody">
+    <div class="limg"><img id="lImg" src="" alt=""></div>
+    <div class="lin">
+      <h3 id="lTitle"></h3>
+      <span class="lst" id="lSt"></span>
+      <p id="lDesc"></p>
+      <div class="lkit" id="lKit"></div>
+      <div class="llk" id="lLk"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+(() => {
+"use strict";
+const q=(s,c=document)=>c.querySelector(s), qa=(s,c=document)=>[...c.querySelectorAll(s)];
+const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+const isTouch=matchMedia("(pointer:coarse)").matches;
+const clamp=(v,a=0,b=1)=>Math.min(b,Math.max(a,v));
+
+/* ═══════════════════════════════════════════
+   MOTOR · integrador de mola
+   Toda animação desta página passa por aqui.
+   ═══════════════════════════════════════════ */
+function spring(o){
+  const stiff=o.stiffness||190, damp=o.damping||24, mass=o.mass||1;
+  let x=o.from!==undefined?o.from:0, to=o.to!==undefined?o.to:1, v=0, dead=false;
+  const dt=1/60;
+  function step(){
+    if(dead) return;
+    for(let i=0;i<2;i++){                    // dois sub-passos: mais estável
+      const f=-stiff*(x-to)+(-damp*v);
+      v+=(f/mass)*(dt/2); x+=v*(dt/2);
+    }
+    o.onUpdate&&o.onUpdate(x);
+    if(Math.abs(to-x)<.0012 && Math.abs(v)<.0012){
+      x=to; o.onUpdate&&o.onUpdate(x); dead=true; o.onRest&&o.onRest(); return;
+    }
+    requestAnimationFrame(step);
+  }
+  if(reduce){ o.onUpdate&&o.onUpdate(to); o.onRest&&o.onRest(); return {stop(){},set(){}} ; }
+  requestAnimationFrame(step);
+  return { stop(){dead=true}, set(t){to=t; if(dead){dead=false;requestAnimationFrame(step)}} };
+}
+
+/* ═══════════════════════════════════════════
+   0 · AJUSTE TIPOGRÁFICO
+   A serifa de display pode não existir na máquina
+   do visitante; o substituto é mais largo. Medimos
+   o texto real e reduzimos o corpo até caber.
+   ═══════════════════════════════════════════ */
+const fitText=(()=>{
+  const probe=document.createElement("span");
+  probe.setAttribute("aria-hidden","true");
+  probe.style.cssText="position:absolute;left:-99999px;top:0;visibility:hidden;white-space:pre;";
+  document.body.appendChild(probe);
+  function widthAt100(el,text){
+    const cs=getComputedStyle(el);
+    const fs=parseFloat(cs.fontSize)||100;
+    const lsEm=(parseFloat(cs.letterSpacing)||0)/fs;
+    probe.style.fontFamily=cs.fontFamily;
+    probe.style.fontWeight=cs.fontWeight;
+    probe.style.fontStyle=cs.fontStyle;
+    probe.style.textTransform=cs.textTransform;
+    probe.style.fontSize="100px";
+    probe.style.letterSpacing=(lsEm*100)+"px";
+    probe.textContent=text;
+    return probe.getBoundingClientRect().width;
+  }
+  return function fit(el,opts){
+    if(!el) return;
+    opts=opts||{};
+    const min=opts.min||22;
+    const lines=(opts.lines||[el.textContent]).filter(Boolean);
+    function apply(){
+      el.style.fontSize="";
+      const max=parseFloat(getComputedStyle(el).fontSize);
+      const box=(el.parentElement||el).clientWidth;
+      if(!box) return;
+      let widest=0;
+      for(const t of lines) widest=Math.max(widest,widthAt100(el,t));
+      if(!widest) return;
+      el.style.fontSize=Math.max(min,Math.min(max,box/widest*100*0.985))+"px";
+    }
+    apply();
+    addEventListener("resize",apply,{passive:true});
+    if(document.fonts&&document.fonts.ready) document.fonts.ready.then(apply);
+  };
+})();
+fitText(q(".mh-title"),{lines:["Guilherme Pereira"],min:26});
+
+/* ═══════════════════════════════════════════
+   1 · FUNDO: fibra de papel + sangria de tinta
+   ═══════════════════════════════════════════ */
+(function paper(){
+  const cv=q("#paperCv");
+  const gl=cv.getContext("webgl",{alpha:true,antialias:false,powerPreference:"low-power"})
+        || cv.getContext("experimental-webgl");
+  if(!gl||reduce){ cv.style.display="none"; q("#paperFB").style.display="block"; return; }
+  const VS="attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}";
+  const FS=[
+"precision mediump float;",
+"uniform vec2 u_res; uniform float u_t; uniform float u_s;",
+"float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}",
+"float noise(vec2 p){vec2 i=floor(p),f=fract(p);vec2 u=f*f*(3.-2.*f);",
+"  return mix(mix(hash(i),hash(i+vec2(1,0)),u.x),mix(hash(i+vec2(0,1)),hash(i+vec2(1,1)),u.x),u.y);}",
+"float fbm(vec2 p){float v=0.,a=.5;for(int i=0;i<5;i++){v+=a*noise(p);p*=2.06;a*=.5;}return v;}",
+"void main(){",
+"  vec2 uv=gl_FragCoord.xy/u_res;",
+"  vec2 asp=vec2(u_res.x/u_res.y,1.);",
+"  float t=u_t*.028;",
+// fibra do papel: ruído muito fino e estático
+"  float fiber=fbm(uv*asp*220.)*0.055;",
+// duas sangrias de tinta que respiram devagar
+"  vec2 a=vec2(.18,.86-u_s*.22);",
+"  vec2 b=vec2(.86,.30+u_s*.18);",
+"  float wa=fbm(uv*asp*2.4+t*1.3);",
+"  float wb=fbm(uv*asp*2.9-t*1.1+7.3);",
+"  float da=length((uv-a)*asp)+wa*.16;",
+"  float db=length((uv-b)*asp)+wb*.17;",
+"  float ia=smoothstep(.44,.02,da);",
+"  float ib=smoothstep(.40,.02,db);",
+"  vec3 navy=vec3(.114,.184,.353);",
+"  vec3 red =vec3(.820,.204,.122);",
+"  vec3 ink=navy*ia*.30+red*ib*.22;",
+"  float alpha=clamp(ia*.30+ib*.24+fiber,0.,.55);",
+"  vec3 col=mix(vec3(.42,.40,.36),ink,clamp((ia+ib)*1.2,0.,1.));",
+"  gl_FragColor=vec4(col,alpha);",
+"}"].join("\n");
+  function sh(t,s){const o=gl.createShader(t);gl.shaderSource(o,s);gl.compileShader(o);
+    if(!gl.getShaderParameter(o,gl.COMPILE_STATUS))throw new Error(gl.getShaderInfoLog(o));return o;}
+  let prog;
+  try{
+    prog=gl.createProgram();
+    gl.attachShader(prog,sh(gl.VERTEX_SHADER,VS));
+    gl.attachShader(prog,sh(gl.FRAGMENT_SHADER,FS));
+    gl.linkProgram(prog);
+    if(!gl.getProgramParameter(prog,gl.LINK_STATUS))throw new Error("link");
+  }catch(e){ cv.style.display="none"; q("#paperFB").style.display="block"; return; }
+  gl.useProgram(prog);
+  const buf=gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER,buf);
+  gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);
+  const lp=gl.getAttribLocation(prog,"p");
+  gl.enableVertexAttribArray(lp); gl.vertexAttribPointer(lp,2,gl.FLOAT,false,0,0);
+  gl.enable(gl.BLEND); gl.blendFunc(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA);
+  const uRes=gl.getUniformLocation(prog,"u_res"),
+        uT=gl.getUniformLocation(prog,"u_t"),
+        uS=gl.getUniformLocation(prog,"u_s");
+  const dpr=Math.min(devicePixelRatio||1,1)* (innerWidth<760?.7:.85);
+  const t0=performance.now();
+  let acc=0;
+  (function frame(now){
+    requestAnimationFrame(frame);
+    // 24 fps bastam para tinta que se move devagar — economia de bateria
+    if(now-acc<41) return; acc=now;
+    const w=Math.max(1,cv.clientWidth*dpr|0), h=Math.max(1,cv.clientHeight*dpr|0);
+    if(cv.width!==w||cv.height!==h){cv.width=w;cv.height=h;gl.viewport(0,0,w,h);}
+    const doc=document.documentElement.scrollHeight-innerHeight;
+    gl.uniform2f(uRes,cv.width,cv.height);
+    gl.uniform1f(uT,(now-t0)/1000);
+    gl.uniform1f(uS,clamp(scrollY/(doc||1)));
+    gl.drawArrays(gl.TRIANGLES,0,3);
+  })(t0);
+})();
+
+/* ═══════════════════════════════════════════
+   2 · DOBRAS DE PÁGINA EM 3D
+   As duas metades se inclinam conforme a dobra
+   passa pelo centro da tela.
+   ═══════════════════════════════════════════ */
+(function folds(){
+  const list=qa("[data-fold]").map(el=>({el,a:q(".half.a",el),b:q(".half.b",el)}));
+  if(!list.length) return;
+  let raf=null;
+  function upd(){
+    const vh=innerHeight;
+    for(const f of list){
+      const r=f.el.getBoundingClientRect();
+      const mid=r.top+r.height/2;
+      // -1 (abaixo) → 0 (centro) → 1 (acima)
+      const p=clamp((vh-mid)/vh,0,1);
+      const open=Math.sin(p*Math.PI);      // fecha nas pontas, abre no meio
+      const ang=reduce?0:open*26;
+      f.a.style.transform="rotateX("+(-ang)+"deg)";
+      f.b.style.transform="rotateX("+(ang)+"deg)";
+      f.el.style.setProperty("--shade",String(open));
+      f.a.style.filter="brightness("+(1-open*.10)+")";
+      f.b.style.filter="brightness("+(1-open*.06)+")";
+    }
+    raf=null;
+  }
+  addEventListener("scroll",()=>{ if(!raf) raf=requestAnimationFrame(upd); },{passive:true});
+  addEventListener("resize",upd); upd();
+})();
+
+/* ═══════════════════════════════════════════
+   3 · REVELAÇÕES COM MOLA
+   ═══════════════════════════════════════════ */
+(function rises(){
+  const io=new IntersectionObserver(es=>es.forEach(e=>{
+    if(!e.isIntersecting) return;
+    io.unobserve(e.target);
+    const el=e.target;
+    spring({from:0,to:1,stiffness:150,damping:21,onUpdate:t=>{
+      el.style.opacity=String(t);
+      el.style.transform="translateY("+((1-t)*20)+"px)";
+    },onRest:()=>{el.style.transform="";el.style.opacity="1"}});
+  }),{threshold:.12,rootMargin:"0px 0px -40px"});
+  qa(".rise").forEach(el=>io.observe(el));
+})();
+
+/* ═══════════════════════════════════════════
+   4 · MEDIDORES DA TABELA
+   ═══════════════════════════════════════════ */
+qa(".prow").forEach(row=>{
+  const bar=q(".meter i",row), lvl=+row.dataset.lvl;
+  new IntersectionObserver((es,o)=>es.forEach(e=>{
+    if(!e.isIntersecting) return; o.disconnect();
+    spring({from:0,to:lvl,stiffness:120,damping:22,
+      onUpdate:v=>bar.style.width=Math.max(0,v)+"%"});
+  }),{threshold:.6}).observe(row);
+});
+
+/* ═══════════════════════════════════════════
+   5 · MAGNÉTICO — só em ponteiro fino
+   ═══════════════════════════════════════════ */
+if(!isTouch && !reduce) qa("[data-mag]").forEach(el=>{
+  let s=null;
+  el.addEventListener("pointermove",e=>{
+    s&&s.stop();
+    const r=el.getBoundingClientRect();
+    el.style.transform="translate("+((e.clientX-r.left-r.width/2)*.18)+"px,"+
+                                    ((e.clientY-r.top-r.height/2)*.3)+"px)";
+  });
+  el.addEventListener("pointerleave",()=>{
+    const m=/translate\((-?[\d.]+)px,\s*(-?[\d.]+)px\)/.exec(el.style.transform);
+    const x0=m?+m[1]:0, y0=m?+m[2]:0;
+    s=spring({from:1,to:0,stiffness:250,damping:15,onUpdate:t=>{
+      el.style.transform="translate("+(x0*t)+"px,"+(y0*t)+"px)";
+    },onRest:()=>el.style.transform=""});
+  });
+});
+
+/* ═══════════════════════════════════════════
+   6 · ÍNDICE (disclosure com mola)
+   ═══════════════════════════════════════════ */
+qa(".ix").forEach(item=>{
+  const head=q(".ix-h",item), body=q(".ix-b",item), inner=q(".in",body);
+  if(item.classList.contains("open")) body.style.height=inner.offsetHeight+"px";
+  head.addEventListener("click",()=>{
+    const opening=!item.classList.contains("open");
+    head.setAttribute("aria-expanded",String(opening));
+    qa(".ix.open").forEach(o=>{
+      if(o===item) return;
+      o.classList.remove("open");
+      q(".ix-h",o).setAttribute("aria-expanded","false");
+      const bp=q(".ix-b",o);
+      spring({from:bp.offsetHeight,to:0,stiffness:220,damping:26,
+        onUpdate:h=>bp.style.height=Math.max(0,h)+"px"});
+    });
+    item.classList.toggle("open",opening);
+    spring({from:body.offsetHeight,to:opening?inner.offsetHeight:0,stiffness:220,damping:26,
+      onUpdate:h=>body.style.height=Math.max(0,h)+"px",
+      onRest:()=>{ if(opening) body.style.height="auto"; }});
+  });
+});
+
+/* ═══════════════════════════════════════════
+   7 · FOLHA DE CONTATO + VIRADA DE PÁGINA 3D
+   No celular a folha vira uma "sheet" que sobe
+   do rodapé; no desktop, uma página que gira.
+   ═══════════════════════════════════════════ */
+const P=[
+  {t:"Food Explorer",st:"Online",c:"#1a7f4b",
+   s:"Plataforma para restaurantes",
+   d:"Catálogo de pratos, carrinho de compras e painel administrativo com CRUD completo. O controle de acesso por perfil separa o que o cliente vê do que o administrador gerencia. Falta apenas o gateway de cobrança para ficar comercialmente completo.",
+   k:["React","Node.js","SQLite","JWT"],
+   img:"https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=900&q=80",
+   u:"https://foodexplorer-maxtr.netlify.app/",g:"https://github.com/Maxtherox/foodexplorer-react-frontend"},
+  {t:"Camila Braga",st:"Cliente real",c:"#1a7f4b",
+   s:"Site institucional",
+   d:"Website desenvolvido para a estrategista de marketing Camila Braga. Estruturado em React + Vite com Styled Components, priorizando velocidade de carregamento e leitura confortável em qualquer tela. Publicado com autorização expressa da cliente.",
+   k:["React","Vite","Styled Components"],
+   img:"https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=900&q=80",
+   u:"https://camilabragamarketing.com",g:"https://github.com/Maxtherox/camilabragamarketing.com"},
+  {t:"NFe System",st:"Online",c:"#1a7f4b",
+   s:"Gestão de notas fiscais",
+   d:"Projeto pessoal criado para testar abordagens diferentes de arquitetura REST em um domínio de negócio real. Permite criar, editar, visualizar e excluir clientes, empresas e produtos, com as relações entre eles modeladas no banco.",
+   k:["Node.js","Knex","REST","React"],
+   img:"https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=900&q=80",
+   u:"https://nfesystem.guilhermejp.com",g:"https://github.com/Maxtherox/nfe-system-2025"},
+  {t:"Taekwondo Manager",st:"Backend 100%",c:"#1a7f4b",
+   s:"Gestão de campeonatos",
+   d:"Nasceu do meu próprio esporte. Cadastra competidores, gera e balanceia automaticamente as chaves de luta e administra usuários. O backend está completo com todas as rotas; a área administrativa do frontend está em torno de 85%.",
+   k:["Node.js","JWT","React","Algoritmos"],
+   img:"https://images.unsplash.com/photo-1555597673-b21d5c935865?w=900&q=80",
+   u:"https://taekwondo.guilhermejp.com/",g:"https://github.com/Maxtherox/Taekwondo-EManager"},
+  {t:"Maralt",st:"Em desenvolvimento",c:"#c07a13",
+   s:"E-commerce independente",
+   d:"Loja virtual sob medida para vendedor independente. A API em Node.js com Knex já entrega autenticação JWT e gerenciamento de carrinho. As integrações com Mercado Pago e Correios seguem em progresso. No frontend, a vitrine já exibe produtos e o checkout está em construção.",
+   k:["Node.js","Knex","React","Checkout"],
+   img:"https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=900&q=80",u:null,g:null},
+  {t:"RocketNotes",st:"Refinando",c:"#c07a13",
+   s:"Anotações com tags",
+   d:"Aplicação de notas vinculadas ao usuário autenticado, com tags e busca. CRUD completo sobre API REST própria. Estão pendentes o polimento de responsividade e as validações de formulário no cliente.",
+   k:["React","Node.js","SQLite"],
+   img:"https://images.unsplash.com/photo-1531346878377-a5be20888e57?w=900&q=80",
+   u:"https://rocketnotes-maxtr.netlify.app/",g:"https://github.com/Maxtherox/rocketnotes-nodejs-backend"}
+];
+(function sheet(){
+  q("#sheet").innerHTML=P.map((p,i)=>
+    '<div class="frame-i" data-i="'+i+'" role="button" tabindex="0" aria-label="Abrir '+p.t+'">'+
+      '<div class="th"><span class="fb"></span>'+
+        '<img src="'+p.img+'" alt="" loading="lazy" onerror="this.remove()">'+
+        '<span class="n">'+String(i+1).padStart(2,"0")+'</span>'+
+        '<span class="dot" style="background:'+p.c+'"></span></div>'+
+      '<div class="cap"><b>'+p.t+'</b><span>'+p.st+'</span></div>'+
+      '<div class="kk">'+p.k.join(" · ")+'</div>'+
+    '</div>').join("");
+
+  const leaf=q("#leaf"), scrim=q("#scrim");
+  let origin=null, sp=null;
+  const mobile=()=>innerWidth<700;
+
+  function open(i,card){
+    const p=P[i]; origin=card;
+    q("#lFo").textContent="Fig. "+String(i+1).padStart(2,"0");
+    q("#lTitle").textContent=p.t;
+    const st=q("#lSt"); st.textContent=p.st; st.style.color=p.c;
+    q("#lDesc").textContent=p.d;
+    q("#lKit").innerHTML=p.k.map(k=>"<span>"+k+"</span>").join("");
+    q("#lLk").innerHTML=
+      (p.u?'<a class="btn fill" href="'+p.u+'" target="_blank">Ver online ↗</a>'
+          :'<span class="btn" style="opacity:.4">Deploy em breve</span>')+
+      (p.g?'<a class="btn" href="'+p.g+'" target="_blank">Código-fonte</a>'
+          :'<span class="btn" style="opacity:.4">Repositório privado</span>');
+    const im=q("#lImg"); im.src=p.img; im.style.display="";
+    im.onerror=()=>{ im.style.display="none"; };
+
+    const from=card.getBoundingClientRect();
+    const to = mobile()
+      ? {left:0, top:innerHeight*.10, width:innerWidth, height:innerHeight*.90}
+      : (()=>{const W=Math.min(660,innerWidth-56), H=Math.min(660,innerHeight-80);
+              return {left:(innerWidth-W)/2, top:(innerHeight-H)/2, width:W, height:H};})();
+
+    leaf.style.opacity="1"; leaf.classList.add("on"); scrim.classList.add("on");
+    document.body.style.overflow="hidden";
+    sp&&sp.stop();
+    sp=spring({from:0,to:1,stiffness:170,damping:23,onUpdate:t=>{
+      leaf.style.left  =(from.left  +(to.left  -from.left  )*t)+"px";
+      leaf.style.top   =(from.top   +(to.top   -from.top   )*t)+"px";
+      leaf.style.width =(from.width +(to.width -from.width )*t)+"px";
+      leaf.style.height=(from.height+(to.height-from.height)*t)+"px";
+      // a virada: gira em Y no desktop, sobe reto no celular
+      const rot = mobile() ? 0 : (1-t)*-58;
+      leaf.style.transform="perspective(1400px) rotateY("+rot+"deg)";
+      q(".lbody",leaf).style.opacity=String(clamp((t-.32)/.68));
+    }});
+  }
+  function close(){
+    if(!origin) return;
+    const from=leaf.getBoundingClientRect(), to=origin.getBoundingClientRect();
+    scrim.classList.remove("on"); leaf.classList.remove("on");
+    document.body.style.overflow="";
+    sp&&sp.stop();
+    sp=spring({from:0,to:1,stiffness:210,damping:26,onUpdate:t=>{
+      leaf.style.left  =(from.left  +(to.left  -from.left  )*t)+"px";
+      leaf.style.top   =(from.top   +(to.top   -from.top   )*t)+"px";
+      leaf.style.width =(from.width +(to.width -from.width )*t)+"px";
+      leaf.style.height=(from.height+(to.height-from.height)*t)+"px";
+      leaf.style.opacity=String(1-t);
+      leaf.style.transform="perspective(1400px) rotateY("+(mobile()?0:t*44)+"deg)";
+      q(".lbody",leaf).style.opacity="0";
+    },onRest:()=>{origin=null;leaf.style.transform=""}});
+  }
+  qa(".frame-i").forEach(c=>{
+    const go=()=>open(+c.dataset.i,c);
+    c.addEventListener("click",go);
+    c.addEventListener("keydown",e=>{ if(e.key==="Enter"||e.key===" "){e.preventDefault();go();} });
+  });
+  q("#lClose").addEventListener("click",close);
+  scrim.addEventListener("click",close);
+  addEventListener("keydown",e=>{ if(e.key==="Escape") close(); });
+})();
+
+/* ═══════════════════════════════════════════
+   8 · TIRA DE FILME
+   ═══════════════════════════════════════════ */
+(function film(){
+  const box=q("#film"); if(!box) return;
+  const v=q("#fv"), btn=q("#fplay"), tc=q("#ftc");
+  let sp="";
+  for(let i=0;i<60;i++) sp+="<i></i>";
+  q("#sp1").innerHTML=sp; q("#sp2").innerHTML=sp;
+  const fmt=s=>isNaN(s)?"00:00":String(Math.floor(s/60)).padStart(2,"0")+":"+String(Math.floor(s%60)).padStart(2,"0");
+  v.addEventListener("timeupdate",()=>tc.textContent=fmt(v.currentTime)+" / "+fmt(v.duration));
+  v.addEventListener("error",()=>{ tc.textContent="—"; btn.style.display="none"; });
+  function play(on){
+    box.classList.toggle("live",on);
+    if(on){const pr=v.play(); if(pr&&pr.catch)pr.catch(()=>{});} else v.pause();
+  }
+  btn.addEventListener("click",()=>play(v.paused));
+  new IntersectionObserver(es=>es.forEach(e=>{
+    if(e.isIntersecting){ if(!reduce && !isTouch) play(true); }
+    else if(!v.paused) play(false);
+  }),{threshold:.45}).observe(box);
+})();
+
+/* ═══════════════════════════════════════════
+   9 · HOBBIES · GRADE · NAV ATIVA
+   ═══════════════════════════════════════════ */
+(function rest(){
+  const H=[
+    ["belt","Taekwondo","Prestes a conquistar a faixa vermelha — o degrau que antecede poder instruir. Disciplina, paciência e resiliência que atravessam direto para o modo como escrevo código."],
+    ["server","Servidores &amp; Linux","Desde a adolescência subo e mantenho servidores de jogos em Ubuntu Server e FreeBSD. Redes, segurança e automação aprendidas quebrando e consertando coisa de verdade."],
+    ["gamepad","Soulslikes","Dark Souls, Elden Ring e RPGs em geral. Me interessa a engenharia por trás: sistemas, feedback ao jogador e curva de dificuldade são design de produto com outro nome."],
+    ["gauge","Simuladores","Corrida e voo. Setup, física e aerodinâmica me prendem tanto quanto a adrenalina — é o mesmo prazer de ajustar variáveis até a coisa responder certo."]
+  ];
+  q("#hobs").innerHTML=H.map(h=>
+    '<div class="hrow rise"><span class="em"><svg viewBox="0 0 24 24"><use href="#i-'+h[0]+'"/></svg></span>'+
+    '<h4>'+h[1]+'</h4><p>'+h[2]+'</p></div>').join("");
+  // observa os que acabaram de nascer
+  const io=new IntersectionObserver(es=>es.forEach(e=>{
+    if(!e.isIntersecting) return; io.unobserve(e.target);
+    const el=e.target;
+    spring({from:0,to:1,stiffness:150,damping:21,onUpdate:t=>{
+      el.style.opacity=String(t); el.style.transform="translateY("+((1-t)*18)+"px)";
+    },onRest:()=>{el.style.transform="";}});
+  }),{threshold:.15});
+  qa("#hobs .rise").forEach(el=>io.observe(el));
+
+  const tog=q("#gridTog");
+  tog.addEventListener("click",()=>{
+    const on=document.body.classList.toggle("grid-on");
+    tog.setAttribute("aria-pressed",String(on));
+  });
+
+  const links=qa(".nav-bar a");
+  const secs=links.map(a=>q("#"+a.dataset.sec)).filter(Boolean);
+  let raf=null;
+  addEventListener("scroll",()=>{
+    if(raf) return;
+    raf=requestAnimationFrame(()=>{
+      raf=null;
+      let active=0;
+      secs.forEach((s,i)=>{ if(s.getBoundingClientRect().top<innerHeight*.42) active=i; });
+      links.forEach((a,i)=>a.classList.toggle("on",i===active));
+    });
+  },{passive:true});
+})();
+})();
+</script>
+</body>
+</html>

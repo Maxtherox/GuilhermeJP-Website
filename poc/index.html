@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Esboços — Novo web currículo · Guilherme Pereira</title>
+</head>
+<body>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0a0c;--surf:#121216;--surf2:#17171c;--line:rgba(255,255,255,.1);
+  --txt:#f4f4f5;--muted:#8a8a96;
+  --font:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
+}
+body{background:var(--bg);color:var(--txt);font-family:var(--font);line-height:1.62;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1280px;margin:0 auto;padding:0 24px}
+h1,h2,h3{line-height:1.1;letter-spacing:-.035em}
+img{max-width:100%;display:block}
+
+header{padding:72px 0 40px;border-bottom:1px solid var(--line);position:relative;overflow:hidden}
+header::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),
+                   linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);
+  background-size:44px 44px;
+  -webkit-mask-image:radial-gradient(ellipse 70% 100% at 25% 0%,#000,transparent);
+  mask-image:radial-gradient(ellipse 70% 100% at 25% 0%,#000,transparent)}
+.hd-in{display:flex;gap:26px;align-items:flex-start;flex-wrap:wrap;position:relative}
+.hd-in img.me{width:74px;height:74px;border-radius:18px;object-fit:cover;flex:none;
+  box-shadow:0 0 0 1px var(--line),0 14px 34px -14px #000}
+.tag{display:inline-block;font:500 11px/1 var(--mono);letter-spacing:.2em;text-transform:uppercase;
+  color:#a78bfa;border:1px solid rgba(167,139,250,.3);background:rgba(167,139,250,.08);
+  padding:6px 12px;border-radius:999px;margin-bottom:18px}
+h1{font-size:clamp(30px,4.8vw,50px);font-weight:680}
+header p{color:var(--muted);max-width:660px;margin-top:14px;font-size:16.5px}
+
+.legend{display:flex;gap:10px;flex-wrap:wrap;padding:26px 0 0;position:relative}
+.legend span{font:500 11.5px/1 var(--mono);letter-spacing:.08em;color:var(--muted);
+  border:1px solid var(--line);border-radius:999px;padding:7px 13px}
+.legend span b{color:var(--txt);font-weight:500}
+
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;padding:40px 0 20px}
+@media(max-width:1180px){.grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:620px){.grid{grid-template-columns:1fr}}
+
+.card{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:var(--surf);
+  display:flex;flex-direction:column;transition:transform .4s cubic-bezier(.16,1,.3,1),box-shadow .4s,border-color .4s}
+.card:hover{transform:translateY(-6px)}
+.card.c1:hover{border-color:#8b5cf6;box-shadow:0 26px 60px -30px #8b5cf6}
+.card.c2:hover{border-color:#3b82f6;box-shadow:0 26px 60px -30px #3b82f6}
+.card.c3:hover{border-color:#c6ff00;box-shadow:0 26px 60px -30px #c6ff00}
+.card.c4:hover{border-color:#a8502a;box-shadow:0 26px 60px -30px #a8502a}
+.card.c5:hover{border-color:#4f46e5;box-shadow:0 26px 60px -30px #4f46e5}
+.card.c6:hover{border-color:#2563eb;box-shadow:0 26px 60px -30px #2563eb}
+.card.c7:hover{border-color:#1c64f2;box-shadow:0 26px 60px -30px #1c64f2}
+.card.c8:hover{border-color:#7828c8;box-shadow:0 26px 60px -30px #7828c8}
+
+.sw{height:104px;position:relative;overflow:hidden;display:flex;align-items:flex-end;padding:13px}
+.sw .num{position:relative;z-index:2;font:800 34px/1 var(--font);letter-spacing:-.05em;
+  color:rgba(255,255,255,.94);text-shadow:0 2px 18px rgba(0,0,0,.65)}
+.s1{background:radial-gradient(circle at 20% 30%,#4f46e5,transparent 55%),radial-gradient(circle at 80% 20%,#d946ef,transparent 55%),radial-gradient(circle at 55% 90%,#06b6d4,transparent 55%),#030014}
+.s2{background:linear-gradient(135deg,#fff 0 50%,#08080a 50% 100%)}
+.s2::after{content:"";position:absolute;inset:0;background:
+  repeating-linear-gradient(90deg,rgba(15,98,254,.5) 0 1px,transparent 1px 30px),
+  repeating-linear-gradient(0deg,rgba(15,98,254,.5) 0 1px,transparent 1px 30px);opacity:.35}
+.s2 .num{color:#08080a;text-shadow:none}
+.s3{background:#000}
+.s3::after{content:"";position:absolute;inset:0;background:
+  radial-gradient(circle at 25% 50%,#ff2e88,transparent 42%),
+  radial-gradient(circle at 70% 40%,#00f0ff,transparent 42%),
+  radial-gradient(circle at 50% 85%,#c6ff00,transparent 38%);filter:blur(6px)}
+.s4{background:#f7f6f3}
+.s4::after{content:"";position:absolute;inset:0;background:
+  linear-gradient(115deg,transparent 40%,rgba(168,80,42,.5) 40% 46%,transparent 46%),
+  radial-gradient(circle at 78% 26%,rgba(91,107,88,.42),transparent 44%)}
+.s4 .num{color:#191917;text-shadow:none}
+.s5{background:#fff}
+.s5::after{content:"";position:absolute;inset:0;background:
+  radial-gradient(60% 90% at 15% 10%,#818cf8,transparent 62%),
+  radial-gradient(55% 85% at 85% 30%,#38bdf8,transparent 62%),
+  radial-gradient(50% 70% at 55% 95%,#c084fc,transparent 62%);filter:blur(11px);opacity:.85}
+.s5 .num{color:#0f172a;text-shadow:none}
+.s6{background:linear-gradient(90deg,#f9fafb 0 46%,#0b1120 46% 100%)}
+.s6::after{content:"";position:absolute;inset:0;background:
+  repeating-linear-gradient(0deg,transparent 0 13px,rgba(37,99,235,.42) 13px 15px);opacity:.55}
+.s6 .num{color:#2563eb;text-shadow:none}
+.s7{background:linear-gradient(120deg,#1c64f2,#7e3af2)}
+.s7::after{content:"";position:absolute;inset:0;
+  background-image:radial-gradient(rgba(255,255,255,.3) 1px,transparent 1px);background-size:15px 15px}
+.s8{background:#000}
+.s8::after{content:"";position:absolute;inset:0;background:
+  conic-gradient(from 210deg at 40% 50%,#7828c8,#0072f5,#f31260,#12a150,#7828c8);filter:blur(15px);opacity:.9}
+
+.body{padding:20px;flex:1;display:flex;flex-direction:column}
+.lib{font:500 10.5px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:9px}
+.card h3{font-size:20px;margin-bottom:5px}
+.vibe{font-size:13px;color:var(--muted);font-style:italic;margin-bottom:13px}
+.desc{font-size:13.8px;color:#c2c2cc;margin-bottom:15px;flex:1}
+.engine{font:500 10.5px/1 var(--mono);letter-spacing:.06em;color:#a78bfa;
+  border:1px dashed rgba(167,139,250,.35);border-radius:7px;padding:7px 10px;margin-bottom:14px}
+ul{list-style:none;display:flex;flex-wrap:wrap;gap:5px;margin-bottom:17px}
+li{font:500 10.5px/1 var(--mono);padding:5px 8px;border-radius:6px;border:1px solid var(--line);color:#9a9aa8}
+.open{display:block;text-align:center;padding:11px;border-radius:9px;font-size:13.5px;font-weight:600;
+  background:#fff;color:#000;transition:.25s}
+.open:hover{opacity:.86;transform:translateY(-1px)}
+
+h2.sect{font-size:24px;margin:60px 0 20px;font-weight:660}
+.table{border:1px solid var(--line);border-radius:16px;overflow-x:auto;margin-bottom:40px}
+table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:920px}
+th,td{text-align:left;padding:13px 16px;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:rgba(255,255,255,.03);font:500 11px/1.4 var(--mono);letter-spacing:.08em;
+  text-transform:uppercase;color:var(--muted)}
+td:first-child{color:var(--muted);font-family:var(--mono);font-size:11.5px;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+.dotc{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;vertical-align:1px}
+
+.rec{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:50px}
+@media(max-width:900px){.rec{grid-template-columns:1fr}}
+.rec div{border:1px solid var(--line);border-radius:14px;padding:20px;background:var(--surf2)}
+.rec h4{font-size:15px;margin-bottom:9px}
+.rec p{font-size:13.8px;color:#b4b4c0}
+.rec b{color:#a78bfa}
+
+.note{border:1px solid var(--line);border-left:3px solid #a78bfa;border-radius:0 12px 12px 0;
+  padding:20px 24px;background:rgba(167,139,250,.05);margin-bottom:70px}
+.note strong{color:#c4b5fd}
+.note p{color:#b4b4c0;font-size:14.3px}
+.note p+p{margin-top:10px}
+code{font-family:var(--mono);font-size:12.5px;color:#c4b5fd}
+footer{border-top:1px solid var(--line);padding:26px 0;color:#5a5a68;font:500 11.5px/1 var(--mono);letter-spacing:.12em}
+</style>
+
+<header>
+  <div class="wrap">
+    <div class="hd-in">
+      <img class="me" src="gp.jpg" alt="Guilherme Pereira"
+           onerror="this.style.background='linear-gradient(135deg,#4f46e5,#d946ef)'">
+      <div>
+        <span class="tag">Fase 0 · Esboços de identidade visual</span>
+        <h1>Oito direções para o novo web currículo</h1>
+        <p>Cada esboço é uma página completa e funcional, com sistema visual, estrutura e vocabulário de animação próprios. Abra os oito, escolha uma direção (ou combine duas) — depois disso eu refatoro o site de verdade em React sobre a escolhida.</p>
+      </div>
+    </div>
+    <div class="legend">
+      <a href="v2.html" style="font:500 11.5px/1 var(--mono);letter-spacing:.08em;color:#08080a;
+         background:#ff8a5b;border-radius:999px;padding:8px 15px;font-weight:600">
+        → Ver a V2 do top 4 (Eclipse · Synthesis · Press · Meridian)</a>
+      <span><b>8</b> esboços</span>
+      <span><b>0</b> dependências — HTML/CSS/JS puro</span>
+      <span>Foto real: <b>gp.jpg</b></span>
+      <span>Demais imagens: <b>Unsplash</b> com fallback offline</span>
+      <span>Conteúdo: <b>currículo real</b></span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="grid">
+
+    <article class="card c1">
+      <div class="sw s1"><span class="num">01</span></div>
+      <div class="body">
+        <div class="lib">Aceternity UI</div>
+        <h3>Aurora Void</h3>
+        <p class="vibe">Cinematográfico, escuro, premium.</p>
+        <p class="desc">Aurora em movimento, spotlight seguindo o cursor pela página inteira, meteoros, efeito lamp nos títulos, cards 3D com tilt e hobbies com hover criptografado.</p>
+        <div class="engine">Animação: CSS + rAF sob medida</div>
+        <ul><li>Spotlight</li><li>Aurora</li><li>3D tilt</li><li>Lamp</li><li>Meteors</li><li>Evervault</li></ul>
+        <a class="open" href="01-aceternity-aurora.html">Abrir 01 →</a>
+      </div>
+    </article>
+
+    <article class="card c2">
+      <div class="sw s2"><span class="num">02</span></div>
+      <div class="body">
+        <div class="lib">Magic UI</div>
+        <h3>Signal</h3>
+        <p class="vibe">SaaS moderno, limpo, confiável.</p>
+        <p class="desc">Tema claro/escuro, border beams girando, grid com células piscando, mockup de dashboard que se levanta, diagrama com feixes percorrendo os caminhos e dock estilo macOS.</p>
+        <div class="engine">Animação: CSS + scroll-linked</div>
+        <ul><li>Light/Dark</li><li>Border beam</li><li>Dock</li><li>Text reveal</li><li>Ticker</li><li>Retro grid</li></ul>
+        <a class="open" href="02-magicui-signal.html">Abrir 02 →</a>
+      </div>
+    </article>
+
+    <article class="card c3">
+      <div class="sw s3"><span class="num">03</span></div>
+      <div class="body">
+        <div class="lib">React Bits</div>
+        <h3>Hyperspace</h3>
+        <p class="vibe">Experimental, brutalista, memorável.</p>
+        <p class="desc">Cursor customizado com rótulo contextual, hipervelocidade em canvas reagindo ao mouse, glitch, grão de filme, galeria circular 3D arrastável e cards que empilham no scroll.</p>
+        <div class="engine">Animação: Canvas 2D + rAF</div>
+        <ul><li>Hyperspeed</li><li>Cursor</li><li>Glitch</li><li>Scramble</li><li>Galeria 3D</li><li>Scroll stack</li></ul>
+        <a class="open" href="03-reactbits-hyperspace.html">Abrir 03 →</a>
+      </div>
+    </article>
+
+    <article class="card c4">
+      <div class="sw s4"><span class="num">04</span></div>
+      <div class="body">
+        <div class="lib">Motion Primitives</div>
+        <h3>Quiet</h3>
+        <p class="vibe">Editorial, contido, refinado.</p>
+        <p class="desc">Único em tema claro tipográfico. Cards que <em>morfam</em> em modal no lugar (shared layout), popover que cresce do botão, progressive blur nas bordas e elementos magnéticos com mola real.</p>
+        <div class="engine">Motor: integrador de <b style="color:#c4b5fd">spring</b> (Motion)</div>
+        <ul><li>Morph dialog</li><li>Morph popover</li><li>Magnetic</li><li>Prog. blur</li><li>Disclosure</li><li>Dock</li></ul>
+        <a class="open" href="04-motionprimitives-quiet.html">Abrir 04 →</a>
+      </div>
+    </article>
+
+    <article class="card c5">
+      <div class="sw s5"><span class="num">05</span></div>
+      <div class="body">
+        <div class="lib">Tailwind Plus</div>
+        <h3>Commerce</h3>
+        <p class="vibe">Profissional, vendedor, sem risco.</p>
+        <p class="desc">Landing page de agência completa: hero com screenshot, logo cloud, features alternadas, faixa de números, depoimentos, <strong style="color:#e4e4e7">tabela de pacotes</strong>, FAQ e footer em colunas.</p>
+        <div class="engine">Animação: reveals discretos</div>
+        <ul><li>Hero</li><li>Logo cloud</li><li>Features</li><li>Pricing</li><li>Testimonials</li><li>FAQ</li></ul>
+        <a class="open" href="05-tailwindplus-commerce.html">Abrir 05 →</a>
+      </div>
+    </article>
+
+    <article class="card c6">
+      <div class="sw s6"><span class="num">06</span></div>
+      <div class="body">
+        <div class="lib">Preline UI</div>
+        <h3>Console</h3>
+        <p class="vibe">O currículo como um produto SaaS.</p>
+        <p class="desc">App shell com sidebar, breadcrumb, <strong style="color:#e4e4e7">command palette (Ctrl+K)</strong>, tabs, tabela de projetos com filtro e ordenação, accordion, formulário, modal e toasts.</p>
+        <div class="engine">Animação: transições de UI</div>
+        <ul><li>App shell</li><li>Ctrl+K</li><li>Data table</li><li>Modal</li><li>Toasts</li><li>Dark mode</li></ul>
+        <a class="open" href="06-preline-console.html">Abrir 06 →</a>
+      </div>
+    </article>
+
+    <article class="card c7">
+      <div class="sw s7"><span class="num">07</span></div>
+      <div class="body">
+        <div class="lib">Flowbite</div>
+        <h3>Atlas</h3>
+        <p class="vibe">Maduro, abrangente, narrativo.</p>
+        <p class="desc">Seção <strong style="color:#e4e4e7">fixada</strong> que conta o processo em 4 passos conforme você rola, galeria de projetos em <strong style="color:#e4e4e7">scroll horizontal</strong>, parallax em camadas, carousel, drawer e mega menu.</p>
+        <div class="engine">Motor: mini-<b style="color:#c4b5fd">ScrollTrigger</b> (GSAP)</div>
+        <ul><li>Pin + scrub</li><li>Scroll horiz.</li><li>Parallax</li><li>Mega menu</li><li>Drawer</li><li>Carousel</li></ul>
+        <a class="open" href="07-flowbite-atlas.html">Abrir 07 →</a>
+      </div>
+    </article>
+
+    <article class="card c8">
+      <div class="sw s8"><span class="num">08</span></div>
+      <div class="body">
+        <div class="lib">HeroUI</div>
+        <h3>Nova</h3>
+        <p class="vibe">Design system polido e acessível.</p>
+        <p class="desc"><strong style="color:#e4e4e7">Shader WebGL de verdade</strong> no hero (GLSL, reage ao cursor) e um <strong style="color:#e4e4e7">mascote vetorial</strong> com máquina de estados. Quatro paletas trocáveis, tabs com cursor animado, tudo navegável por teclado.</p>
+        <div class="engine">Motores: <b style="color:#c4b5fd">WebGL</b> (R3F) + <b style="color:#c4b5fd">SVG states</b> (Rive)</div>
+        <ul><li>GLSL shader</li><li>Mascote</li><li>4 temas</li><li>Tabs</li><li>A11y</li><li>Modal</li></ul>
+        <a class="open" href="08-heroui-nova.html">Abrir 08 →</a>
+      </div>
+    </article>
+  </div>
+
+  <h2 class="sect">Comparativo</h2>
+  <div class="table">
+    <table>
+      <thead><tr>
+        <th>Critério</th><th>01 Aurora</th><th>02 Signal</th><th>03 Hyperspace</th>
+        <th>04 Quiet</th><th>05 Commerce</th><th>06 Console</th><th>07 Atlas</th><th>08 Nova</th>
+      </tr></thead>
+      <tbody>
+        <tr><td>Sensação</td><td>Cinematográfico</td><td>Produto sério</td><td>Ousado</td><td>Editorial</td>
+            <td>Comercial</td><td>Técnico</td><td>Narrativo</td><td>Polido</td></tr>
+        <tr><td>Melhor para</td><td>Impressionar</td><td>Recrutador</td><td>Destacar-se</td><td>Sênior/criativo</td>
+            <td>Vender serviço</td><td>Vaga técnica</td><td>Contar processo</td><td>Mostrar domínio</td></tr>
+        <tr><td>Tema</td>
+            <td><span class="dotc" style="background:#8b5cf6"></span>Escuro</td>
+            <td><span class="dotc" style="background:#3b82f6"></span>Ambos</td>
+            <td><span class="dotc" style="background:#c6ff00"></span>Escuro</td>
+            <td><span class="dotc" style="background:#a8502a"></span>Claro</td>
+            <td><span class="dotc" style="background:#4f46e5"></span>Claro</td>
+            <td><span class="dotc" style="background:#2563eb"></span>Ambos</td>
+            <td><span class="dotc" style="background:#1c64f2"></span>Ambos</td>
+            <td><span class="dotc" style="background:#7828c8"></span>Ambos + 4 paletas</td></tr>
+        <tr><td>Peso / GPU</td><td>Médio</td><td>Leve</td><td>Pesado</td><td>Leve</td>
+            <td>Muito leve</td><td>Leve</td><td>Médio</td><td>Pesado (WebGL)</td></tr>
+        <tr><td>Acessibilidade</td><td>Boa</td><td>Boa</td><td>Exige atenção</td><td>Boa</td>
+            <td>Muito boa</td><td>Muito boa</td><td>Boa</td><td>A melhor</td></tr>
+        <tr><td>Manutenção</td><td>Média</td><td>Baixa</td><td>Alta</td><td>Média</td>
+            <td>Baixa</td><td>Média</td><td>Alta</td><td>Média</td></tr>
+        <tr><td>Mobile</td><td>Bom</td><td>Ótimo</td><td>Razoável</td><td>Ótimo</td>
+            <td>Ótimo</td><td>Ótimo</td><td>Bom</td><td>Ótimo</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2 class="sect">Se eu tivesse que escolher</h2>
+  <div class="rec">
+    <div>
+      <h4>🎯 Aposta mais segura — <b>02 Signal</b> ou <b>05 Commerce</b></h4>
+      <p>Se o objetivo é conseguir cliente ou passar em triagem de recrutador, estes dois vendem sem assustar. O 05 já vem com tabela de pacotes e FAQ prontos para converter.</p>
+    </div>
+    <div>
+      <h4>⚡ Maior impacto — <b>08 Nova</b> ou <b>01 Aurora</b></h4>
+      <p>O 08 tem shader WebGL escrito à mão: é a prova técnica mais forte do conjunto, e ainda é o mais acessível. O 01 é puro espetáculo visual.</p>
+    </div>
+    <div>
+      <h4>🧠 Mais original — <b>06 Console</b> ou <b>07 Atlas</b></h4>
+      <p>Currículo em forma de dashboard (06) ou de narrativa fixada no scroll (07). Ninguém esquece nenhum dos dois, e ambos demonstram habilidade que o texto não demonstra.</p>
+    </div>
+  </div>
+
+  <h2 class="sect">Observações</h2>
+  <div class="note">
+    <p><strong>Sua foto:</strong> <code>gp.jpg</code> está em uso nos oito esboços, com tratamento diferente em cada um — orbe com anel giratório no 01, avatar com indicador de status no 02, retrato duotone com glitch no 03, retrato editorial emoldurado no 04, e avatares/marca nos demais.</p>
+    <p><strong>Demais imagens:</strong> placeholders do Unsplash (código, servidores, restaurante, e-commerce). Toda <code>&lt;img&gt;</code> tem <code>onerror</code> que cai num gradiente — se abrir offline, nada quebra.</p>
+    <p><strong>Depoimentos e preços</strong> no esboço 05 são explicitamente marcados como placeholder. Nenhuma citação foi atribuída a pessoa real.</p>
+    <p><strong>Sobre os motores:</strong> os esboços são HTML/CSS/JS puro, sem dependências. Onde a proposta pedia um motor específico, ele foi reimplementado do zero: integrador de spring no 04 (Motion), mini-ScrollTrigger com pin/scrub/scroll horizontal no 07 (GSAP), shader GLSL em WebGL no 08 (React Three Fiber) e mascote SVG com máquina de estados também no 08 (Rive). Na implementação real usaríamos as bibliotecas de verdade.</p>
+    <p><strong>Estes arquivos são descartáveis.</strong> Servem só para você decidir a direção. A versão final vai para React + Vite sobre o que já existe em <code>guilhermejp/</code>.</p>
+  </div>
+</div>
+
+<footer><div class="wrap">POC · Novo web currículo · Guilherme Pereira · 2026</div></footer>
+</body>
+</html>
